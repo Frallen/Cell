@@ -1,30 +1,45 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <div>
+    <navbar></navbar>
+    <router-view></router-view>
+  </div>
 </template>
 
 <style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+@import "modern-normalize/modern-normalize.css";
+html {
+  font-size: 16px;
 }
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul {
+  padding: 0;
+  margin: 0;
+}
+li {
+  list-style-type: none;
+}
+body {
+  background: #262626;
 }
 </style>
+<script>
+import Navbar from "@/components/ui/navbar";
+import { mapActions } from "vuex";
+export default {
+  components: { Navbar },
+  methods: {
+    ...mapActions({
+      LoginStatus: "auth/LoginStatus",
+    }),
+  },
+  mounted() {
+    this.LoginStatus();
+  },
+};
+</script>

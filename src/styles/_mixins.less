@@ -1,0 +1,28 @@
+.section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  &-container {
+    position: relative;
+    padding: 0 10vw;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    flex-grow: 1;
+    @media @md {
+      padding: 0 8.3vw;
+    }
+    @media @xs {
+      padding: 0 6.3vw;
+    }
+  }
+  &-column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 50%;
+    max-width: 50%;
+  }
+}
+.trs{
+  transition: 0.3s ease-in-out;
+}

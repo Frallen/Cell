@@ -34,12 +34,7 @@ import { mapActions } from "vuex";
 export default {
   components: { Navbar },
   methods: {
-    ...mapActions({
-      LoginStatus: "auth/LoginStatus",
-    }),
-  },
-  mounted() {
-    this.LoginStatus();
+
   },
 };
 </script>

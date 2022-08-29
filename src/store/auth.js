@@ -1,7 +1,7 @@
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
+  onAuthStateChanged,signOut
 } from "firebase/auth";
 import { auth } from "../../firebase";
 
@@ -60,22 +60,22 @@ export const AuthModule = {
         });
     },
     async logout({ state, commit }) {
+
+     await signOut(auth)
       commit("isLoading", true);
       commit("setUser", null);
       commit("isLoading", false);
     },
-    async LoginStatus({ commit }) {
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          console.log(user)
-         commit("setAuthReady", true);
-         commit("setUser", user);
+     LoginStatus({ commit }, user) {
 
-        } else {
-          // User is signed out
-          // ...
-        }
-      });
+      if (user) {
+        commit("setAuthReady", true);
+        commit("setUser", user);
+      } else {
+
+        // User is signed out
+        // ...
+      }
     },
   },
 };

@@ -54,17 +54,23 @@
 
 <script>
 import loginMixin from "@/mixins/loginMixin";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "nav-bar",
-  mixins: [loginMixin],
+  computed:{
+    ...mapState({
+      isAuthReady: (state) => state.auth.isAuthReady,
+    }),
+  },
   methods: {
     logout() {
       this.$router.push("/");
+      this.$store.dispatch("auth/logout")
     },
+
     ...mapActions({
-      logout: "auth/logout",
+      exit: "auth/logout",
     }),
   },
 };

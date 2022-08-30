@@ -44,7 +44,7 @@
           <li @click="$router.push('registration')" v-if="!isAuthReady">
             Регистрация
           </li>
-          <li @click="$router.push('account')">Аккаунт</li>
+          <li v-if="isAuthReady" @click="$router.push('account')">Аккаунт</li>
           <li @click="logout" v-if="isAuthReady">Выйти</li>
         </ul>
       </div>
@@ -58,15 +58,15 @@ import { mapActions, mapState } from "vuex";
 
 export default {
   name: "nav-bar",
-  computed:{
+  computed: {
     ...mapState({
       isAuthReady: (state) => state.auth.isAuthReady,
     }),
   },
   methods: {
     logout() {
+      this.$store.dispatch("auth/logout");
       this.$router.push("/");
-      this.$store.dispatch("auth/logout")
     },
 
     ...mapActions({

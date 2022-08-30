@@ -1,7 +1,8 @@
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,signOut
+  onAuthStateChanged,
+  signOut,
 } from "firebase/auth";
 import { auth } from "../../firebase";
 
@@ -35,7 +36,7 @@ export const AuthModule = {
           const user = snap.user;
 
           commit("setUser", user);
-
+          commit("setAuthReady", true);
           commit("isLoading", false);
         })
         .catch((err) => {
@@ -53,6 +54,7 @@ export const AuthModule = {
         .then((snap) => {
           const user = snap.user;
           commit("setUser", user);
+          commit("setAuthReady", true);
           commit("isLoading", false);
         })
         .catch((err) => {
@@ -60,19 +62,18 @@ export const AuthModule = {
         });
     },
     async logout({ state, commit }) {
-
-     await signOut(auth)
-      commit("isLoading", true);
-      commit("setUser", null);
-      commit("isLoading", false);
+      await signOut(auth).then((p) => {
+        commit("isLoading", true);
+        commit("setUser", null);
+        commit("setAuthReady", false);
+        commit("isLoading", false);
+      });
     },
-     LoginStatus({ commit }, user) {
-
+    LoginStatus({ commit }, user) {
       if (user) {
         commit("setAuthReady", true);
         commit("setUser", user);
       } else {
-
         // User is signed out
         // ...
       }

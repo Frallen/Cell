@@ -12,8 +12,14 @@ export default {
 
   methods: {
     createUser(val) {
-      this.setUser(val);
-      this.signUp();
+      try {
+        this.setUser(val);
+        this.signUp();
+        this.$router.push("/")
+      }catch (e) {
+
+      }
+
     },
     ...mapMutations({
       setUser: "auth/setUser",

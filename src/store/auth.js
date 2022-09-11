@@ -1,10 +1,10 @@
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
   signOut,
 } from "firebase/auth";
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
+import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
 
 export const AuthModule = {
   namespaced: true,
@@ -12,11 +12,19 @@ export const AuthModule = {
     isAuthReady: false,
     isLoading: false,
     user: null,
+    userProfile: null,
   }),
-  getters: {},
+  getters: {
+    checkRouteAuth(state) {
+      return state.isAuthReady;
+    },
+  },
   mutations: {
     setUser(state, user) {
       state.user = user;
+    },
+    setUserProfile(state, userProfile) {
+      state.userProfile = userProfile;
     },
     isLoading(state, isLoading) {
       state.isLoading = isLoading;
@@ -24,9 +32,13 @@ export const AuthModule = {
     setAuthReady(state, isAuthReady) {
       state.isAuthReady = isAuthReady;
     },
+    setAdmin(state, isAdmin) {
+      state.isAdmin = isAdmin;
+    },
   },
   actions: {
-    async signUp({ state, commit }) {
+    //создание пользователя
+    async signUp({ state, commit, dispatch }) {
       await createUserWithEmailAndPassword(
         auth,
         state.user.email,
@@ -35,6 +47,8 @@ export const AuthModule = {
         .then((snap) => {
           const user = snap.user;
 
+          dispatch("signUpData");
+
           commit("setUser", user);
           commit("setAuthReady", true);
           commit("isLoading", false);
@@ -42,6 +56,32 @@ export const AuthModule = {
         .catch((err) => {
           console.log(err);
         });
+    },
+    //Создание профиля пользователя
+    async signUpData({ state }) {
+      addDoc(collection(db, "users"), {
+        id: state.user.uid,
+        email: state.user.email,
+      })
+        .then((s) => {})
+        .catch((err) => console.log(err));
+    },
+    //проверка авторизации
+    async AuthState({ dispatch }) {
+      await auth.onAuthStateChanged((userFirebase) => {
+        dispatch("LoginStatus", userFirebase);
+      });
+    },
+    LoginStatus({ commit, dispatch }, user) {
+      //console.log(user)
+      if (user) {
+        commit("setAuthReady", true);
+        commit("setUser", user);
+        dispatch("UserProfile", user);
+      } else {
+        // User is signed out
+        // ...
+      }
     },
     async login({ state, commit }) {
       commit("isLoading", true);
@@ -61,6 +101,19 @@ export const AuthModule = {
           console.log(err);
         });
     },
+    async UserProfile({ state, commit }, user) {
+      let users = collection(db, "users");
+      let searchQuery = query(users, where("id", "==", user.uid));
+      await getDocs(searchQuery).then((p) =>
+        p.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          commit("setUserProfile", doc.data());
+          if (doc.data().isAdmin) {
+            commit("setAdmin", true);
+          }
+        })
+      );
+    },
     async logout({ state, commit }) {
       await signOut(auth).then((p) => {
         commit("isLoading", true);
@@ -68,15 +121,6 @@ export const AuthModule = {
         commit("setAuthReady", false);
         commit("isLoading", false);
       });
-    },
-    LoginStatus({ commit }, user) {
-      if (user) {
-        commit("setAuthReady", true);
-        commit("setUser", user);
-      } else {
-        // User is signed out
-        // ...
-      }
     },
   },
 };

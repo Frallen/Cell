@@ -5,6 +5,22 @@
   </div>
 </template>
 
+<script>
+import Navbar from "@/components/ui/navbar";
+import { mapActions, mapState } from "vuex";
+export default {
+  components: { Navbar },
+  methods: {
+    ...mapActions({
+      AuthState:"auth/AuthState"
+    }),
+  },
+  mounted() {
+    this.AuthState()
+  }
+};
+</script>
+
 <style lang="less">
 @import "modern-normalize/modern-normalize.css";
 html {
@@ -28,13 +44,3 @@ body {
   background: #262626;
 }
 </style>
-<script>
-import Navbar from "@/components/ui/navbar";
-import { mapActions } from "vuex";
-export default {
-  components: { Navbar },
-  methods: {
-
-  },
-};
-</script>

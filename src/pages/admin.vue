@@ -1,11 +1,7 @@
 <template>
   <div class="section-container">
     <div class="admin">
-      <div class="form-wrapper">
-        <h3></h3>
-        <DefaultForm class="form" typeForm="Авторизация" @getData="loginAdmin">
-        </DefaultForm>
-      </div>
+
     </div>
   </div>
 </template>

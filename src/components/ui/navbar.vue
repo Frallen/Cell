@@ -40,10 +40,12 @@
           <li @click="$router.push('cartoons')">Мультфильмы</li>
         </ul>
         <ul class="menu-user">
-          <li @click="$router.push('auth')" v-if="!isAuthReady">Авторизация</li>
-          <li @click="$router.push('registration')" v-if="!isAuthReady">
+          <template v-if="!isAuthReady">
+          <li @click="$router.push('auth')">Авторизация</li>
+          <li @click="$router.push('registration')">
             Регистрация
           </li>
+          </template>
           <li v-if="isAuthReady" @click="$router.push('account')">Аккаунт</li>
           <li @click="logout" v-if="isAuthReady">Выйти</li>
         </ul>

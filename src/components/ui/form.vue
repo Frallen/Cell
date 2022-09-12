@@ -56,8 +56,7 @@ export default {
   position: relative;
   padding: 20px 50px;
   background: #fff;
-  margin-top: 10vh;
-  border-radius: 5px;
+  .br(5px);
 }
 .form {
   display: flex;

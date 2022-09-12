@@ -4,7 +4,7 @@
   flex-direction: column;
   &-container {
     position: relative;
-    padding: 0 10vw;
+    padding: 2vw;
     display: flex;
     flex-wrap: wrap;
     width: 100%;
@@ -25,4 +25,21 @@
 }
 .trs{
   transition: 0.3s ease-in-out;
+}
+.br(@val){
+  border-radius: @val;
+}
+.button{
+  text-decoration: none;
+  cursor: pointer;
+  display: block;
+  border: none;
+  padding: 10px 15px;
+  background: #f23f3f;
+  color: #fff;
+  font-size: 1.125em;
+  .br(10px);
+  @media @lg{
+    font-size: 1em;
+  }
 }

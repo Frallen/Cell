@@ -1,32 +1,22 @@
 <template>
-  <div class="section-container">
-    <div class="admin">
-
-    </div>
-  </div>
+  <DefaultForm class="form" typeForm="Авторизация" @getData="login">
+  </DefaultForm>
 </template>
 
 <script>
 import DefaultForm from "@/components/ui/form";
 import { mapActions, mapMutations } from "vuex";
+import { useRouter } from "vue-router";
 
 export default {
-  name: "adminPage",
-  data() {
-    return {
-      data: {
-        return: {},
-      },
-    };
-  },
+  name: "authPage",
   components: { DefaultForm },
-  computed: {
-    login: "auth/login",
-  },
   methods: {
-    loginAdmin(val) {
+    login(val) {
       this.setUser(val);
-      this.setAuth();
+
+      this.setAuth().then();
+     this.$router.push("/")
     },
     ...mapMutations({
       setUser: "auth/setUser",
@@ -38,8 +28,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-.admin {
-  width: 100%;
-}
-</style>
+<style scoped></style>

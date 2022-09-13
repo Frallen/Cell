@@ -70,12 +70,4 @@ export default {
 button {
   margin-top: 1em;
 }
-.input {
-  display: block;
-  border-radius: 6px;
-  padding: 10px 15px;
-  border: 1px solid @gray;
-  outline: none;
-  margin-top: 0.5em;
-}
 </style>

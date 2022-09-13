@@ -1,20 +1,14 @@
 <template>
-  <ul class="admin-nav">
-    <router-link
-      v-for="route in routes"
-      :to="route.path"
-      active-class="active"
-      >{{ route.name }}</router-link
-    >
-  </ul>
+  <div class="admin-nav">
+    <router-link v-for="route in routes" :to="route.path" active-class="active"
+      >{{ route.name }}
+    </router-link>
+  </div>
   <div class="admin-actions">
     <input type="text" />
-    <router-link
-      :to="this.$router.currentRoute.value.path + '/add'"
-      class="button"
-      >Добавить запись</router-link
-    >
+    <a class="button">Добавить запись</a>
   </div>
+  <router-view></router-view>
 </template>
 
 <script>
@@ -27,11 +21,10 @@ export default {
     return {
       path: null,
       routes: [
-        { path: "/admin/admin-statistics", name: "Статистика" },
-        { path: "/admin/admin-users", name: "Пользователи" },
-        { path: "/admin/admin-films", name: "Фильмы" },
-        { path: "/admin/admin-actors", name: "Актеры" },
-        { path: "/admin/admin-genres", name: "Жанры" },
+        { path: "/admin/users", name: "Пользователи" },
+        { path: "/admin/films", name: "Фильмы" },
+        { path: "/admin/actors", name: "Актеры" },
+        { path: "/admin/genres", name: "Жанры" },
       ],
     };
   },

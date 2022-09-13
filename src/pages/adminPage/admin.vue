@@ -1,18 +1,11 @@
 <template>
   <div class="admin">
     <admin-nav></admin-nav>
-
-
   </div>
 </template>
 
 <script>
-import DefaultForm from "@/components/ui/form";
 import { mapActions, mapMutations } from "vuex";
-import Table from "@/components/ui/table";
-import DefaultButton from "@/components/ui/button";
-import { ErrorMessage, Field, Form } from "vee-validate";
-import AdminForm from "@/components/ui/adminForm";
 import AdminNav from "@/pages/adminPage/admin-nav";
 
 export default {
@@ -25,13 +18,6 @@ export default {
   },
   components: {
     AdminNav,
-    AdminForm,
-    DefaultForm,
-    Table,
-    DefaultButton,
-    Form,
-    Field,
-    ErrorMessage,
   },
   computed: {
     login: "auth/login",

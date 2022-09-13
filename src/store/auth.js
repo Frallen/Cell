@@ -59,7 +59,7 @@ export const AuthModule = {
     },
     //Создание профиля пользователя
     async signUpData({ state }) {
-      addDoc(collection(db, "users"), {
+     await addDoc(collection(db, "users"), {
         id: state.user.uid,
         email: state.user.email,
       })

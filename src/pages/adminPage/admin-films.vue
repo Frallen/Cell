@@ -1,7 +1,5 @@
 <template>
-  <admin-nav></admin-nav>
   <Table :table-header="tableHeader"></Table>
-
 </template>
 
 <script>

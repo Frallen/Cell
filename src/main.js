@@ -3,7 +3,9 @@ import App from "./App.vue";
 import router from "@/router/router";
 import store from "@/store/index";
 import VCalendar from 'v-calendar';
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 const app = createApp(App);
 
-app.use(store).use(router).use(VCalendar).mount("#app");
+app.use(store).use(router).use(VCalendar).use(VueSweetalert2).mount("#app");

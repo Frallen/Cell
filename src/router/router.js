@@ -8,7 +8,6 @@ import adminGenres from "@/pages/adminPage/admin-genres";
 import adminActors from "@/pages/adminPage/admin-actors";
 import adminUsers from "@/pages/adminPage/admin-users";
 import adminFilms from "@/pages/adminPage/admin-films";
-import adminForm from "@/components/ui/adminForm";
 
 const routes = [
   {
@@ -16,29 +15,25 @@ const routes = [
     component: indexPage,
   },
   {
-    path: "/admin/",
+    path: "/admin",
     component: adminPage,
     meta: { requiresLogin: true },
     children: [
       {
-        path: "admin-genres/",
-        component: adminGenres,
-        children: [{ path: "add", component: adminForm }],
-      },
-      {
-        path: "admin-actors/",
+        path: "actors",
         component: adminActors,
-        children: [{ path: "add", component: adminForm }],
       },
       {
-        path: "admin-users/",
+        path: "users",
         component: adminUsers,
-        children: [{ path: "add", component: adminForm }],
       },
       {
-        path: "admin-films/",
+        path: "films",
         component: adminFilms,
-        children: [{ path: "add", component: adminForm }],
+      },
+      {
+        path: "genres",
+        component: adminGenres,
       },
     ],
   },

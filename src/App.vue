@@ -9,16 +9,26 @@
       </div>
     </div>
   </div>
+  <preloader v-show="loadingAdmin"></preloader>
 </template>
 
 <script>
 import Navbar from "@/components/ui/navbar";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
+import "@/formLocalize"
+import Preloader from "@/components/ui/preloader";
 export default {
-  components: { Navbar },
+  components: { Preloader, Navbar },
   methods: {
+
     ...mapActions({
       AuthState: "auth/AuthState",
+    }),
+
+  },
+  computed:{
+    ...mapState({
+      loadingAdmin:(state)=>state.admin.loadingAdmin
     }),
   },
   mounted() {

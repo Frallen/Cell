@@ -64,11 +64,11 @@
 </template>
 
 <script>
-import loginMixin from "@/mixins/loginMixin";
 import { mapActions, mapState } from "vuex";
-
+import Logo from "@/icons/logo";
 export default {
   name: "nav-bar",
+  components:[Logo],
   computed: {
     ...mapState({
       isAuthReady: (state) => state.auth.isAuthReady,

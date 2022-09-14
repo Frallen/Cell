@@ -11,23 +11,20 @@ import AdminNav from "@/pages/adminPage/admin-nav";
 export default {
   name: "adminPage",
   data() {
-    return {
-      tableHeader: null,
-      formVisible: false,
-    };
+    return {};
   },
   components: {
     AdminNav,
   },
   computed: {
-    login: "auth/login",
+    //   login: "auth/login",
   },
   methods: {
     ...mapMutations({
-      setUser: "auth/setUser",
+      //  setUser: "auth/setUser",
     }),
     ...mapActions({
-      setAuth: "auth/login",
+      //setAuth: "auth/login",
     }),
   },
 };

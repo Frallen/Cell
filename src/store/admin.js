@@ -1,4 +1,12 @@
-import { addDoc, collection, query, where, getDocs,doc, onSnapshot  } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  onSnapshot,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 
 export const adminModule = {
@@ -10,23 +18,33 @@ export const adminModule = {
     users: [],
     loadingAdmin: false,
   }),
-  getters: {
-
-  },
+  getters: {},
   mutations: {
     setLoading(state, loading) {
       state.loadingAdmin = loading;
     },
-    setGenres(state,genres){
-      state.genres=genres
-    }
+    setGenres(state, genres) {
+      state.genres = genres;
+    },
   },
   actions: {
-    async GetGenres({state,commit,}){
+    async GetGenres({ state, commit }) {
       commit("setLoading", true);
-     let snap=await onSnapshot(doc(db, "cities", "SF"), (doc) => {
-       commit("setGenres", doc.data());
-       commit("setLoading", false);
+      const q = query(collection(db, "genres"));
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const genres = [];
+        querySnapshot.forEach((doc) => {
+          let genre={
+            id:doc.id,
+            name:doc.data().genre,
+            slug:doc.data().slug,
+          }
+          genres.push(genre);
+        });
+
+        commit("setGenres", genres);
+        commit("setLoading", false);
+        // console.log("Current cities in CA: ", genres.join(", "));
       });
     },
     async CreateGenre({ state, commit }, newGenre) {

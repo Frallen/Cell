@@ -4,10 +4,6 @@
       >{{ route.name }}
     </router-link>
   </div>
-  <div class="admin-actions">
-    <input type="text" />
-    <a class="button">Добавить запись</a>
-  </div>
   <router-view></router-view>
 </template>
 
@@ -55,11 +51,5 @@ export default {
   display: block;
   height: 3px;
   background: @red;
-}
-.admin-actions {
-  display: flex;
-  align-content: center;
-  justify-content: space-between;
-  margin: 1em 0;
 }
 </style>

@@ -5,7 +5,9 @@ import {
   where,
   getDocs,
   doc,
+  deleteDoc,
   onSnapshot,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 
@@ -34,17 +36,16 @@ export const adminModule = {
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const genres = [];
         querySnapshot.forEach((doc) => {
-          let genre={
-            id:doc.id,
-            name:doc.data().genre,
-            slug:doc.data().slug,
-          }
+          let genre = {
+            id: doc.id,
+            name: doc.data().genre,
+            slug: doc.data().slug,
+          };
           genres.push(genre);
         });
 
         commit("setGenres", genres);
         commit("setLoading", false);
-        // console.log("Current cities in CA: ", genres.join(", "));
       });
     },
     async CreateGenre({ state, commit }, newGenre) {
@@ -59,6 +60,31 @@ export const adminModule = {
           commit("setLoading", false);
           console.log(err);
         });
+    },
+    async updateDoc({ state, commit }, obj) {
+      try {
+        commit("setLoading", true);
+        let docRef = doc(db, obj.to, obj.id);
+        await updateDoc(docRef, {
+          genre: obj.items.genre,
+          slug: obj.items.slug,
+        });
+        commit("setLoading", false);
+      } catch (e) {
+        commit("setLoading", false);
+        console.log(e);
+      }
+    },
+    async DeleteDoc({ state, commit }, obj) {
+      try {
+        commit("setLoading", true);
+
+        await deleteDoc(doc(db, obj.to, obj.id));
+        commit("setLoading", false);
+      } catch (err) {
+        console.log(err);
+        commit("setLoading", false);
+      }
     },
   },
 };

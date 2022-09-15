@@ -22,8 +22,8 @@
         <div class="table-body-item">{{ item.name }}</div>
         <div class="table-body-item">{{ item.slug }}</div>
         <div class="table-body-item">
-          <Pen />
-          <Close />
+          <Pen @click="updateValues(item.id)"/>
+          <Close @click="DeleteGenre(item.id)" />
         </div>
       </div>
     </div>
@@ -33,10 +33,11 @@
 <script>
 import Pen from "@/icons/pen.vue";
 import Close from "@/icons/close.vue";
+import { mapActions } from "vuex";
 export default {
   name: "Table",
   components: { Pen, Close },
-  emits: ["visible"],
+  emits: ["visible","updateValues"],
   data() {
     return {};
   },
@@ -50,8 +51,22 @@ export default {
   },
   mounted() {},
   methods: {
+    updateValues(val){
+      this.$emit("updateValues",val)
+      this.visibleForm()
+    },
     visibleForm() {
-      this.$emit("visible", true);
+      this.$emit("visible", true,);
+    },
+    ...mapActions({
+      DeleteDoc: "admin/DeleteDoc",
+    }),
+    DeleteGenre(val) {
+      let obj = {
+        to: "genres",
+        id: val,
+      };
+     this.DeleteDoc(obj);
     },
   },
 };
@@ -87,6 +102,9 @@ export default {
     overflow-y: auto;
     &-item {
       color: #fff;
+      svg {
+        cursor: pointer;
+      }
     }
   }
 }

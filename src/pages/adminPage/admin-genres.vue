@@ -1,23 +1,33 @@
 <template>
-  <adminForm @formValues="submitData" :schema="schema" v-show="visible" @hide="visibleForm">
-      <label for="genre" class="form-item">
-        Введите жанр
-        <Field name="genre" id="genre" class="input" v-model.trim="slugField" />
-        <ErrorMessage name="genre" />
-      </label>
-      <label for="slug" class="form-item">
-        Чпу
-        <Field
-          name="slug"
-          id="slug"
-          class="input slug"
-          v-model="slugedGenre"
-          v-bind:readonly="true"
-        />
-        <ErrorMessage name="slug" />
-      </label>
+  <adminForm
+    @formValues="submitData"
+    :schema="schema"
+    v-show="visible"
+    @hide="visibleForm"
+  >
+    <label for="genre" class="form-item">
+      Введите жанр
+      <Field name="genre" id="genre" class="input" v-model.trim="slugField" />
+      <ErrorMessage name="genre" />
+    </label>
+    <label for="slug" class="form-item">
+      Чпу
+      <Field
+        name="slug"
+        id="slug"
+        class="input slug"
+        v-model="slugedGenre"
+        v-bind:readonly="true"
+      />
+      <ErrorMessage name="slug" />
+    </label>
   </adminForm>
-  <Table :table-header="tableHeader" :data="genres" @visible="visibleForm" ></Table>
+  <Table
+    :table-header="tableHeader"
+    :data="genres"
+    @updateValues="SetId"
+    @visible="visibleForm"
+  ></Table>
 </template>
 
 <script>
@@ -44,23 +54,49 @@ export default {
     return {
       visible: false,
       tableHeader: ["Название жанра", "чпу", "действия"],
+      updateId: null,
+      FilteredGenres: [],
+      submitType: "submit",
     };
   },
   methods: {
     visibleForm(val) {
       this.visible = val;
+      if (val === false) this.submitType = "submit";
     },
     submitData(val) {
       //this.$swal('Hello Vue world!!!');
-      this.CreateGenre(val);
+      if (this.submitType === "submit") {
+        this.CreateGenre(val);
+      } else if (this.submitType === "update") {
+        let obj = {
+          id: this.updateId,
+          to: "genres",
+          items: val,
+        };
+
+        this.updateDoc(obj);
+        this.submitType = "submit";
+      }
     },
     ...mapActions({
       CreateGenre: "admin/CreateGenre",
       GetGenres: "admin/GetGenres",
+      updateDoc: "admin/updateDoc",
     }),
+    SetId(val) {
+      this.updateId = val;
+    },
   },
   mounted() {
     this.GetGenres();
+  },
+  watch: {
+    updateId(val) {
+      let item = this.genres.find((p) => p.id === val);
+      this.slugField = item.name;
+      this.submitType = "update";
+    },
   },
 
   computed: {
@@ -77,6 +113,4 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
-
-</style>
+<style scoped lang="less"></style>

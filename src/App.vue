@@ -9,26 +9,25 @@
       </div>
     </div>
   </div>
-  <preloader v-show="loadingAdmin"></preloader>
+  <preloader v-show="loadingAdmin || isLoading"></preloader>
 </template>
 
 <script>
 import Navbar from "@/components/ui/navbar";
 import { mapActions, mapGetters, mapState } from "vuex";
-import "@/formLocalize"
+import "@/formLocalize";
 import Preloader from "@/components/ui/preloader";
 export default {
   components: { Preloader, Navbar },
   methods: {
-
     ...mapActions({
       AuthState: "auth/AuthState",
     }),
-
   },
-  computed:{
+  computed: {
     ...mapState({
-      loadingAdmin:(state)=>state.admin.loadingAdmin
+      loadingAdmin: (state) => state.admin.loadingAdmin,
+      isLoading: (state) => state.auth.isLoading,
     }),
   },
   mounted() {
@@ -38,7 +37,7 @@ export default {
 </script>
 
 <style lang="less">
-@import 'v-calendar/dist/style.css';
+@import "v-calendar/dist/style.css";
 @import "modern-normalize/modern-normalize.css";
 html {
   font-size: 16px;
@@ -68,7 +67,7 @@ body {
   }
   &-body {
     width: 80%;
-    &-wrapper{
+    &-wrapper {
       width: 100%;
     }
   }

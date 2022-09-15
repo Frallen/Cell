@@ -1,6 +1,11 @@
 <template>
   <div>
-    <Form class="form" :validation-schema="LocalSchema" @submit="onSubmit">
+    <Form
+      class="form"
+      :validation-schema="LocalSchema"
+      @submit="onSubmit"
+      ref="Form"
+    >
       <div class="form-wrapper">
         <slot></slot>
       </div>
@@ -29,6 +34,12 @@ export default {
     schema: {
       type: Object,
     },
+    updateValues: { type: Object },
+  },
+  data() {
+    return {
+      setValues: null,
+    };
   },
   methods: {
     onSubmit(values, { resetForm }) {

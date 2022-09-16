@@ -12,6 +12,7 @@
     "@vee-validate/rules": "^4.6.7",
     "core-js": "^3.8.3",
     "modern-normalize": "^1.1.0",
+    "quasar": "^2.8.2",
     "svg-sprite": "^1.5.4",
     "svg-sprite-loader": "^6.0.11",
     "swiper": "^8.3.2",

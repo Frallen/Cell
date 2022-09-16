@@ -22,7 +22,7 @@
         <div class="table-body-item">{{ item.name }}</div>
         <div class="table-body-item">{{ item.slug }}</div>
         <div class="table-body-item">
-          <Pen @click="updateValues(item.id)"/>
+          <Pen @click="updateValues(item.id)" />
           <Close @click="DeleteGenre(item.id)" />
         </div>
       </div>
@@ -33,11 +33,10 @@
 <script>
 import Pen from "@/icons/pen.vue";
 import Close from "@/icons/close.vue";
-import { mapActions } from "vuex";
 export default {
   name: "Table",
   components: { Pen, Close },
-  emits: ["visible","updateValues"],
+  emits: ["visible", "updateValues","DeleteItem"],
   data() {
     return {};
   },
@@ -51,22 +50,15 @@ export default {
   },
   mounted() {},
   methods: {
-    updateValues(val){
-      this.$emit("updateValues",val)
-      this.visibleForm()
+    updateValues(val) {
+      this.$emit("updateValues", val);
+      this.visibleForm();
     },
     visibleForm() {
-      this.$emit("visible", true,);
+      this.$emit("visible", true);
     },
-    ...mapActions({
-      DeleteDoc: "admin/DeleteDoc",
-    }),
     DeleteGenre(val) {
-      let obj = {
-        to: "genres",
-        id: val,
-      };
-     this.DeleteDoc(obj);
+      this.$emit("DeleteItem",val);
     },
   },
 };
@@ -107,6 +99,10 @@ export default {
       }
     }
   }
+}
+.table-header-item:first-child,
+.table-body-item:first-child {
+  flex-basis: 50%;
 }
 .table-actions {
   display: flex;

@@ -22,7 +22,7 @@ import Close from "@/icons/close";
 
 export default {
   name: "adminForm",
-  emits: ["hide"],
+  emits: ["hide", "refForm"],
   components: {
     Close,
     DefaultButton,
@@ -41,6 +41,9 @@ export default {
       setValues: null,
     };
   },
+  mounted() {
+    this.$emit("refForm", this.$refs.Form);
+  },
   methods: {
     onSubmit(values, { resetForm }) {
       this.$emit("formValues", values);
@@ -48,6 +51,8 @@ export default {
     },
     hideForm() {
       this.$emit("hide", false);
+      //Очистка формы по закрытию формы
+      //    this.$refs.Form.resetForm();
     },
   },
   computed: {
@@ -77,10 +82,7 @@ export default {
     margin: -10px 0 1em -10px;
     display: flex;
     flex-wrap: wrap;
-
-    .slug {
-      cursor: not-allowed;
-    }
+    align-items: center;
   }
 }
 </style>

@@ -5,10 +5,10 @@
     v-show="visible"
     @hide="visibleForm"
   >
-    <label for="genre" class="form-item">
+    <label for="name" class="form-item">
       Введите жанр
-      <Field name="genre" id="genre" class="input" v-model.trim="slugField" />
-      <ErrorMessage name="genre" />
+      <Field name="name" id="name" class="input" v-model.trim="slugField" />
+      <ErrorMessage name="name" />
     </label>
     <label for="slug" class="form-item">
       Чпу
@@ -27,6 +27,7 @@
     :data="genres"
     @updateValues="SetId"
     @visible="visibleForm"
+    @DeleteItem="DeleteItem"
   ></Table>
 </template>
 
@@ -39,9 +40,10 @@ import { Field, ErrorMessage } from "vee-validate";
 import { mapActions, mapState } from "vuex";
 import * as yup from "yup";
 import slugMixin from "@/mixins/slugMixin";
+import toastMixin from "@/mixins/toastMixin";
 export default {
   name: "admin-genres",
-  mixins: [slugMixin],
+  mixins: [slugMixin, toastMixin],
   components: {
     Table,
     AdminNav,
@@ -55,7 +57,6 @@ export default {
       visible: false,
       tableHeader: ["Название жанра", "чпу", "действия"],
       updateId: null,
-      FilteredGenres: [],
       submitType: "submit",
     };
   },
@@ -65,9 +66,14 @@ export default {
       if (val === false) this.submitType = "submit";
     },
     submitData(val) {
-      //this.$swal('Hello Vue world!!!');
       if (this.submitType === "submit") {
-        this.CreateGenre(val);
+        let obj={
+          to: "genres",
+          val:val
+        }
+        this.CreateItem(obj)
+          .then((p) => this.setSuccess("Запись добавлена"))
+          .catch((err) => this.setError());
       } else if (this.submitType === "update") {
         let obj = {
           id: this.updateId,
@@ -75,21 +81,33 @@ export default {
           items: val,
         };
 
-        this.updateDoc(obj);
+        this.updateDoc(obj)
+          .then((p) => this.setSuccess("Запись обновлена"))
+          .catch((err) => this.setError());
         this.submitType = "submit";
       }
     },
+    DeleteItem(val) {
+      let obj = {
+        to: "genres",
+        id: val,
+      };
+      this.DeleteDoc(obj)
+        .then((p) => this.setSuccess("Запись удалена"))
+        .catch((err) => this.setError());
+    },
     ...mapActions({
-      CreateGenre: "admin/CreateGenre",
-      GetGenres: "admin/GetGenres",
+      CreateItem: "admin/CreateItem",
+      FetchData: "admin/FetchData",
       updateDoc: "admin/updateDoc",
+      DeleteDoc: "admin/DeleteDoc",
     }),
     SetId(val) {
       this.updateId = val;
     },
   },
   mounted() {
-    this.GetGenres();
+    this.FetchData("genres");
   },
   watch: {
     updateId(val) {
@@ -105,7 +123,7 @@ export default {
     }),
     schema() {
       return yup.object({
-        genre: yup.string().required(),
+        name: yup.string().required(),
         slug: yup.string().required(),
       });
     },

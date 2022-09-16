@@ -23,13 +23,13 @@
     max-width: 50%;
   }
 }
-.trs{
+.trs {
   transition: 0.3s ease-in-out;
 }
-.br(@val){
+.br(@val) {
   border-radius: @val;
 }
-.button{
+.button {
   text-decoration: none;
   cursor: pointer;
   display: block;
@@ -39,7 +39,7 @@
   color: #fff;
   font-size: 1.125em;
   .br(10px);
-  @media @lg{
+  @media @lg {
     font-size: 1em;
   }
 }
@@ -51,7 +51,11 @@
   outline: none;
   margin-top: 0.5em;
 }
-.form-item{
+.form-item {
   margin-top: 10px;
   margin-left: 10px;
+  height: fit-content;
+}
+.slug {
+  cursor: not-allowed;
 }

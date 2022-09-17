@@ -22,7 +22,7 @@ import Close from "@/icons/close";
 
 export default {
   name: "adminForm",
-  emits: ["hide", "refForm"],
+  emits: ["hide", "refForm","formValues"],
   components: {
     Close,
     DefaultButton,

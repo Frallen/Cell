@@ -85,16 +85,23 @@ export const adminModule = {
       try {
         commit("setLoading", true);
         let docRef = doc(db, obj.to, obj.id);
-        await updateDoc(docRef, {
-          name: obj.items.name,
-          slug: obj.items.slug,
-          country:  obj.items.country,
-          duration: obj.items.duration,
-          year:  obj.items.year,
-          video:  obj.items.video,
-          genres: obj.items.genres ?? null,
-          actors: obj.items.actors ?? null,
-        });
+        if(obj.items.country) {
+          await updateDoc(docRef, {
+            name: obj.items.name,
+            slug: obj.items.slug,
+            country:  obj.items.country,
+             duration: obj.items.duration,
+             year:  obj.items.year,
+             video:  obj.items.video,
+             genres: obj.items.genres ?? null,
+             actors: obj.items.actors ?? null,
+          });
+        }else{
+          await updateDoc(docRef, {
+            name: obj.items.name,
+            slug: obj.items.slug
+          });
+        }
         commit("setLoading", false);
       } catch (e) {
         commit("setLoading", false);

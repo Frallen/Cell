@@ -44,6 +44,26 @@
       <Field name="video" id="video" class="input" />
       <ErrorMessage name="video" />
     </label>
+    <label for="poster" class="form-item">
+      Постер
+      <Field
+        name="poster"
+        id="poster"
+        class="input"
+        type="file"
+      />
+      <ErrorMessage name="poster" />
+    </label>
+    <label for="BigPoster" class="form-item">
+      Большой постер
+      <Field
+        name="BigPoster"
+        id="BigPoster"
+        class="input"
+        type="file"
+      />
+      <ErrorMessage name="poster" />
+    </label>
   </adminForm>
   <Table
     :table-header="tableHeader"
@@ -85,6 +105,7 @@ export default {
       submitType: "submit",
       selectGenreValue: [],
       refForm: null,
+      poster: null,
     };
   },
   methods: {
@@ -168,6 +189,9 @@ export default {
         country: yup.string().required(),
         duration: yup.string().required(),
         year: yup.string().required(),
+        video: yup.string().required(),
+        poster: yup.string().required(),
+        BigPoster: yup.string().required(),
         genres: yup
           .array()
           .min(1, "Необходимо выбрать хотябы 1 жанр")

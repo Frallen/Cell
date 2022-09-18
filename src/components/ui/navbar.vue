@@ -65,10 +65,10 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import Logo from "@/icons/logo";
+import Logo from "@/icons/logo.vue";
 export default {
   name: "nav-bar",
-  components:[Logo],
+  components: [Logo],
   computed: {
     ...mapState({
       isAuthReady: (state) => state.auth.isAuthReady,

@@ -1,11 +1,9 @@
 <template>
   <div class="container">
     <navbar class="container-nav"></navbar>
-    <div class="container-body">
-      <div class="section-container">
-        <div class="container-body-wrapper">
-          <router-view></router-view>
-        </div>
+    <div class="section-container">
+      <div class="container-body">
+        <router-view></router-view>
       </div>
     </div>
   </div>
@@ -54,6 +52,24 @@ ul {
   padding: 0;
   margin: 0;
 }
+h1 {
+  font-weight: 700;
+}
+h2 {
+  font-weight: 600;
+}
+h3 {
+  font-weight: 500;
+}
+h4 {
+  font-weight: 400;
+}
+h5 {
+  font-weight: 300;
+}
+p {
+  font-weight: 400;
+}
 li {
   list-style-type: none;
 }
@@ -63,21 +79,14 @@ body {
 }
 .container {
   display: flex;
+  flex-direction: column;
   height: 100vh;
+  &-body {
+    width: 100%;
+  }
   &-nav {
-    width: 20%;
-    @media @lg{
-      width: 10%;
-    }
   }
   &-body {
-    width: 80%;
-    @media @lg{
-      width: 100%;
-    }
-    &-wrapper {
-      width: 100%;
-    }
   }
 }
 </style>

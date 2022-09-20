@@ -1,13 +1,6 @@
 <template>
-  <div class="menu-wrapper">
-    <div class="menu">
-      <div class="menu-mobile">
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50" width="50px" height="50px">
-          <g id="surface259545422">
-            <path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;" d="M 0 7.5 L 0 12.5 L 50 12.5 L 50 7.5 Z M 0 22.5 L 0 27.5 L 50 27.5 L 50 22.5 Z M 0 37.5 L 0 42.5 L 50 42.5 L 50 37.5 Z M 0 37.5 "/>
-          </g>
-        </svg>
-      </div>
+  <div class="menu" :class="{ mobile: mobile }">
+    <div class="menu-wrapper">
       <div class="menu-logo" @click="$router.push('/')">
         <svg
           width="24px"
@@ -40,9 +33,20 @@
         <h3>Cell</h3>
       </div>
       <ul class="menu-nav">
+        <li class="menu-section">
+          <ul>
+            <li><router-link to="/news">Новости</router-link></li>
+            <li><router-link to="/movies">Фильмы</router-link></li>
+            <li><router-link to="/series">Сериалы</router-link></li>
+            <li><router-link to="/cartoons">Мультфильмы</router-link></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="menu-wrapper menu-manipulation">
+      <ul class="menu-nav">
         <li v-if="isAuthReady" class="menu-section">
           <ul>
-            <li class="menu-nav-title">Личное</li>
             <li><router-link to="account">Аккаунт</router-link></li>
             <li v-if="isAuthReady && isAdmin">
               <router-link to="/admin">Админ</router-link>
@@ -56,16 +60,14 @@
             <li><router-link to="/registration">Регистрация</router-link></li>
           </ul>
         </li>
-        <li class="menu-section">
-          <ul>
-            <li class="menu-nav-title">Навигация</li>
-            <li><router-link to="/news">Новости</router-link></li>
-            <li><router-link to="/movies">Фильмы</router-link></li>
-            <li><router-link to="/series">Сериалы</router-link></li>
-            <li><router-link to="/cartoons">Мультфильмы</router-link></li>
-          </ul>
-        </li>
       </ul>
+      <div
+        class="menu-mobile"
+        :class="{ 'icon-active': mobile }"
+        @click="mobileView"
+      >
+        <span></span>
+      </div>
     </div>
   </div>
 </template>
@@ -73,10 +75,14 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import Logo from "@/icons/logo.vue";
-import Hamburger from "@/icons/hamburger.vue";
 export default {
   name: "nav-bar",
-  components: [Logo,Hamburger],
+  components: [Logo],
+  data() {
+    return {
+      mobile: false,
+    };
+  },
   computed: {
     ...mapState({
       isAuthReady: (state) => state.auth.isAuthReady,
@@ -87,6 +93,9 @@ export default {
     logout() {
       this.$store.dispatch("auth/logout");
       this.$router.push("/");
+    },
+    mobileView() {
+      this.mobile === false ? (this.mobile = true) : (this.mobile = false);
     },
 
     ...mapActions({
@@ -99,42 +108,73 @@ export default {
 <style lang="less" scoped>
 .menu {
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
+  align-items: center;
+  position: relative;
   width: 100%;
-  &-wrapper {
-    border-right: 1px solid #393838;
+  border-bottom: 1px solid #393838;
 
-    padding: 15px 10px;
+  padding: 15px 10px;
+  &-wrapper {
   }
   &-logo {
     display: flex;
     align-items: center;
     cursor: pointer;
     color: #fff;
-    @media @lg{
-      display: none;
-    }
     svg {
       margin-right: 10px;
     }
   }
-  &-mobile{
+  &-mobile {
     display: none;
-    @media @lg{
+    cursor: pointer;
+    position: relative;
+    width: 40px;
+    height: 40px;
+    @media @lg {
       display: block;
+    }
+    span {
+      content: "";
+      width: 100%;
+      height: 3px;
+      background: #fff;
+      display: block;
+      margin-top: 50%;
+    }
+    span::after,
+    span::before {
+      content: "";
+      width: 100%;
+      height: 3px;
+      background: #fff;
+      display: block;
+      position: absolute;
+      .trs();
+    }
+    span::after {
+      margin-top: -12px;
+    }
+
+    span::before {
+      margin-top: 13px;
     }
   }
   &-nav {
     .menu-section {
-      margin-top: 1em;
+      margin-left: 1em;
       ul {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         li {
-          margin-bottom: 0.7em;
+          margin-left: 0.8em;
           font-size: 1.5em;
           user-select: none;
           color: @thin-white;
-          @media @lg{
+          cursor: pointer;
+          @media @lg {
             font-size: 1.3em;
           }
           a {
@@ -151,21 +191,77 @@ export default {
         }
       }
     }
-    &-title {
-      font-size: 2.5em!important;
-      color: #fff;
-      font-weight: 500;
-      margin-bottom: 0.5em;
-      @media @lg{
-        font-size: 2em!important;
+  }
+  &-nav,
+  &-wrapper,
+  &-user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &-manipulation {
+    .menu-nav {
+      @media @lg {
+        display: none;
       }
     }
   }
-  &-nav,
-  &-user {
+  &-wrapper {
+    .menu-nav {
+      @media @md {
+        display: none;
+      }
+    }
+  }
+}
+.mobile {
+  align-items: flex-start;
+  flex-direction: column;
+  animation: show 0.5s ease-in-out;
+  .menu-nav,
+  .menu-wrapper,
+  .menu-user,
+  .menu-section ul {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  li {
+    margin-top: 0.8em;
+    margin-left: 0 !important;
+  }
+
+  .menu-wrapper {
+    .menu-nav {
+    }
+  }
+}
+@keyframes show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.icon-active {
+  position: absolute;
+  right: 2%;
+  top: 4%;
+  span {
+    transform: rotate(225deg);
+    .trs();
+  }
+  span::after {
+    margin-top: 0;
+    transform: rotate(-90deg);
+    .trs();
+  }
+  span::before {
+    margin-top: 0;
+    .trs();
+    opacity: 0;
   }
 }
 </style>

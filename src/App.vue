@@ -39,6 +39,7 @@ export default {
 <style lang="less">
 @import "v-calendar/dist/style.css";
 @import "modern-normalize/modern-normalize.css";
+@import "@/styles/fonts.less";
 html {
   font-size: 16px;
 }
@@ -58,15 +59,22 @@ li {
 }
 body {
   background: #262626;
+  font-family: "Oswald" !important;
 }
 .container {
   display: flex;
   height: 100vh;
   &-nav {
     width: 20%;
+    @media @lg{
+      width: 10%;
+    }
   }
   &-body {
     width: 80%;
+    @media @lg{
+      width: 100%;
+    }
     &-wrapper {
       width: 100%;
     }

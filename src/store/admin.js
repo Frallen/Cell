@@ -1,20 +1,18 @@
 import {
   addDoc,
   collection,
-  query,
-  where,
-  getDocs,
-  doc,
   deleteDoc,
+  doc,
   onSnapshot,
+  query,
   updateDoc,
 } from "firebase/firestore";
 import {
-  ref,
-  uploadBytesResumable,
   deleteObject,
   getDownloadURL,
   listAll,
+  ref,
+  uploadBytesResumable,
 } from "firebase/storage";
 
 import { db, storage } from "../../firebase";
@@ -57,44 +55,25 @@ export const adminModule = {
         const q = query(collection(db, to));
 
         await onSnapshot(q, (querySnapshot) => {
-          const data = [];
-
-          querySnapshot.forEach((doc) => {
-            // const poster=`gs://cell-11ef4.appspot.com/images/${doc.id}/poster.png`
-            let url = async () => {
-              let url;
-              const starsRef = ref(storage, `images/${doc.id}/poster.png`);
-
-              await getDownloadURL(starsRef).then((p) => {
-                url = p;
-              });
-
-              return url;
-            };
-
+          const allPromises = querySnapshot.docs.map(async (doc) => {
             let item = {
               id: doc.id,
-              name: doc.data().name,
-              slug: doc.data().slug,
-              country: doc.data().country,
-              duration: doc.data().duration,
-              year: doc.data().year,
-              video: doc.data().video,
-              genres: doc.data().genres,
-              actors: doc.data().actors,
-             // poster: to === "films" ? url() : null,
-              // BipPoster: url,
+             ...doc.data()
             };
-
-            data.push(item);
-
-            // Get the download URL
+            if (to === "films") {
+              const poster = ref(storage, `images/${doc.id}/poster.png`);
+              const BigPoster=ref(storage, `images/${doc.id}/BigPoster.png`);
+              item.poster = await getDownloadURL(poster);
+              item.BigPoster=await getDownloadURL(BigPoster);
+            }
+            return item;
           });
-
-          commit("setData", { data, to });
+          Promise.all(allPromises)
+            .then((data) => commit("setData", { data, to }))
+           // .catch(console.error);
         });
       } catch (err) {
-        console.log(err);
+        console.error(err);
       } finally {
         commit("setLoading", false);
       }
@@ -144,26 +123,9 @@ export const adminModule = {
               }
             },
             (error) => {
-              // A full list of error codes is available at
-              // https://firebase.google.com/docs/storage/web/handle-errors
-              switch (error.code) {
-                case "storage/unauthorized":
-                  // User doesn't have permission to access the object
-                  break;
-                case "storage/canceled":
-                  // User canceled the upload
-                  break;
-                case "storage/unknown":
-                  // Unknown error occurred, inspect error.serverResponse
-                  break;
-              }
+              console.error(error);
             },
-            () => {
-              // Upload completed successfully, now we can get the download URL
-              /*getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                  console.log('File available at', downloadURL);
-                });*/
-            }
+            () => {}
           );
           uploadTaskBigPicture.on(
             "state_changed",
@@ -181,26 +143,9 @@ export const adminModule = {
               }
             },
             (error) => {
-              // A full list of error codes is available at
-              // https://firebase.google.com/docs/storage/web/handle-errors
-              switch (error.code) {
-                case "storage/unauthorized":
-                  // User doesn't have permission to access the object
-                  break;
-                case "storage/canceled":
-                  // User canceled the upload
-                  break;
-                case "storage/unknown":
-                  // Unknown error occurred, inspect error.serverResponse
-                  break;
-              }
+              console.error(error);
             },
-            () => {
-              // Upload completed successfully, now we can get the download URL
-              /*getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                  console.log('File available at', downloadURL);
-                });*/
-            }
+            () => {}
           );
         });
       } catch (err) {
@@ -232,10 +177,10 @@ export const adminModule = {
             slug: obj.items.slug,
           });
         }
+      } catch (err) {
+        console.error(err);
+      } finally {
         commit("setLoading", false);
-      } catch (e) {
-        commit("setLoading", false);
-        console.log(e);
       }
     },
     async DeleteDoc({ state, commit }, obj) {
@@ -256,7 +201,6 @@ export const adminModule = {
         }
       } catch (err) {
         console.log(err);
-        commit("setLoading", false);
       } finally {
         commit("setLoading", false);
       }

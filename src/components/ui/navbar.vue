@@ -1,6 +1,13 @@
 <template>
   <div class="menu-wrapper">
     <div class="menu">
+      <div class="menu-mobile">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50" width="50px" height="50px">
+          <g id="surface259545422">
+            <path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;" d="M 0 7.5 L 0 12.5 L 50 12.5 L 50 7.5 Z M 0 22.5 L 0 27.5 L 50 27.5 L 50 22.5 Z M 0 37.5 L 0 42.5 L 50 42.5 L 50 37.5 Z M 0 37.5 "/>
+          </g>
+        </svg>
+      </div>
       <div class="menu-logo" @click="$router.push('/')">
         <svg
           width="24px"
@@ -66,9 +73,10 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import Logo from "@/icons/logo.vue";
+import Hamburger from "@/icons/hamburger.vue";
 export default {
   name: "nav-bar",
-  components: [Logo],
+  components: [Logo,Hamburger],
   computed: {
     ...mapState({
       isAuthReady: (state) => state.auth.isAuthReady,
@@ -95,7 +103,7 @@ export default {
   justify-content: space-between;
   width: 100%;
   &-wrapper {
-    border-right: 1px solid @thin-white;
+    border-right: 1px solid #393838;
 
     padding: 15px 10px;
   }
@@ -104,28 +112,35 @@ export default {
     align-items: center;
     cursor: pointer;
     color: #fff;
+    @media @lg{
+      display: none;
+    }
     svg {
       margin-right: 10px;
     }
   }
-  &-nav {
-    &-title {
-      font-size: 1.5em;
-      color: #fff;
-      font-weight: 500;
-      margin-bottom: 0.5em;
+  &-mobile{
+    display: none;
+    @media @lg{
+      display: block;
     }
+  }
+  &-nav {
     .menu-section {
       margin-top: 1em;
       ul {
         li {
           margin-bottom: 0.7em;
-
+          font-size: 1.5em;
           user-select: none;
           color: @thin-white;
+          @media @lg{
+            font-size: 1.3em;
+          }
           a {
             color: @thin-white;
             .trs();
+
             text-decoration: none;
           }
           a:hover {
@@ -134,6 +149,15 @@ export default {
             color: #fff;
           }
         }
+      }
+    }
+    &-title {
+      font-size: 2.5em!important;
+      color: #fff;
+      font-weight: 500;
+      margin-bottom: 0.5em;
+      @media @lg{
+        font-size: 2em!important;
       }
     }
   }

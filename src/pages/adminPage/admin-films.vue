@@ -46,23 +46,23 @@
     </label>
     <label for="poster" class="form-item">
       Постер
-      <Field
-        name="poster"
-        id="poster"
-        class="input"
-        type="file"
-      />
+      <Field name="poster" id="poster" class="input" type="file" />
       <ErrorMessage name="poster" />
     </label>
     <label for="BigPoster" class="form-item">
       Большой постер
-      <Field
-        name="BigPoster"
-        id="BigPoster"
-        class="input"
-        type="file"
-      />
+      <Field name="BigPoster" id="BigPoster" class="input" type="file" />
       <ErrorMessage name="poster" />
+    </label>
+    <label v-show="currentUpdItem" class="form-item posters">
+      <a href="#">
+        Постер
+        <img :src="currentUpdItem.poster" alt="" />
+      </a>
+      <a href="#">
+        Большой постер
+        <img :src="currentUpdItem.BigPoster" alt="" />
+      </a>
     </label>
   </adminForm>
   <Table
@@ -103,9 +103,9 @@ export default {
       tableHeader: ["Название", "Чпу", "действия"],
       updateId: null,
       submitType: "submit",
-      selectGenreValue: [],
       refForm: null,
       poster: null,
+      currentUpdItem: [],
     };
   },
   methods: {
@@ -134,6 +134,7 @@ export default {
           .catch((err) => this.setError());
         this.submitType = "submit";
       }
+      this.currentUpdItem = [];
     },
     DeleteItem(val) {
       let obj = {
@@ -143,6 +144,7 @@ export default {
       this.DeleteDoc(obj)
         .then((p) => this.setSuccess("Запись удалена"))
         .catch((err) => this.setError());
+      this.currentUpdItem = [];
     },
     ...mapActions({
       CreateItem: "admin/CreateItem",
@@ -173,6 +175,7 @@ export default {
       this.refForm.setFieldValue("genres", item.genres);
       this.refForm.setFieldValue("actors", item.actors);
       this.submitType = "update";
+      this.currentUpdItem = item;
     },
   },
 
@@ -206,4 +209,21 @@ export default {
 };
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.posters {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  a{
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: @text;
+    img {
+      max-width: 150px;
+      max-height: 150px;
+    }
+  }
+
+}
+</style>

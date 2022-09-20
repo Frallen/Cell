@@ -7,7 +7,7 @@
       </div>
     </div>
   </div>
-  <preloader v-show="loadingAdmin || isLoading"></preloader>
+  <preloader v-show="loadingAdmin || isLoading || isLoadingF"></preloader>
 </template>
 
 <script>
@@ -26,6 +26,7 @@ export default {
     ...mapState({
       loadingAdmin: (state) => state.admin.loadingAdmin,
       isLoading: (state) => state.auth.isLoading,
+      isLoadingF: (state) => state.films.isLoading,
     }),
   },
   mounted() {
@@ -88,5 +89,11 @@ body {
   }
   &-body {
   }
+}
+.swiper-button-disabled{
+  color: #eee!important;
+}
+.swiper-button-next,.swiper-button-prev{
+  color: #fff!important;
 }
 </style>

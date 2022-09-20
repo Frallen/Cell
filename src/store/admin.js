@@ -58,19 +58,20 @@ export const adminModule = {
           const allPromises = querySnapshot.docs.map(async (doc) => {
             let item = {
               id: doc.id,
-             ...doc.data()
+              ...doc.data(),
             };
             if (to === "films") {
               const poster = ref(storage, `images/${doc.id}/poster.png`);
-              const BigPoster=ref(storage, `images/${doc.id}/BigPoster.png`);
+              const BigPoster = ref(storage, `images/${doc.id}/BigPoster.png`);
               item.poster = await getDownloadURL(poster);
-              item.BigPoster=await getDownloadURL(BigPoster);
+              item.BigPoster = await getDownloadURL(BigPoster);
             }
             return item;
           });
-          Promise.all(allPromises)
-            .then((data) => commit("setData", { data, to }))
-           // .catch(console.error);
+          Promise.all(allPromises).then((data) =>
+            commit("setData", { data, to })
+          );
+          // .catch(console.error);
         });
       } catch (err) {
         console.error(err);
@@ -95,15 +96,12 @@ export const adminModule = {
           let docId = p._key.path.segments[1];
 
           const uploadTaskPicture = uploadBytesResumable(
-            ref(storage, `images/${docId}/poster.${poster.name.split(".")[1]}`),
+            ref(storage, `images/${docId}/poster.png`),
             poster,
             metadata
           );
           const uploadTaskBigPicture = uploadBytesResumable(
-            ref(
-              storage,
-              `images/${docId}/BigPoster.${BigPoster.name.split(".")[1]}`
-            ),
+            ref(storage, `images/${docId}/BigPoster.png`),
             BigPoster,
             metadata
           );
@@ -162,6 +160,7 @@ export const adminModule = {
           await updateDoc(docRef, {
             name: obj.items.name,
             slug: obj.items.slug,
+            text: obj.items.text,
             country: obj.items.country,
             duration: obj.items.duration,
             year: obj.items.year,

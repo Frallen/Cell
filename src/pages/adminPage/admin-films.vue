@@ -64,6 +64,13 @@
         <img :src="currentUpdItem.BigPoster" alt="" />
       </a>
     </label>
+    <label for="text" class="form-item textarea">
+      Описание
+      <Field name="text" id="text" v-slot="{ field }" type="text-area">
+        <textarea class="input" v-bind="field"></textarea>
+      </Field>
+      <ErrorMessage name="text" />
+    </label>
   </adminForm>
   <Table
     :table-header="tableHeader"
@@ -168,6 +175,7 @@ export default {
     updateId(val) {
       let item = this.films.find((p) => p.id === val);
       this.slugField = item.name;
+      this.refForm.setFieldValue("text", item.text);
       this.refForm.setFieldValue("country", item.country);
       this.refForm.setFieldValue("duration", item.duration);
       this.refForm.setFieldValue("year", item.year);
@@ -189,6 +197,7 @@ export default {
       return yup.object({
         name: yup.string().required(),
         slug: yup.string().required(),
+        text: yup.string().required(),
         country: yup.string().required(),
         duration: yup.string().required(),
         year: yup.string().required(),
@@ -214,7 +223,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  a{
+  a {
     display: flex;
     flex-direction: column;
     text-decoration: none;
@@ -224,6 +233,13 @@ export default {
       max-height: 150px;
     }
   }
-
+}
+.textarea {
+  width: 100%;
+  textarea {
+    width: 100%;
+    resize: none;
+    height: 150px;
+  }
 }
 </style>

@@ -8,6 +8,7 @@ import adminGenres from "@/pages/adminPage/admin-genres";
 import adminActors from "@/pages/adminPage/admin-actors";
 import adminUsers from "@/pages/adminPage/admin-users";
 import adminFilms from "@/pages/adminPage/admin-films";
+import filmsDetail from "@/pages/films/filmsDetail";
 
 const routes = [
   {
@@ -36,6 +37,10 @@ const routes = [
         component: adminGenres,
       },
     ],
+  },
+  {
+    path:"/films/:id",
+    component: filmsDetail
   },
   { path: "/auth", component: authPage },
   { path: "/registration", component: singUpPage },

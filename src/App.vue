@@ -70,6 +70,10 @@ h5 {
 }
 p {
   font-weight: 400;
+  font-size: 18px;
+  @media @lg{
+    font-size: 16px;
+  }
 }
 li {
   list-style-type: none;

@@ -34,11 +34,7 @@ export const filmsModule = {
       try {
         commit("setLoading", true);
 
-        // `onSnapshot` registers a real-time updates listener,
-        // use `getDocs` to retrieve documents
         const { docs } = await getDocs(query(collection(db, "films")));
-
-        // Map over the `docs` array and return fully hydrated objects
         const data = await Promise.all(
           docs.map(async (doc) => ({
             ...doc.data(),
@@ -65,7 +61,6 @@ export const filmsModule = {
       try {
         commit("setLoading", true);
         const docs = await getDoc(doc(db, "films", id));
-        console.log(docs.data());
         let returnPoster = async () => {
           return await getDownloadURL(
             ref(storage, `images/${docs.id}/poster.png`)

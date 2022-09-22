@@ -147,7 +147,7 @@ export const adminModule = {
           );
         });
       } catch (err) {
-        console.log(err);
+        console.error(err);
       } finally {
         commit("setLoading", false);
       }
@@ -199,7 +199,7 @@ export const adminModule = {
           });
         }
       } catch (err) {
-        console.log(err);
+        console.error(err);
       } finally {
         commit("setLoading", false);
       }

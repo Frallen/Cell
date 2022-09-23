@@ -6,6 +6,9 @@ import {
   query,
   where,
   getDoc,
+  orderBy,
+  startAfter,
+  limit,
 } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 import { getDownloadURL, ref } from "firebase/storage";
@@ -14,11 +17,19 @@ export const filmsModule = {
   namespaced: true,
   state: () => ({
     films: [],
+    orderedGenres: [],
     film: {},
+    genres: [],
     isLoading: false,
   }),
   getters: {},
   mutations: {
+    loadMoreFilms(state, data) {
+      state.orderedGenres.push(data);
+    },
+    setGenres(state, data) {
+      state.genres = data;
+    },
     setFilms(state, data) {
       state.films = data;
     },
@@ -51,6 +62,60 @@ export const filmsModule = {
         );
 
         commit("setFilms", data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        commit("setLoading", false);
+      }
+    },
+    async FetchGenres({ state, commit }) {
+      try {
+        commit("setLoading", true);
+
+        const docs = await getDocs(query(collection(db, "genres")));
+        let arr = [];
+        docs.forEach((p) => {
+          const item = {
+            ...p.data(),
+            id: p.id,
+          };
+          arr.push(item);
+        });
+
+        commit("setGenres", arr);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        commit("setLoading", false);
+      }
+    },
+    async GetFilmsByGenre({ state, commit }, genreSlug) {
+      try {
+        commit("setLoading", true);
+        let genre = state.genres.find((p) => p.slug === genreSlug);
+
+        let documentSnapshots = await getDocs(
+          query(
+            collection(db, "films"),
+            where("genres", "array-contains", genre.name),
+            limit(25)
+          )
+        );
+
+        const lastVisible =
+          documentSnapshots.docs[documentSnapshots.docs.length - 1];
+        const next = await getDocs(
+          query(
+            collection(db, "films"),
+            where("genres", "array-contains", genre.name),
+            startAfter(lastVisible),
+            limit(25)
+          )
+        );
+        let data = {
+          ...next.data(),
+        };
+        commit("loadMoreFilms", data);
       } catch (err) {
         console.error(err);
       } finally {

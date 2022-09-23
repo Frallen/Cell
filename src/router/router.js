@@ -9,6 +9,7 @@ import adminActors from "@/pages/adminPage/admin-actors";
 import adminUsers from "@/pages/adminPage/admin-users";
 import adminFilms from "@/pages/adminPage/admin-films";
 import filmsDetail from "@/pages/films/filmsDetail";
+import filmsCompilation from "@/pages/films/filmsCompilation";
 
 const routes = [
   {
@@ -39,8 +40,12 @@ const routes = [
     ],
   },
   {
-    path:"/films/:id",
+    path:"/film/:id",
     component: filmsDetail
+  },
+  {
+    path:"/genre/:id",
+    component: filmsCompilation
   },
   { path: "/auth", component: authPage },
   { path: "/registration", component: singUpPage },

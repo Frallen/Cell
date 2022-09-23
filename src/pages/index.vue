@@ -14,7 +14,7 @@
         class="index-slider-item"
         v-for="slide in firstFive"
         :key="slide.id"
-        @click="this.$router.push(`/films/${slide.id}`)"
+        @click="this.$router.push(`/film/${slide.id}`)"
       >
         <iframe
           width="100%"
@@ -36,6 +36,31 @@
       </swiper-slide>
     </swiper>
   </div>
+  <div class="index-genres">
+    <swiper
+      class="index-genres-wrapper"
+      :modules="modules"
+      :slides-per-view="4"
+      :space-between="20"
+      :navigation="true"
+      :breakpoints="breakpointGenres"
+      @swiper="onSwiper"
+      @slideChange="onSlideChange"
+    >
+      <swiper-slide
+        class="index-genres-item"
+        v-for="genre in genres"
+        :key="genre.id"
+        :style="{
+          backgroundColor:
+            '#' + Math.floor(Math.random() * 16777215).toString(16),
+        }"
+        @click="this.$router.push(`/genre/${genre.slug}`)"
+      >
+        {{ genre.name }}
+      </swiper-slide>
+    </swiper>
+  </div>
 </template>
 
 <script>
@@ -52,6 +77,11 @@ export default {
   data() {
     return {
       navigation: true,
+      breakpointGenres: {
+        998: { slidesPerView: 4 },
+        767: { slidesPerView: 3 },
+        320: { slidesPerView: 1 },
+      },
     };
   },
 
@@ -71,10 +101,12 @@ export default {
   methods: {
     ...mapActions({
       FetchFilms: "films/FetchFilms",
+      FetchGenres: "films/FetchGenres",
     }),
   },
   mounted() {
     this.FetchFilms();
+    this.FetchGenres();
     if (window.matchMedia("(max-width: 998px)")) {
       this.navigation = false;
     } else {
@@ -84,6 +116,7 @@ export default {
   computed: {
     ...mapState({
       films: (state) => state.films.films,
+      genres: (state) => state.films.genres,
     }),
     firstFive() {
       return this.films.slice(0, 4);
@@ -120,7 +153,8 @@ export default {
       justify-self: flex-end;
       overflow: hidden;
       .text-eclipse();
-      -webkit-line-clamp: 5;    line-height: 34px;
+      -webkit-line-clamp: 5;
+      line-height: 34px;
       @media @lg {
         font-size: 1em;
       }
@@ -133,7 +167,7 @@ export default {
     .br(10px);
     position: relative;
     overflow: hidden;
-
+    cursor: pointer;
     iframe {
       position: absolute;
       top: 50%;
@@ -171,6 +205,29 @@ export default {
       rgba(0, 0, 0, 0.01) 64.92%,
       transparent 69.32%
     );
+  }
+}
+.index-genres {
+  &-wrapper {
+    height: 170px;
+    margin: 3em 1em;
+  }
+  &-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    .br(15px);
+    height: 150px;
+    font-size: 1.3em;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    .trs();
+    cursor: pointer;
+  }
+  &-item:hover {
+    box-shadow: 0px 6px 5px 0px #fff;
+    .trs();
   }
 }
 </style>

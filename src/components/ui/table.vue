@@ -1,6 +1,7 @@
 <template>
   <div class="table-actions">
-    <input type="text" class="input" /><button
+    <input type="text" class="input" @input="filterValue" />
+    <button
       class="button"
       @click="visibleForm"
     >
@@ -36,7 +37,7 @@ import Close from "@/icons/close.vue";
 export default {
   name: "Table",
   components: { Pen, Close },
-  emits: ["visible", "updateValues","DeleteItem"],
+  emits: ["visible", "updateValues", "DeleteItem","filterValue"],
   data() {
     return {};
   },
@@ -50,6 +51,9 @@ export default {
   },
   mounted() {},
   methods: {
+    filterValue(val){
+      this.$emit("filterValue",val)
+    },
     updateValues(val) {
       this.$emit("updateValues", val);
       this.visibleForm();
@@ -58,7 +62,7 @@ export default {
       this.$emit("visible", true);
     },
     DeleteGenre(val) {
-      this.$emit("DeleteItem",val);
+      this.$emit("DeleteItem", val);
     },
   },
 };

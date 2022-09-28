@@ -78,6 +78,7 @@
     @updateValues="SetId"
     @visible="visibleForm"
     @DeleteItem="DeleteItem"
+    @filterValue="setQuery"
   ></Table>
 </template>
 
@@ -113,6 +114,7 @@ export default {
       refForm: null,
       poster: null,
       currentUpdItem: [],
+      searchValue: null,
     };
   },
   methods: {
@@ -122,9 +124,12 @@ export default {
     },
     submitData(val) {
       if (this.submitType === "submit") {
+        let genres = this.genres.filter((p) => val.genres.includes(p.name));
+        delete val.genres;
         let obj = {
           to: "films",
           val: val,
+          genres: genres,
         };
         this.CreateItem(obj)
           .then((p) => this.setSuccess("Запись добавлена"))
@@ -162,6 +167,9 @@ export default {
     SetId(val) {
       this.updateId = val;
     },
+    setQuery(val) {
+      this.searchValue = val;
+    },
     refFormAction(val) {
       this.refForm = val;
     },
@@ -180,10 +188,19 @@ export default {
       this.refForm.setFieldValue("duration", item.duration);
       this.refForm.setFieldValue("year", item.year);
       this.refForm.setFieldValue("video", item.video);
-      this.refForm.setFieldValue("genres", item.genres);
+      this.refForm.setFieldValue(
+        "genres",
+        item.genres.map((p) => p.name)
+      );
       this.refForm.setFieldValue("actors", item.actors);
       this.submitType = "update";
       this.currentUpdItem = item;
+    },
+    searchValue(val) {
+      if (val) {
+        console.log(this.films.filter((p) => p.name.includes(val)));
+        this.films = this.films.filter((p) => p.name);
+      }
     },
   },
 

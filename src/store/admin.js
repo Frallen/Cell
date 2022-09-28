@@ -92,6 +92,7 @@ export const adminModule = {
 
         await addDoc(collection(db, obj.to), {
           ...obj.val,
+          genres:obj.genres,
         }).then((p) => {
           let docId = p._key.path.segments[1];
 

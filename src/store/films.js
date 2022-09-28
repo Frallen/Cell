@@ -25,7 +25,7 @@ export const filmsModule = {
   getters: {},
   mutations: {
     loadMoreFilms(state, data) {
-      state.orderedGenres.push(data);
+      state.orderedGenres = data;
     },
     setGenres(state, data) {
       state.genres = data;
@@ -92,30 +92,61 @@ export const filmsModule = {
     async GetFilmsByGenre({ state, commit }, genreSlug) {
       try {
         commit("setLoading", true);
-        let genre = state.genres.find((p) => p.slug === genreSlug);
 
-        let documentSnapshots = await getDocs(
-          query(
-            collection(db, "films"),
-            where("genres", "array-contains", genre.name),
-            limit(25)
-          )
+        let genre = state.genres.filter((p) => p.slug === genreSlug);
+        const first = query(
+          collection(db, "films"),
+          where("genres", "array-contains", genre.map((p=>p.name))),
+          orderBy("genres"),
+          limit(25)
         );
+        const documentSnapshots = await getDocs(first);
 
+        // Get the last visible document
         const lastVisible =
           documentSnapshots.docs[documentSnapshots.docs.length - 1];
-        const next = await getDocs(
+        //let data = new Object(genre.name);
+
+        await onSnapshot(
+          query(
+            collection(db, "films"),
+            where("genres", "array-contains-any", genre.map(p=>p.name)),
+            //orderBy("genres"),
+           // startAfter(lastVisible),
+            limit(25)
+          ),
+          (querySnapshot) => {
+            const allPromises = querySnapshot.docs.map(async (doc) => {
+              const poster = ref(storage, `images/${doc.id}/poster.png`);
+              const BigPoster = ref(storage, `images/${doc.id}/BigPoster.png`);
+              return {
+                id: doc.id,
+                ...doc.data(),
+                poster: await getDownloadURL(poster),
+                BigPoster: await getDownloadURL(BigPoster),
+              };
+            });
+
+            Promise.all(allPromises).then((data) =>
+              commit("loadMoreFilms", data)
+            );
+          }
+        );
+
+        /*  const lastVisible =
+          documentSnapshots.docs[documentSnapshots.docs.length - 1];*/
+        /* const next = await getDocs(
           query(
             collection(db, "films"),
             where("genres", "array-contains", genre.name),
+            orderBy(genre.name),
             startAfter(lastVisible),
             limit(25)
           )
         );
-        let data = {
-          ...next.data(),
-        };
-        commit("loadMoreFilms", data);
+        documentSnapshots.forEach((p) => {
+          
+        });*/
       } catch (err) {
         console.error(err);
       } finally {

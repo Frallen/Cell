@@ -51,8 +51,8 @@ export default {
   },
   mounted() {},
   methods: {
-    filterValue(val){
-      this.$emit("filterValue",val)
+    filterValue(e){
+      this.$emit("filterValue",e.currentTarget.value)
     },
     updateValues(val) {
       this.$emit("updateValues", val);

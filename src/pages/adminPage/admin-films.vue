@@ -90,7 +90,7 @@ import DefaultButton from "@/components/ui/button";
 import { ErrorMessage, Field } from "vee-validate";
 import slugMixin from "@/mixins/slugMixin";
 import toastMixin from "@/mixins/toastMixin";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import * as yup from "yup";
 import Select from "@/components/ui/select";
 export default {
@@ -196,15 +196,12 @@ export default {
       this.submitType = "update";
       this.currentUpdItem = item;
     },
-    searchValue(val) {
-      if (val) {
-        console.log(this.films.filter((p) => p.name.includes(val)));
-        this.films = this.films.filter((p) => p.name);
-      }
-    },
   },
 
   computed: {
+    ...mapGetters({
+      searchTable: "admin/searchTable",
+    }),
     ...mapState({
       films: (state) => state.admin.films,
       genres: (state) => state.admin.genres,

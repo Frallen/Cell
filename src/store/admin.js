@@ -26,7 +26,14 @@ export const adminModule = {
     users: [],
     loadingAdmin: false,
   }),
-  getters: {},
+  getters: {
+    //поиск по строке в инпуте
+    searchTable(state, val ) {
+      return state.films.filter((p) =>
+        p.name.toLowerCase().includes(val.toLowerCase())
+      );
+    },
+  },
   mutations: {
     setLoading(state, loading) {
       state.loadingAdmin = loading;

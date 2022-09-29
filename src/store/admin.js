@@ -26,7 +26,7 @@ export const adminModule = {
     users: [],
     searchFieldFilms: null,
     searchFieldActors: null,
-    searchFieldGenres:null,
+    searchFieldGenres: null,
     loadingAdmin: false,
   }),
   getters: {
@@ -44,7 +44,7 @@ export const adminModule = {
     searchTableActors(state) {
       if (state.searchFieldActors) {
         return state.actors.filter((p) =>
-            p.name.toLowerCase().includes(state.searchFieldActors.toLowerCase())
+          p.name.toLowerCase().includes(state.searchFieldActors.toLowerCase())
         );
       } else {
         return state.actors;
@@ -54,7 +54,7 @@ export const adminModule = {
     searchTableGenres(state) {
       if (state.searchFieldGenres) {
         return state.genres.filter((p) =>
-            p.name.toLowerCase().includes(state.searchFieldGenres.toLowerCase())
+          p.name.toLowerCase().includes(state.searchFieldGenres.toLowerCase())
         );
       } else {
         return state.genres;
@@ -103,11 +103,18 @@ export const adminModule = {
               id: doc.id,
               ...doc.data(),
             };
+
             if (to === "films") {
-              const poster = ref(storage, `images/${doc.id}/poster.png`);
-              const BigPoster = ref(storage, `images/${doc.id}/BigPoster.png`);
+              const poster = ref(storage, `images/films/${doc.id}/poster.png`);
+              const BigPoster = ref(
+                storage,
+                `images/films/${doc.id}/BigPoster.png`
+              );
               item.poster = await getDownloadURL(poster);
               item.BigPoster = await getDownloadURL(BigPoster);
+            } else if (to === "genres") {
+              const genre = ref(storage, `images/genres/${doc.id}/genre.png`);
+              item.genre = await getDownloadURL(genre);
             }
             return item;
           });
@@ -130,67 +137,94 @@ export const adminModule = {
         };
         let poster = obj.val.poster;
         let BigPoster = obj.val.BigPoster;
+        let genre= obj.val.genre;
         delete obj.val.poster;
         delete obj.val.BigPoster;
-
+        delete obj.val.genre;
         await addDoc(collection(db, obj.to), {
           ...obj.val,
           //если жанр существует то добавить объект жанров
           ...(obj.genres && { genres: obj.genres }),
         }).then((p) => {
-          if(obj.films){
           let docId = p._key.path.segments[1];
-
-          const uploadTaskPicture = uploadBytesResumable(
-            ref(storage, `images/${docId}/poster.png`),
-            poster,
-            metadata
-          );
-          const uploadTaskBigPicture = uploadBytesResumable(
-            ref(storage, `images/${docId}/BigPoster.png`),
-            BigPoster,
-            metadata
-          );
-          uploadTaskPicture.on(
-            "state_changed",
-            (snapshot) => {
-              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-              /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          if (obj.to === "films") {
+            const uploadTaskPicture = uploadBytesResumable(
+              ref(storage, `images/films/${docId}/poster.png`),
+              poster,
+              metadata
+            );
+            const uploadTaskBigPicture = uploadBytesResumable(
+              ref(storage, `images/films/${docId}/BigPoster.png`),
+              BigPoster,
+              metadata
+            );
+            uploadTaskPicture.on(
+              "state_changed",
+              (snapshot) => {
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 console.log('Upload is ' + progress + '% done');*/
-              switch (snapshot.state) {
-                case "paused":
-                  console.log("Upload is paused");
-                  break;
-                case "running":
-                  console.log("Upload is running");
-                  break;
-              }
-            },
-            (error) => {
-              console.error(error);
-            },
-            () => {}
-          );
-          uploadTaskBigPicture.on(
-            "state_changed",
-            (snapshot) => {
-              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-              /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                switch (snapshot.state) {
+                  case "paused":
+                    console.log("Upload is paused");
+                    break;
+                  case "running":
+                    console.log("Upload is running");
+                    break;
+                }
+              },
+              (error) => {
+                console.error(error);
+              },
+              () => {}
+            );
+            uploadTaskBigPicture.on(
+              "state_changed",
+              (snapshot) => {
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                  console.log('Upload is ' + progress + '% done');*/
-              switch (snapshot.state) {
-                case "paused":
-                  console.log("Upload is paused");
-                  break;
-                case "running":
-                  console.log("Upload is running");
-                  break;
-              }
-            },
-            (error) => {
-              console.error(error);
-            },
-            () => {}
-          );}
+                switch (snapshot.state) {
+                  case "paused":
+                    console.log("Upload is paused");
+                    break;
+                  case "running":
+                    console.log("Upload is running");
+                    break;
+                }
+              },
+              (error) => {
+                console.error(error);
+              },
+              () => {}
+            );
+          } else if (obj.to === "genres") {
+            const uploadTaskPicture = uploadBytesResumable(
+              ref(storage, `images/genres/${docId}/genre.png`),
+                genre,
+              metadata
+            );
+            uploadTaskPicture.on(
+              "state_changed",
+              (snapshot) => {
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                  console.log('Upload is ' + progress + '% done');*/
+                switch (snapshot.state) {
+                  case "paused":
+                    console.log("Upload is paused");
+                    break;
+                  case "running":
+                    console.log("Upload is running");
+                    break;
+                }
+              },
+              (error) => {
+                console.error(error);
+              },
+              () => {}
+            );
+          }
         });
       } catch (err) {
         console.error(err);
@@ -234,7 +268,17 @@ export const adminModule = {
 
         await deleteDoc(doc(db, obj.to, obj.id));
         if (obj.to === "films") {
-          const desertRef = ref(storage, `images/${obj.id}`);
+          const desertRef = ref(storage, `images/films/${obj.id}`);
+
+          listAll(desertRef).then(async (listResults) => {
+            const promises = listResults.items.map((item) => {
+              return deleteObject(item);
+            });
+
+            await Promise.all(promises);
+          });
+        } else if (obj.to === "genres") {
+          const desertRef = ref(storage, `images/genres/${obj.id}`);
 
           listAll(desertRef).then(async (listResults) => {
             const promises = listResults.items.map((item) => {

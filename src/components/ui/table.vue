@@ -1,12 +1,7 @@
 <template>
   <div class="table-actions">
     <input type="text" class="input" @input="filterValue" />
-    <button
-      class="button"
-      @click="visibleForm"
-    >
-      Добавить запись
-    </button>
+    <button class="button" @click="visibleForm">Добавить запись</button>
   </div>
   <div class="table">
     <div class="table-header">
@@ -37,7 +32,7 @@ import Close from "@/icons/close.vue";
 export default {
   name: "Table",
   components: { Pen, Close },
-  emits: ["visible", "updateValues", "DeleteItem","filterValue"],
+  emits: ["visible", "updateValues", "DeleteItem", "filterValue"],
   data() {
     return {};
   },
@@ -51,8 +46,8 @@ export default {
   },
   mounted() {},
   methods: {
-    filterValue(e){
-      this.$emit("filterValue",e.currentTarget.value)
+    filterValue(e) {
+      this.$emit("filterValue", e.currentTarget.value);
     },
     updateValues(val) {
       this.$emit("updateValues", val);
@@ -96,12 +91,24 @@ export default {
   &-body {
     max-height: 400px;
     overflow-y: auto;
+    margin-top: 1em;
     &-item {
       color: #fff;
       svg {
         cursor: pointer;
       }
     }
+  }
+  &-body::-webkit-scrollbar {
+    width: 10px;
+  }
+  &-body::-webkit-scrollbar-track {
+    background-color: #fff;
+    .br(10px);
+  }
+  &-body::-webkit-scrollbar-thumb {
+    background: @red;
+    .br(10px);
   }
 }
 .table-header-item:first-child,

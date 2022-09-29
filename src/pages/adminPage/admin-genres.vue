@@ -21,6 +21,15 @@
       />
       <ErrorMessage name="slug" />
     </label>
+    <label for="genre" class="form-item">
+      Изображение
+      <Field name="genre" id="genre" class="input" type="file" />
+      <ErrorMessage name="genre" />
+    </label>
+    <div class="form-item genre-img" v-if="currentUpdateItem.genre">
+      <h5>Текущее изображение</h5>
+      <a href="#"><img :src="currentUpdateItem.genre" alt="" /></a>
+    </div>
   </adminForm>
   <Table
     :table-header="tableHeader"
@@ -38,7 +47,7 @@ import AdminNav from "@/components/ui/table";
 import adminForm from "@/components/ui/adminForm";
 import DefaultButton from "@/components/ui/button";
 import { Field, ErrorMessage } from "vee-validate";
-import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import * as yup from "yup";
 import slugMixin from "@/mixins/slugMixin";
 import toastMixin from "@/mixins/toastMixin";
@@ -59,11 +68,12 @@ export default {
       tableHeader: ["Название жанра", "чпу", "действия"],
       updateId: null,
       submitType: "submit",
+      currentUpdateItem: [],
     };
   },
   methods: {
     setQuery(val) {
-      this.setGenresQuery(val)
+      this.setGenresQuery(val);
     },
     ...mapMutations({
       setGenresQuery: "admin/setGenresQuery",
@@ -74,10 +84,10 @@ export default {
     },
     submitData(val) {
       if (this.submitType === "submit") {
-        let obj={
+        let obj = {
           to: "genres",
-          val:val
-        }
+          val: val,
+        };
         this.CreateItem(obj)
           .then((p) => this.setSuccess("Запись добавлена"))
           .catch((err) => this.setError());
@@ -120,6 +130,7 @@ export default {
     updateId(val) {
       let item = this.genres.find((p) => p.id === val);
       this.slugField = item.name;
+      this.currentUpdateItem = item;
       this.submitType = "update";
     },
   },
@@ -135,10 +146,18 @@ export default {
       return yup.object({
         name: yup.string().required(),
         slug: yup.string().required(),
+        genre: yup.string().required(),
       });
     },
   },
 };
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.genre-img {
+  img {
+    width: 200px;
+    height: 200px;
+  }
+}
+</style>

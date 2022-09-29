@@ -54,7 +54,7 @@
       <Field name="BigPoster" id="BigPoster" class="input" type="file" />
       <ErrorMessage name="poster" />
     </label>
-    <label v-show="currentUpdItem" class="form-item posters">
+    <div v-if="currentUpdItem.poster" class="form-item posters">
       <a href="#">
         Постер
         <img :src="currentUpdItem.poster" alt="" />
@@ -63,7 +63,7 @@
         Большой постер
         <img :src="currentUpdItem.BigPoster" alt="" />
       </a>
-    </label>
+    </div>
     <label for="text" class="form-item textarea">
       Описание
       <Field name="text" id="text" v-slot="{ field }" type="text-area">
@@ -125,6 +125,7 @@ export default {
     submitData(val) {
       if (this.submitType === "submit") {
         let genres = this.genres.filter((p) => val.genres.includes(p.name));
+        genres.forEach(p=>delete p.genre)
         delete val.genres;
         let obj = {
           to: "films",
@@ -227,7 +228,7 @@ export default {
           .required(),
         actors: yup
           .array()
-          .min(1, "Необходимо выбрать хотябы 1 жанр")
+          .min(1, "Необходимо выбрать хотябы 1 актера")
           .required(),
       });
     },

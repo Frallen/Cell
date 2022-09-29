@@ -49,15 +49,11 @@
     >
       <swiper-slide
         class="index-genres-item"
-        v-for="genre in genres"
-        :key="genre.id"
-        :style="{
-          backgroundColor:
-            '#' + Math.floor(Math.random() * 16777215).toString(16),
-        }"
-        @click="this.$router.push(`/genre/${genre.slug}`)"
+        v-for="item in genres"
+        :key="item.id"
+        @click="this.$router.push(`/genre/${item.slug}`)"
       >
-        {{ genre.name }}
+        <img :src="item.genre" :alt="genres.name" />
       </swiper-slide>
     </swiper>
   </div>
@@ -209,7 +205,7 @@ export default {
 }
 .index-genres {
   &-wrapper {
-    height: 170px;
+    height: 270px;
     margin: 2em 1em;
   }
   &-item {
@@ -218,12 +214,18 @@ export default {
     justify-content: center;
     color: #fff;
     .br(15px);
-    height: 150px;
+    height: 250px;
     font-size: 1.3em;
     text-transform: uppercase;
     letter-spacing: 5px;
     .trs();
     cursor: pointer;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
   &-item:hover {
     box-shadow: 0px 6px 5px 0px #fff;

@@ -74,7 +74,7 @@
   </adminForm>
   <Table
     :table-header="tableHeader"
-    :data="films"
+    :data="searchTable"
     @updateValues="SetId"
     @visible="visibleForm"
     @DeleteItem="DeleteItem"
@@ -164,11 +164,14 @@ export default {
       updateDoc: "admin/updateDoc",
       DeleteDoc: "admin/DeleteDoc",
     }),
+    ...mapMutations({
+      setFilmQuery: "admin/setFilmQuery",
+    }),
     SetId(val) {
       this.updateId = val;
     },
     setQuery(val) {
-      this.searchValue = val;
+      this.setFilmQuery(val)
     },
     refFormAction(val) {
       this.refForm = val;
@@ -200,7 +203,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      searchTable: "admin/searchTable",
+      searchTable: "admin/searchTableFilms",
     }),
     ...mapState({
       films: (state) => state.admin.films,

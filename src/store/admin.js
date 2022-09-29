@@ -24,17 +24,53 @@ export const adminModule = {
     actors: [],
     films: [],
     users: [],
+    searchFieldFilms: null,
+    searchFieldActors: null,
+    searchFieldGenres:null,
     loadingAdmin: false,
   }),
   getters: {
-    //поиск по строке в инпуте
-    searchTable(state, val ) {
-      return state.films.filter((p) =>
-        p.name.toLowerCase().includes(val.toLowerCase())
-      );
+    //поиск по строке в инпуте, таблица фильмов
+    searchTableFilms(state) {
+      if (state.searchFieldFilms) {
+        return state.films.filter((p) =>
+          p.name.toLowerCase().includes(state.searchFieldFilms.toLowerCase())
+        );
+      } else {
+        return state.films;
+      }
+    },
+    //поиск по строке в инпуте, таблица актеров
+    searchTableActors(state) {
+      if (state.searchFieldActors) {
+        return state.actors.filter((p) =>
+            p.name.toLowerCase().includes(state.searchFieldActors.toLowerCase())
+        );
+      } else {
+        return state.actors;
+      }
+    },
+    //поиск по строке в инпуте, таблица актеров
+    searchTableGenres(state) {
+      if (state.searchFieldGenres) {
+        return state.genres.filter((p) =>
+            p.name.toLowerCase().includes(state.searchFieldGenres.toLowerCase())
+        );
+      } else {
+        return state.genres;
+      }
     },
   },
   mutations: {
+    setFilmQuery(state, query) {
+      state.searchFieldFilms = query;
+    },
+    setActorsQuery(state, query) {
+      state.searchFieldActors = query;
+    },
+    setGenresQuery(state, query) {
+      state.searchFieldGenres = query;
+    },
     setLoading(state, loading) {
       state.loadingAdmin = loading;
     },
@@ -99,8 +135,10 @@ export const adminModule = {
 
         await addDoc(collection(db, obj.to), {
           ...obj.val,
-          genres:obj.genres,
+          //если жанр существует то добавить объект жанров
+          ...(obj.genres && { genres: obj.genres }),
         }).then((p) => {
+          if(obj.films){
           let docId = p._key.path.segments[1];
 
           const uploadTaskPicture = uploadBytesResumable(
@@ -152,7 +190,7 @@ export const adminModule = {
               console.error(error);
             },
             () => {}
-          );
+          );}
         });
       } catch (err) {
         console.error(err);

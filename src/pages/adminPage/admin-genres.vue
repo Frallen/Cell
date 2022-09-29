@@ -24,10 +24,11 @@
   </adminForm>
   <Table
     :table-header="tableHeader"
-    :data="genres"
+    :data="searchTable"
     @updateValues="SetId"
     @visible="visibleForm"
     @DeleteItem="DeleteItem"
+    @filterValue="setQuery"
   ></Table>
 </template>
 
@@ -37,7 +38,7 @@ import AdminNav from "@/components/ui/table";
 import adminForm from "@/components/ui/adminForm";
 import DefaultButton from "@/components/ui/button";
 import { Field, ErrorMessage } from "vee-validate";
-import { mapActions, mapState } from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import * as yup from "yup";
 import slugMixin from "@/mixins/slugMixin";
 import toastMixin from "@/mixins/toastMixin";
@@ -61,6 +62,12 @@ export default {
     };
   },
   methods: {
+    setQuery(val) {
+      this.setGenresQuery(val)
+    },
+    ...mapMutations({
+      setGenresQuery: "admin/setGenresQuery",
+    }),
     visibleForm(val) {
       this.visible = val;
       if (val === false) this.submitType = "submit";
@@ -120,6 +127,9 @@ export default {
   computed: {
     ...mapState({
       genres: (state) => state.admin.genres,
+    }),
+    ...mapGetters({
+      searchTable: "admin/searchTableGenres",
     }),
     schema() {
       return yup.object({

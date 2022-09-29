@@ -210,7 +210,7 @@ export default {
 .index-genres {
   &-wrapper {
     height: 170px;
-    margin: 3em 1em;
+    margin: 2em 1em;
   }
   &-item {
     display: flex;

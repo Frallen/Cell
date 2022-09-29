@@ -74,10 +74,11 @@
   </adminForm>
   <Table
     :table-header="tableHeader"
-    :data="films"
+    :data="searchTable"
     @updateValues="SetId"
     @visible="visibleForm"
     @DeleteItem="DeleteItem"
+    @filterValue="setQuery"
   ></Table>
 </template>
 
@@ -89,7 +90,7 @@ import DefaultButton from "@/components/ui/button";
 import { ErrorMessage, Field } from "vee-validate";
 import slugMixin from "@/mixins/slugMixin";
 import toastMixin from "@/mixins/toastMixin";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import * as yup from "yup";
 import Select from "@/components/ui/select";
 export default {
@@ -113,6 +114,7 @@ export default {
       refForm: null,
       poster: null,
       currentUpdItem: [],
+      searchValue: null,
     };
   },
   methods: {
@@ -122,9 +124,12 @@ export default {
     },
     submitData(val) {
       if (this.submitType === "submit") {
+        let genres = this.genres.filter((p) => val.genres.includes(p.name));
+        delete val.genres;
         let obj = {
           to: "films",
           val: val,
+          genres: genres,
         };
         this.CreateItem(obj)
           .then((p) => this.setSuccess("Запись добавлена"))
@@ -159,8 +164,14 @@ export default {
       updateDoc: "admin/updateDoc",
       DeleteDoc: "admin/DeleteDoc",
     }),
+    ...mapMutations({
+      setFilmQuery: "admin/setFilmQuery",
+    }),
     SetId(val) {
       this.updateId = val;
+    },
+    setQuery(val) {
+      this.setFilmQuery(val)
     },
     refFormAction(val) {
       this.refForm = val;
@@ -180,7 +191,10 @@ export default {
       this.refForm.setFieldValue("duration", item.duration);
       this.refForm.setFieldValue("year", item.year);
       this.refForm.setFieldValue("video", item.video);
-      this.refForm.setFieldValue("genres", item.genres);
+      this.refForm.setFieldValue(
+        "genres",
+        item.genres.map((p) => p.name)
+      );
       this.refForm.setFieldValue("actors", item.actors);
       this.submitType = "update";
       this.currentUpdItem = item;
@@ -188,6 +202,9 @@ export default {
   },
 
   computed: {
+    ...mapGetters({
+      searchTable: "admin/searchTableFilms",
+    }),
     ...mapState({
       films: (state) => state.admin.films,
       genres: (state) => state.admin.genres,

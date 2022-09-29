@@ -24,10 +24,11 @@
   </admin-form>
   <Table
     :table-header="tableHeader"
-    :data="actors"
+    :data="searchTable"
     @updateValues="SetId"
     @visible="visibleForm"
     @DeleteItem="DeleteItem"
+    @filterValue="setQuery"
   ></Table>
 </template>
 
@@ -37,10 +38,11 @@ import AdminNav from "@/components/ui/table";
 import adminForm from "@/components/ui/adminForm";
 import DefaultButton from "@/components/ui/button";
 import { Field, ErrorMessage } from "vee-validate";
-import { mapActions, mapState } from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import * as yup from "yup";
 import slugMixin from "@/mixins/slugMixin";
 import toastMixin from "@/mixins/toastMixin";
+import { query } from "firebase/firestore";
 export default {
   name: "admin-actors",
   mixins: [slugMixin, toastMixin],
@@ -87,6 +89,9 @@ export default {
         this.submitType = "submit";
       }
     },
+    setQuery(val) {
+      this.setActorsQuery(val);
+    },
     DeleteItem(val) {
       let obj = {
         to: "actors",
@@ -101,6 +106,9 @@ export default {
       FetchData: "admin/FetchData",
       updateDoc: "admin/updateDoc",
       DeleteDoc: "admin/DeleteDoc",
+    }),
+    ...mapMutations({
+      setActorsQuery: "admin/setActorsQuery",
     }),
     SetId(val) {
       this.updateId = val;
@@ -120,6 +128,9 @@ export default {
   computed: {
     ...mapState({
       actors: (state) => state.admin.actors,
+    }),
+    ...mapGetters({
+      searchTable: "admin/searchTableActors",
     }),
     schema() {
       return yup.object({

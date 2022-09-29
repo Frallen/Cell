@@ -7,7 +7,7 @@
         <div class="info-genres">
           <span>Жанры:</span>
           <div class="info-genres-list">
-            <div v-for="item in film.genres">{{ item }},</div>
+            <div v-for="item in film.genres">{{ item.name }},</div>
           </div>
         </div>
         <ul>

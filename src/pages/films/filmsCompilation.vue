@@ -3,7 +3,7 @@
     <div class="films-wrapper">
       <div
         class="films-item"
-        v-for="item in films"
+        v-for="item in orderedGenres"
         :key="item.id"
         @click="this.$router.push(`/film/${item.id}`)"
       >
@@ -26,9 +26,10 @@ export default {
     return {};
   },
   mounted() {
-    this.FetchGenres().finally((p) =>
+    this.FetchGenres().then((p) =>
       this.GetFilmsByGenre(this.$route.params.id)
     );
+
   },
   methods: {
     ...mapActions({
@@ -38,7 +39,7 @@ export default {
   },
   computed: {
     ...mapState({
-      films: (state) => state.films.orderedGenres,
+      orderedGenres: (state) => state.films.orderedGenres,
     }),
   },
 };

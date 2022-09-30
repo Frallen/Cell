@@ -20,6 +20,7 @@ export const filmsModule = {
     orderedGenres: [],
     film: {},
     genres: [],
+
     isLoading: false,
   }),
   getters: {},
@@ -95,14 +96,13 @@ export const filmsModule = {
       try {
         commit("setLoading", true);
 
-        let genre = state.genres.filter((p) => p.slug === genreSlug);
+        let genre = state.genres.find((p) => p.slug === genreSlug);
+        //    genre.forEach(p=>)
+        delete genre.genre;
+
         const first = query(
           collection(db, "films"),
-          where(
-            "genres",
-            "array-contains",
-            genre.map((p) => p.name)
-          ),
+          where("genres", "array-contains", genre),
           orderBy("genres"),
           limit(25)
         );
@@ -116,13 +116,9 @@ export const filmsModule = {
         await onSnapshot(
           query(
             collection(db, "films"),
-            where(
-              "genres",
-              "array-contains-any",
-              genre.map((p) => p.name)
-            ),
-            //orderBy("genres"),
-            // startAfter(lastVisible),
+            where("genres", "array-contains", genre),
+            orderBy("genres"),
+            startAfter(lastVisible),
             limit(25)
           ),
           (querySnapshot) => {

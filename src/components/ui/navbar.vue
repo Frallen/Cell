@@ -36,8 +36,7 @@
         <li class="menu-section">
           <ul>
             <li><router-link to="/news">Новости</router-link></li>
-            <li><router-link to="/movies">Фильмы</router-link></li>
-            <li><router-link to="/series">Сериалы</router-link></li>
+            <li><router-link to="/catalog">Каталог</router-link></li>
             <li><router-link to="/cartoons">Мультфильмы</router-link></li>
           </ul>
         </li>
@@ -47,7 +46,16 @@
       <ul class="menu-nav">
         <li v-if="isAuthReady" class="menu-section">
           <ul>
-            <li><router-link to="account">Аккаунт</router-link></li>
+            <li>
+              <router-link to="/favorite" class="menu-mobile-item">
+                <img :src="Heart" alt="favorite" />
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/profile" class="menu-mobile-item">
+                <img :src="User" alt="profile" />
+              </router-link>
+            </li>
             <li v-if="isAuthReady && isAdmin">
               <router-link to="/admin">Админ</router-link>
             </li>
@@ -61,12 +69,16 @@
           </ul>
         </li>
       </ul>
-      <div
-        class="menu-mobile"
-        :class="{ 'icon-active': mobile }"
-        @click="mobileView"
-      >
-        <span></span>
+      <div class="menu-mobile" :class="{ 'icon-active': mobile }">
+        <router-link to="/favorite" class="menu-mobile-item">
+          <img :src="Heart" alt="favorite" />
+        </router-link>
+        <router-link to="/profile" class="menu-mobile-item">
+          <img :src="User" alt="profile" />
+        </router-link>
+        <div class="menu-mobile-item menu-mobile-icon" @click="mobileView">
+          <span></span>
+        </div>
       </div>
     </div>
   </div>
@@ -74,6 +86,8 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import Heart from "@/icons/heart.png";
+import User from "@/icons/user.png";
 import Logo from "@/icons/logo.vue";
 export default {
   name: "nav-bar",
@@ -81,6 +95,8 @@ export default {
   data() {
     return {
       mobile: false,
+      Heart,
+      User,
     };
   },
   computed: {
@@ -128,40 +144,52 @@ export default {
   }
   &-mobile {
     display: none;
-    cursor: pointer;
-    position: relative;
-    width: 40px;
-    height: 40px;
+
     @media @lg {
-      display: block;
-    }
-    span {
-      content: "";
-      width: 100%;
-      height: 3px;
-      background: #fff;
-      display: block;
-      margin-top: 50%;
-    }
-    span::after,
-    span::before {
-      content: "";
-      width: 100%;
-      height: 3px;
-      background: #fff;
-      display: block;
-      position: absolute;
-      .trs();
-    }
-    span::after {
-      margin-top: -12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    span::before {
-      margin-top: 13px;
+    &-icon {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      position: relative;
+      span {
+        content: "";
+        width: 100%;
+        height: 3px;
+        background: #fff;
+        display: block;
+        margin-top: 50%;
+      }
+      span::after,
+      span::before {
+        content: "";
+        width: 100%;
+        height: 3px;
+        background: #fff;
+        display: block;
+        position: absolute;
+        .trs();
+      }
+      span::after {
+        margin-top: -12px;
+      }
+
+      span::before {
+        margin-top: 13px;
+      }
     }
   }
   &-nav {
+    .menu-mobile-item {
+      margin-left: 0!important;
+      @media @lg {
+        display: none;
+      }
+    }
     .menu-section {
       margin-left: 1em;
       ul {
@@ -262,6 +290,16 @@ export default {
     margin-top: 0;
     .trs();
     opacity: 0;
+  }
+}
+.menu-mobile-item {
+  height: 30px;
+  width: 30px;
+  display: block;
+  margin-left: 1.2em;
+  img {
+    width: 100%;
+    height: 100%;
   }
 }
 </style>

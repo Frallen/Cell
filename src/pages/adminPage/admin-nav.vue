@@ -39,6 +39,7 @@ export default {
   a {
     padding: 10px 0;
     text-decoration: none;
+    font-size: 1.2em;
     color: @text;
     position: relative;
   }

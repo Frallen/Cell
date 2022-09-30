@@ -137,7 +137,7 @@ export const adminModule = {
         };
         let poster = obj.val.poster;
         let BigPoster = obj.val.BigPoster;
-        let genre= obj.val.genre;
+        let genre = obj.val.genre;
         delete obj.val.poster;
         delete obj.val.BigPoster;
         delete obj.val.genre;
@@ -201,7 +201,7 @@ export const adminModule = {
           } else if (obj.to === "genres") {
             const uploadTaskPicture = uploadBytesResumable(
               ref(storage, `images/genres/${docId}/genre.png`),
-                genre,
+              genre,
               metadata
             );
             uploadTaskPicture.on(

@@ -7,7 +7,7 @@
       </div>
     </div>
   </div>
-  <preloader v-show="loadingAdmin || isLoading || isLoadingF"></preloader>
+  <preloader v-show="IsLoad"></preloader>
 </template>
 
 <script>
@@ -20,17 +20,31 @@ export default {
   methods: {
     ...mapActions({
       AuthState: "auth/AuthState",
+      GetUserData: "user/GetUserData",
     }),
   },
   computed: {
     ...mapState({
-      loadingAdmin: (state) => state.admin.loadingAdmin,
-      isLoading: (state) => state.auth.isLoading,
-      isLoadingF: (state) => state.films.isLoading,
+      IsLoadingAdmin: (state) => state.admin.loadingAdmin,
+      IsLoadingAuth: (state) => state.auth.isLoading,
+      IsLoadingFilms: (state) => state.films.isLoading,
+      IsLoadingUsers: (state) => state.user.isLoading,
     }),
+    IsLoad() {
+      if (
+        this.IsLoadingAdmin ||
+        this.IsLoadingAuth ||
+        this.IsLoadingFilms ||
+        this.IsLoadingUsers
+      )
+        return true;
+    },
   },
+
   mounted() {
-    this.AuthState();
+    this.AuthState()
+    this.GetUserData();
+
   },
 };
 </script>
@@ -71,7 +85,7 @@ h5 {
 p {
   font-weight: 400;
   font-size: 18px;
-  @media @lg{
+  @media @lg {
     font-size: 16px;
   }
 }
@@ -94,10 +108,11 @@ body {
   &-body {
   }
 }
-.swiper-button-disabled{
-  color: #eee!important;
+.swiper-button-disabled {
+  color: #eee !important;
 }
-.swiper-button-next,.swiper-button-prev{
-  color: #fff!important;
+.swiper-button-next,
+.swiper-button-prev {
+  color: #fff !important;
 }
 </style>

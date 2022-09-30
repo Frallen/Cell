@@ -33,6 +33,13 @@
           <h3>{{ slide.name }}</h3>
           <p>{{ slide.text }}</p>
         </div>
+        <Favorite
+          @like="like"
+          @dislike="DisLike"
+          :isFavorite="favoriteStatus(slide.id)"
+          :id="slide.id"
+          class="favorite"
+        ></Favorite>
       </swiper-slide>
     </swiper>
   </div>
@@ -63,10 +70,12 @@
 import { Swiper, SwiperSlide, useSwiperSlide } from "swiper/vue";
 import { EffectFade, Navigation, Pagination } from "swiper";
 import { mapActions, mapState } from "vuex";
+import Favorite from "@/components/ui/favorite";
 
 export default {
   name: "indexPage",
   components: {
+    Favorite,
     Swiper,
     SwiperSlide,
   },
@@ -98,7 +107,22 @@ export default {
     ...mapActions({
       FetchFilms: "films/FetchFilms",
       FetchGenres: "films/FetchGenres",
+      addToFavorite: "user/addToFavorite",
+      removeFromFavorite: "user/removeFromFavorite",
     }),
+    like(val) {
+      this.addToFavorite(val);
+    },
+    DisLike(val) {
+      this.removeFromFavorite(val);
+    },
+    favoriteStatus(val) {
+      if (this.user.favorites && this.user.favorites[val] === true) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   mounted() {
     this.FetchFilms();
@@ -113,7 +137,9 @@ export default {
     ...mapState({
       films: (state) => state.films.films,
       genres: (state) => state.films.genres,
+      user: (state) => state.user.userInfo,
     }),
+
     firstFive() {
       return this.films.slice(0, 4);
     },
@@ -230,6 +256,19 @@ export default {
   &-item:hover {
     box-shadow: 0px 6px 5px 0px #fff;
     .trs();
+  }
+}
+.favorite {
+  position: absolute;
+  right: 4%;
+  top: 4%;
+  z-index: 2;
+  display: block;
+  height: 25px;
+  width: 25px;
+  img{
+    width: 100%;
+    height: 100%;
   }
 }
 </style>

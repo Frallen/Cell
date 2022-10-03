@@ -29,6 +29,7 @@ export default {
       IsLoadingAuth: (state) => state.auth.isLoading,
       IsLoadingFilms: (state) => state.films.isLoading,
       IsLoadingUsers: (state) => state.user.isLoading,
+      isAdmin: (state) => state.auth.isAdmin,
     }),
     IsLoad() {
       if (
@@ -42,9 +43,8 @@ export default {
   },
 
   mounted() {
-    this.AuthState()
+    this.AuthState();
     this.GetUserData();
-
   },
 };
 </script>

@@ -4,7 +4,16 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth, db } from "../../firebase";
-import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  setDoc,
+  getDoc,
+} from "firebase/firestore";
 
 export const AuthModule = {
   namespaced: true,
@@ -13,6 +22,7 @@ export const AuthModule = {
     isLoading: false,
     user: null,
     userProfile: null,
+    isAdmin: false,
   }),
   getters: {
     checkRouteAuth(state) {
@@ -39,12 +49,13 @@ export const AuthModule = {
   actions: {
     //создание пользователя
     async signUp({ state, commit, dispatch }) {
-      await createUserWithEmailAndPassword(
-        auth,
-        state.user.email,
-        state.user.password
-      )
-        .then((snap) => {
+      try {
+        commit("isLoading", true);
+        await createUserWithEmailAndPassword(
+          auth,
+          state.user.email,
+          state.user.password
+        ).then((snap) => {
           const user = snap.user;
 
           dispatch("signUpData");
@@ -52,19 +63,36 @@ export const AuthModule = {
           commit("setUser", user);
           commit("setAuthReady", true);
           commit("isLoading", false);
-        })
-        .catch((err) => {
-          console.log(err);
         });
+      } catch (err) {
+        console.error(err);
+      } finally {
+        commit("isLoading", false);
+      }
     },
     //Создание профиля пользователя
-    async signUpData({ state }) {
-     await addDoc(collection(db, "users"), {
-        id: state.user.uid,
-        email: state.user.email,
-      })
-        .then((s) => {})
-        .catch((err) => console.log(err));
+    async signUpData({ state, commit }) {
+      try {
+        await setDoc(doc(db, "users", state.user.uid), {
+          id: state.user.uid,
+          email: state.user.email,
+        });
+      } catch (err) {
+      } finally {
+        commit("isLoading", false);
+      }
+    },
+    async isAdmin({ state, commit }) {
+      try {
+        commit("isLoading", true);
+        let snap = await getDoc(doc(db, "users", state.user.uid));
+
+        commit("setAdmin", snap.data().isAdmin ?? false);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        commit("isLoading", false);
+      }
     },
     //проверка авторизации
     async AuthState({ dispatch }) {
@@ -78,28 +106,30 @@ export const AuthModule = {
         commit("setAuthReady", true);
         commit("setUser", user);
         dispatch("UserProfile", user);
+        dispatch("isAdmin")
       } else {
         // User is signed out
         // ...
       }
     },
     async login({ state, commit }) {
-      commit("isLoading", true);
+      try {
+        commit("isLoading", true);
 
-      await signInWithEmailAndPassword(
-        auth,
-        state.user.email,
-        state.user.password
-      )
-        .then((snap) => {
+        await signInWithEmailAndPassword(
+          auth,
+          state.user.email,
+          state.user.password
+        ).then((snap) => {
           const user = snap.user;
           commit("setUser", user);
           commit("setAuthReady", true);
-          commit("isLoading", false);
-        })
-        .catch((err) => {
-          console.log(err);
         });
+      } catch (err) {
+        console.error(err);
+      } finally {
+        commit("isLoading", false);
+      }
     },
     async UserProfile({ state, commit }, user) {
       let users = collection(db, "users");
@@ -115,12 +145,16 @@ export const AuthModule = {
       );
     },
     async logout({ state, commit }) {
-      await signOut(auth).then((p) => {
+      try {
         commit("isLoading", true);
+        await signOut(auth);
         commit("setUser", null);
         commit("setAuthReady", false);
+      } catch (err) {
+        console.error(err);
+      } finally {
         commit("isLoading", false);
-      });
+      }
     },
   },
 };

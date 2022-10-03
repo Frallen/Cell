@@ -21,6 +21,7 @@ export default {
     ...mapActions({
       AuthState: "auth/AuthState",
       GetUserData: "user/GetUserData",
+      FetchFilms:"films/FetchFilms"
     }),
   },
   computed: {
@@ -45,6 +46,7 @@ export default {
   mounted() {
     this.AuthState();
     this.GetUserData();
+    this.FetchFilms();
   },
 };
 </script>

@@ -47,8 +47,8 @@
         <li v-if="isAuthReady" class="menu-section">
           <ul>
             <li>
-              <router-link to="/favorite" class="menu-mobile-item">
-                <img :src="Heart" alt="favorite" />
+              <router-link to="/favorites" class="menu-mobile-item">
+                <img :src="Heart" alt="favorites" />
               </router-link>
             </li>
             <li>
@@ -57,9 +57,11 @@
               </router-link>
             </li>
             <li v-if="isAuthReady && isAdmin">
-              <router-link to="/admin">Админ</router-link>
+              <router-link to="/admin"><img :src="Crown" alt="" /></router-link>
             </li>
-            <li @click="logout">Выйти</li>
+            <li @click="logout" class="menu-mobile-item">
+              <img :src="ExitLogo" alt="" />
+            </li>
           </ul>
         </li>
         <li class="menu-section">
@@ -70,7 +72,7 @@
         </li>
       </ul>
       <div class="menu-mobile" :class="{ 'icon-active': mobile }">
-        <router-link to="/favorite" class="menu-mobile-item">
+        <router-link to="/favorites" class="menu-mobile-item">
           <img :src="Heart" alt="favorite" />
         </router-link>
         <router-link to="/profile" class="menu-mobile-item">
@@ -89,14 +91,17 @@ import { mapActions, mapState } from "vuex";
 import Heart from "@/icons/heart.png";
 import User from "@/icons/user.png";
 import Logo from "@/icons/logo.vue";
+import ExitLogo from "@/icons/exit.png";
+import Crown from "@/icons/Crown.png";
 export default {
   name: "nav-bar",
   components: [Logo],
   data() {
     return {
       mobile: false,
+      ExitLogo,
       Heart,
-      User,
+      User,Crown
     };
   },
   computed: {
@@ -185,7 +190,6 @@ export default {
   }
   &-nav {
     .menu-mobile-item {
-      margin-left: 0!important;
       @media @lg {
         display: none;
       }
@@ -296,7 +300,6 @@ export default {
   height: 30px;
   width: 30px;
   display: block;
-  margin-left: 1.2em;
   img {
     width: 100%;
     height: 100%;

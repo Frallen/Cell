@@ -125,7 +125,6 @@ export default {
     },
   },
   mounted() {
-    this.FetchFilms();
     this.FetchGenres();
     if (window.matchMedia("(max-width: 998px)")) {
       this.navigation = false;
@@ -266,6 +265,7 @@ export default {
   display: block;
   height: 25px;
   width: 25px;
+  cursor: default;
   img{
     width: 100%;
     height: 100%;

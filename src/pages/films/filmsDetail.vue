@@ -16,6 +16,13 @@
           <li><span>Год:</span>{{ film.year }}</li>
         </ul>
       </div>
+      <Favorite
+        @like="like"
+        @dislike="DisLike"
+        :isFavorite="favoriteStatus(film.id)"
+        :id="film.id"
+        class="favorite"
+      ></Favorite>
     </div>
   </div>
   <div class="info-text">
@@ -36,15 +43,17 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-
+import Favorite from "@/components/ui/favorite";
 export default {
   name: "filmsDetail",
+  components: { Favorite },
   data() {
     return {};
   },
   computed: {
     ...mapState({
       film: (state) => state.films.film,
+      user: (state) => state.user.userInfo,
     }),
   },
   mounted() {
@@ -53,7 +62,22 @@ export default {
   methods: {
     ...mapActions({
       GetFilm: "films/GetFilm",
+      addToFavorite: "user/addToFavorite",
+      removeFromFavorite: "user/removeFromFavorite",
     }),
+    like(val) {
+      this.addToFavorite(val);
+    },
+    DisLike(val) {
+      this.removeFromFavorite(val);
+    },
+    favoriteStatus(val) {
+      if (this.user.favorites && this.user.favorites[val] === true) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
 };
 </script>
@@ -69,6 +93,9 @@ export default {
     img {
       width: 100%;
       height: 100%;
+      @media @md{
+        object-fit: cover;
+      }
     }
   }
   &-poster::before {
@@ -109,6 +136,7 @@ export default {
       font-size: 1.5em;
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
     }
   }
   &-short {
@@ -117,7 +145,13 @@ export default {
     bottom: 5%;
     z-index: 2;
     h3 {
-      margin-bottom: 1em;
+      margin-bottom: 0.3em;
+      @media @lg {
+        font-size: 3em;
+      }
+      @media @md {
+        font-size: 2em;
+      }
     }
     ul {
       margin-bottom: 0.8em;
@@ -128,7 +162,11 @@ export default {
       li {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
         font-size: 1.3em;
+        @media @lg {
+          font-size: 1em;
+        }
       }
     }
   }
@@ -153,5 +191,17 @@ export default {
   p {
     color: @text;
   }
+}
+.favorite {
+  position: absolute;
+  right: 2%;
+  top: 4%;
+  z-index: 2;
+  display: block;
+  height: 25px;
+  width: 25px;
+  cursor: pointer;
+
+
 }
 </style>

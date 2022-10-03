@@ -1,5 +1,5 @@
 <template>
-  <transition>
+  <transition name="favorite">
     <div v-if="isFavorite">
       <div><img :src="Favorite" alt="favorite" @click="dislike" /></div>
     </div>
@@ -43,4 +43,20 @@ export default {
 </script>
 
 <style scoped lang="less">
+.favorite{
+  img{
+    width:100%;
+    height: 100%;
+  }
+}
+.preloader-enter-active,
+.preloader-leave-active {
+  .trs();
+}
+.preloader-enter-from {
+  opacity: 1;
+}
+.preloader-leave-to {
+  opacity: 0;
+}
 </style>

@@ -10,6 +10,7 @@ import adminUsers from "@/pages/adminPage/admin-users";
 import adminFilms from "@/pages/adminPage/admin-films";
 import filmsDetail from "@/pages/films/filmsDetail";
 import filmsCompilation from "@/pages/films/filmsCompilation";
+import userFavorites from "@/pages/user/userFavorites";
 
 const routes = [
   {
@@ -40,12 +41,16 @@ const routes = [
     ],
   },
   {
-    path:"/film/:id",
-    component: filmsDetail
+    path: "/film/:id",
+    component: filmsDetail,
   },
   {
-    path:"/genre/:id",
-    component: filmsCompilation
+    path: "/favorites",
+    component: userFavorites,
+  },
+  {
+    path: "/genre/:id",
+    component: filmsCompilation,
   },
   { path: "/auth", component: authPage },
   { path: "/registration", component: singUpPage },

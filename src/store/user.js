@@ -8,8 +8,8 @@ import {
   getDoc,
   orderBy,
   startAfter,
-  limit,
-  updateDoc,
+  limit,setDoc,
+  updateDoc, addDoc,
 } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 import { getDownloadURL, ref } from "firebase/storage";
@@ -29,9 +29,26 @@ export const userModule = {
     setUserInfo(state, userInfo) {
       return (state.userInfo = userInfo);
     },
+    setFavorites(state, favorites) {
+      return state.favorites=favorites
+    }
   },
   getters: {},
   actions: {
+    async GetUserFavorites({state,commit}){
+      try{
+        commit("setLoading", true);
+       let snap= await getDoc(doc(db, "films",state.userInfo.id));
+
+      //  snap.data().favorites
+
+        commit("setFavorites",)
+      }catch (error) {
+        console.error(error)
+      }finally {
+        commit('setLoading', false);
+      }
+    },
     async addToFavorite({ state, commit }, id) {
       try {
         commit("setLoading", true);

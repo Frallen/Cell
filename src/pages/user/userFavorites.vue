@@ -1,8 +1,9 @@
 <template>
-  <div class="favorites" v-if="favorites">
-    <div class="favorites-wrapper">
+  <Breadcrumbs></Breadcrumbs>
+  <div class="films" v-if="favorites">
+    <div class="films-wrapper">
       <div
-        class="favorites-item"
+        class="films-item"
         v-for="item in favoritesFilms"
         @click="this.$router.push(`/film/${item.id}`)"
       >
@@ -21,8 +22,9 @@
 <script>
 import Favorite from "@/components/ui/favorite";
 import { mapActions, mapState } from "vuex";
+import Breadcrumbs from "@/components/breadcrumbs";
 export default {
-  components: { Favorite },
+  components: {Breadcrumbs, Favorite },
   data() {
     return {};
   },
@@ -60,36 +62,6 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.favorites {
-  margin: 1em 0;
-  &-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: -15px;
-    margin-left: -15px;
-  }
-  &-item {
-    width: calc(100% / 6 - 15px);
-    margin-top: 15px;
-    margin-left: 15px;
-    cursor: pointer;
-    @media @lg {
-      width: calc(100% / 4 - 15px);
-    }
-    @media @md {
-      width: calc(100% / 2 - 15px);
-    }
-    @media @xs {
-      width: 100%
-    }
-    position: relative;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-}
 .favorite {
   position: absolute;
   right: 5%;

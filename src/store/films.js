@@ -117,9 +117,6 @@ export const filmsModule = {
           query(
             collection(db, "films"),
             where("genres", "array-contains", genre),
-            orderBy("genres"),
-            startAfter(lastVisible),
-            limit(25)
           ),
           (querySnapshot) => {
             const allPromises = querySnapshot.docs.map(async (doc) => {

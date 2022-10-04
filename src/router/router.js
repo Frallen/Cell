@@ -30,28 +30,16 @@ const routes = [
         path: "users",
         component: adminUsers,
       },
-      {
-        path: "films",
-        component: adminFilms,
-      },
-      {
-        path: "genres",
-        component: adminGenres,
-      },
+      { name: "Фильмы", path: "films", component: adminFilms },
+      { path: "genres", component: adminGenres },
     ],
   },
   {
     path: "/film/:id",
     component: filmsDetail,
   },
-  {
-    path: "/favorites",
-    component: userFavorites,
-  },
-  {
-    path: "/genre/:id",
-    component: filmsCompilation,
-  },
+  { name: "Избранное", path: "/favorites", component: userFavorites },
+  { name: "Жанры", path: "/genre/:id", component: filmsCompilation },
   { path: "/auth", component: authPage },
   { path: "/registration", component: singUpPage },
 ];

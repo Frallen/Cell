@@ -1,84 +1,41 @@
 <template>
-  <div class="menu" :class="{ mobile: mobile }">
-    <div class="menu-wrapper">
+  <div class="menu">
+    <div class="menu-wrapper" :class="{ 'mobile-flow': mobile }">
       <div class="menu-logo" @click="$router.push('/')">
-        <svg
-          width="24px"
-          height="24px"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M21 3.6V12H12V3H20.4C20.7314 3 21 3.26863 21 3.6Z"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <path
-            d="M21 20.4V12H12V21H20.4C20.7314 21 21 20.7314 21 20.4Z"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <path
-            d="M3 12V3.6C3 3.26863 3.26863 3 3.6 3H12V12H3Z"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-          <path
-            d="M3 12V20.4C3 20.7314 3.26863 21 3.6 21H12V12H3Z"
-            stroke="currentColor"
-            stroke-width="1.5"
-          />
-        </svg>
+        <img :src="Logo" alt="logo" />
         <h3>Cell</h3>
       </div>
-      <ul class="menu-nav">
-        <li class="menu-section">
-          <ul>
-            <li><router-link to="/news">Новости</router-link></li>
-            <li><router-link to="/catalog">Каталог</router-link></li>
-            <li><router-link to="/cartoons">Мультфильмы</router-link></li>
-          </ul>
-        </li>
-      </ul>
+      <div class="menu-nav">
+        <router-link to="/news" class="menu-item">Новости</router-link>
+        <router-link to="/catalog" class="menu-item">Каталог</router-link>
+        <router-link to="/cartoons" class="menu-item">Мультфильмы</router-link>
+      </div>
     </div>
-    <div class="menu-wrapper menu-manipulation">
-      <ul class="menu-nav">
-        <li v-if="isAuthReady" class="menu-section">
-          <ul>
-            <li>
-              <router-link to="/favorites" class="menu-mobile-item">
-                <img :src="Heart" alt="favorites" />
-              </router-link>
-            </li>
-            <li>
-              <router-link to="/profile" class="menu-mobile-item">
-                <img :src="User" alt="profile" />
-              </router-link>
-            </li>
-            <li v-if="isAuthReady && isAdmin">
-              <router-link to="/admin"><img :src="Crown" alt="" /></router-link>
-            </li>
-            <li @click="logout" class="menu-mobile-item">
-              <img :src="ExitLogo" alt="" />
-            </li>
-          </ul>
-        </li>
-        <li class="menu-section">
-          <ul class="menu-user" v-if="!isAuthReady">
-            <li><router-link to="/auth">Авторизация</router-link></li>
-            <li><router-link to="/registration">Регистрация</router-link></li>
-          </ul>
-        </li>
-      </ul>
-      <div class="menu-mobile" :class="{ 'icon-active': mobile }">
-        <router-link to="/favorites" class="menu-mobile-item">
-          <img :src="Heart" alt="favorite" />
+    <div class="menu-additional" :class="{ 'static-position': mobile }">
+      <template v-if="isAuthReady">
+        <router-link to="/favorites" class="menu-item">
+          <img :src="Heart" alt="favorites" />
         </router-link>
-        <router-link to="/profile" class="menu-mobile-item">
+
+        <router-link to="/profile" class="menu-item">
           <img :src="User" alt="profile" />
         </router-link>
-        <div class="menu-mobile-item menu-mobile-icon" @click="mobileView">
+
+        <div v-if="isAuthReady && isAdmin" class="menu-item">
+          <router-link to="/admin"><img :src="Crown" alt="" /></router-link>
+        </div>
+        <div @click="logout" class="menu-item">
+          <img :src="ExitLogo" alt="" />
+        </div>
+      </template>
+      <template v-else="!isAuthReady">
+        <router-link to="/auth" class="menu-item">Авторизация</router-link>
+        <router-link to="/registration" class="menu-item"
+          >Регистрация</router-link
+        >
+      </template>
+      <div class="menu-mobile menu-item" :class="{ 'icon-active': mobile }">
+        <div class="menu-mobile-icon" @click="mobileView">
           <span></span>
         </div>
       </div>
@@ -90,18 +47,19 @@
 import { mapActions, mapState } from "vuex";
 import Heart from "@/icons/heart.png";
 import User from "@/icons/user.png";
-import Logo from "@/icons/logo.vue";
+import Logo from "@/icons/logo.png";
 import ExitLogo from "@/icons/exit.png";
-import Crown from "@/icons/Crown.png";
+import Crown from "@/icons/crown.png";
 export default {
   name: "nav-bar",
-  components: [Logo],
   data() {
     return {
       mobile: false,
+      Logo,
       ExitLogo,
       Heart,
-      User,Crown
+      User,
+      Crown,
     };
   },
   computed: {
@@ -131,29 +89,50 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
-  width: 100%;
-  border-bottom: 1px solid #393838;
-
-  padding: 15px 10px;
-  &-wrapper {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid @red;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #1f1f1fc9;
+  &-logo {
+    cursor: pointer;
+    h3 {
+      color: #fff;
+      @media @lg {
+        font-size: 2em;
+      }
+    }
   }
+  &-wrapper,
+  &-nav,
+  &-additional,
   &-logo {
     display: flex;
     align-items: center;
-    cursor: pointer;
+  }
+  &-nav {
+    @media @lg {
+      display: none;
+    }
+  }
+  &-item {
+    margin-left: 0.5em;
+    text-decoration: none;
     color: #fff;
-    svg {
-      margin-right: 10px;
+    font-size: 1.3em;
+    @media @md {
+      font-size: 1em;
+    }
+    img {
+      width: 30px;
+      height: 30px;
     }
   }
   &-mobile {
     display: none;
-
     @media @lg {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: block;
     }
 
     &-icon {
@@ -167,7 +146,7 @@ export default {
         height: 3px;
         background: #fff;
         display: block;
-        margin-top: 50%;
+        margin-top: 100%;
       }
       span::after,
       span::before {
@@ -188,87 +167,8 @@ export default {
       }
     }
   }
-  &-nav {
-    .menu-mobile-item {
-      @media @lg {
-        display: none;
-      }
-    }
-    .menu-section {
-      margin-left: 1em;
-      ul {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        li {
-          margin-left: 0.8em;
-          font-size: 1.5em;
-          user-select: none;
-          color: @thin-white;
-          cursor: pointer;
-          @media @lg {
-            font-size: 1.3em;
-          }
-          a {
-            color: @thin-white;
-            .trs();
-
-            text-decoration: none;
-          }
-          a:hover {
-            cursor: pointer;
-            .trs();
-            color: #fff;
-          }
-        }
-      }
-    }
-  }
-  &-nav,
-  &-wrapper,
-  &-user {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  &-manipulation {
-    .menu-nav {
-      @media @lg {
-        display: none;
-      }
-    }
-  }
-  &-wrapper {
-    .menu-nav {
-      @media @md {
-        display: none;
-      }
-    }
-  }
 }
-.mobile {
-  align-items: flex-start;
-  flex-direction: column;
-  animation: show 0.5s ease-in-out;
-  .menu-nav,
-  .menu-wrapper,
-  .menu-user,
-  .menu-section ul {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  li {
-    margin-top: 0.8em;
-    margin-left: 0 !important;
-  }
 
-  .menu-wrapper {
-    .menu-nav {
-    }
-  }
-}
 @keyframes show {
   from {
     opacity: 0;
@@ -277,10 +177,12 @@ export default {
     opacity: 1;
   }
 }
-.icon-active {
+.static-position {
   position: absolute;
   right: 2%;
   top: 4%;
+}
+.icon-active {
   span {
     transform: rotate(225deg);
     .trs();
@@ -296,13 +198,17 @@ export default {
     opacity: 0;
   }
 }
-.menu-mobile-item {
-  height: 30px;
-  width: 30px;
-  display: block;
-  img {
-    width: 100%;
-    height: 100%;
+.mobile-flow {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  .menu-nav {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .menu-item {
+    font-size: 1.3em;
   }
 }
 </style>

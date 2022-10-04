@@ -28,9 +28,6 @@ export default {
       type: Number,
     },
   },
-  mounted() {
-    console.log(this.isFavorite);
-  },
   methods: {
     dislike() {
       this.$emit("dislike", this.id);

@@ -52,11 +52,11 @@ export const userModule = {
     async addToFavorite({ state, commit }, id) {
       try {
         commit("setLoading", true);
-        await updateDoc(doc(db, "users", state.userInfo.id), {
+        await setDoc(doc(db, "users", state.userInfo.id), {
           favorites: {
             [id]: true,
           },
-        });
+        },{merge: true});
       } catch (err) {
         console.error(err);
       } finally {
@@ -66,11 +66,11 @@ export const userModule = {
     async removeFromFavorite({ state, commit }, id) {
       try {
         commit("setLoading", true);
-        await updateDoc(doc(db, "users", state.userInfo.id), {
+        await setDoc(doc(db, "users", state.userInfo.id), {
           favorites: {
             [id]: false,
           },
-        });
+        },{merge: true});
       } catch (err) {
         console.error(err);
       } finally {

@@ -231,7 +231,7 @@ export default {
 .index-genres {
   &-wrapper {
     height: 270px;
-    margin: 2em 1em;
+    margin: 2em 0;
   }
   &-item {
     display: flex;
@@ -259,13 +259,13 @@ export default {
 }
 .favorite {
   position: absolute;
-  right: 4%;
-  top: 4%;
+  right: 2%;
+  top: 2%;
   z-index: 2;
   display: block;
   height: 25px;
   width: 25px;
-  cursor: default;
+  cursor: pointer;
   img{
     width: 100%;
     height: 100%;

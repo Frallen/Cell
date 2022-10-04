@@ -29,10 +29,12 @@
         </div>
       </template>
       <template v-else="!isAuthReady">
-        <router-link to="/auth" class="menu-item">Авторизация</router-link>
+        <router-link to="/auth" class="menu-item"
+          ><img :src="Auth" alt=""
+        /></router-link>
         <router-link to="/registration" class="menu-item"
-          >Регистрация</router-link
-        >
+          ><img :src="newUser" alt=""
+        /></router-link>
       </template>
       <div class="menu-mobile menu-item" :class="{ 'icon-active': mobile }">
         <div class="menu-mobile-icon" @click="mobileView">
@@ -50,6 +52,8 @@ import User from "@/icons/user.png";
 import Logo from "@/icons/logo.png";
 import ExitLogo from "@/icons/exit.png";
 import Crown from "@/icons/crown.png";
+import Auth from "@/icons/auth.png";
+import newUser from "@/icons/newUser.png";
 export default {
   name: "nav-bar",
   data() {
@@ -57,9 +61,11 @@ export default {
       mobile: false,
       Logo,
       ExitLogo,
+      newUser,
       Heart,
       User,
       Crown,
+      Auth,
     };
   },
   computed: {
@@ -95,12 +101,16 @@ export default {
   top: 0;
   z-index: 2;
   background: #1f1f1fc9;
+  .trs();
   &-logo {
     cursor: pointer;
     h3 {
       color: #fff;
       @media @lg {
         font-size: 2em;
+      }
+      @media @xs {
+        display: none;
       }
     }
   }
@@ -117,7 +127,7 @@ export default {
     }
   }
   &-item {
-    margin-left: 0.5em;
+    margin-left: 1em;
     text-decoration: none;
     color: #fff;
     font-size: 1.3em;

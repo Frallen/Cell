@@ -21,7 +21,7 @@
           :src="
             'https://www.youtube.com/embed/' +
             slide.video +
-            '?autoplay=1&controls=0&disablekb=1&loop=1&modestbranding=1&enablejsapi=1&playsinline=1&color=white&mute=1&playlist=' +
+            '?autoplay=1&start=8&controls=0&disablekb=1&loop=1&modestbranding=1&enablejsapi=1&playsinline=1&color=white&mute=1&playlist=' +
             slide.video
           "
           :title="slide.title"

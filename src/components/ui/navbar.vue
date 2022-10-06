@@ -28,7 +28,7 @@
           <img :src="ExitLogo" alt="" />
         </div>
       </template>
-      <template v-else="!isAuthReady">
+      <template v-if="!isAuthReady">
         <router-link to="/auth" class="menu-item"
           ><img :src="Auth" alt=""
         /></router-link>

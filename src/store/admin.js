@@ -3,6 +3,8 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
+  getDocs,
   onSnapshot,
   query,
   updateDoc,
@@ -23,10 +25,11 @@ export const adminModule = {
     genres: [],
     actors: [],
     films: [],
-    users: [],
+    news: [],
     searchFieldFilms: null,
     searchFieldActors: null,
     searchFieldGenres: null,
+    searchFieldNews: null,
     loadingAdmin: false,
   }),
   getters: {
@@ -59,6 +62,15 @@ export const adminModule = {
       } else {
         return state.genres;
       }
+    }, //поиск по строке в инпуте, таблица актеров
+    searchTableNews(state) {
+      if (state.searchFieldNews) {
+        return state.news.filter((p) =>
+          p.name.toLowerCase().includes(state.searchFieldNews.toLowerCase())
+        );
+      } else {
+        return state.news;
+      }
     },
   },
   mutations: {
@@ -70,6 +82,9 @@ export const adminModule = {
     },
     setGenresQuery(state, query) {
       state.searchFieldGenres = query;
+    },
+    setNewsQuery(state, query) {
+      state.searchFieldNews = query;
     },
     setLoading(state, loading) {
       state.loadingAdmin = loading;
@@ -85,8 +100,8 @@ export const adminModule = {
         case "films": {
           return (state.films = data);
         }
-        case "users": {
-          return (state.users = data);
+        case "news": {
+          return (state.news = data);
         }
       }
     },
@@ -95,41 +110,44 @@ export const adminModule = {
     async FetchData({ state, commit }, to) {
       try {
         commit("setLoading", true);
-        const q = query(collection(db, to));
 
-        await onSnapshot(q, (querySnapshot) => {
-          const allPromises = querySnapshot.docs.map(async (doc) => {
-            let item = {
-              id: doc.id,
-              ...doc.data(),
-            };
-
-            if (to === "films") {
-              const poster = ref(storage, `images/films/${doc.id}/poster.png`);
-              const BigPoster = ref(
-                storage,
-                `images/films/${doc.id}/BigPoster.png`
-              );
-              item.poster = await getDownloadURL(poster);
-              item.BigPoster = await getDownloadURL(BigPoster);
-            } else if (to === "genres") {
-              const genre = ref(storage, `images/genres/${doc.id}/genre.png`);
-              item.genre = await getDownloadURL(genre);
-            }
-            return item;
-          });
-          Promise.all(allPromises).then((data) =>
-            commit("setData", { data, to })
-          );
-          // .catch(console.error);
-        });
+        const { docs } = await getDocs(query(collection(db, to)));
+        const data = await Promise.all(
+          docs.map(async (doc) => ({
+            ...doc.data(),
+            id: doc.id,
+            name: doc.data().name,
+            slug: doc.data().slug,
+            ...(to === "films" && {
+              poster: await getDownloadURL(
+                ref(storage, `images/films/${doc.id}/poster.png`)
+              ),
+            }),
+            ...(to === "films" && {
+              BigPoster: await getDownloadURL(
+                ref(storage, `images/films/${doc.id}/BigPoster.png`)
+              ),
+            }),
+            ...(to === "genres" && {
+              genre: await getDownloadURL(
+                ref(storage, `images/genres/${doc.id}/genre.png`)
+              ),
+            }),
+            ...(to === "news" && {
+              genre: await getDownloadURL(
+                ref(storage, `images/news/${doc.id}/banner.png`)
+              ),
+            }),
+          }))
+        );
+        commit("setData", { data, to });
       } catch (err) {
         console.error(err);
       } finally {
         commit("setLoading", false);
       }
     },
-    async CreateItem({ state, commit }, obj) {
+    async CreateItem({ state, commit, dispatch }, obj) {
       try {
         commit("setLoading", true);
         const metadata = {
@@ -138,9 +156,11 @@ export const adminModule = {
         let poster = obj.val.poster;
         let BigPoster = obj.val.BigPoster;
         let genre = obj.val.genre;
+        let banner = obj.val.banner;
         delete obj.val.poster;
         delete obj.val.BigPoster;
         delete obj.val.genre;
+        delete obj.val.banner;
         await addDoc(collection(db, obj.to), {
           ...obj.val,
           //если жанр существует то добавить объект жанров
@@ -224,15 +244,42 @@ export const adminModule = {
               },
               () => {}
             );
+          } else if (obj.to === "news") {
+            const uploadTaskPicture = uploadBytesResumable(
+              ref(storage, `images/news/${docId}/banner.png`),
+              banner,
+              metadata
+            );
+            uploadTaskPicture.on(
+              "state_changed",
+              (snapshot) => {
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');*/
+                switch (snapshot.state) {
+                  case "paused":
+                    console.log("Upload is paused");
+                    break;
+                  case "running":
+                    console.log("Upload is running");
+                    break;
+                }
+              },
+              (error) => {
+                console.error(error);
+              },
+              () => {}
+            );
           }
         });
+        dispatch("FetchData", obj.to);
       } catch (err) {
         console.error(err);
       } finally {
         commit("setLoading", false);
       }
     },
-    async updateDoc({ state, commit }, obj) {
+    async updateDoc({ state, commit, dispatch }, obj) {
       try {
         commit("setLoading", true);
         let docRef = doc(db, obj.to, obj.id);
@@ -247,8 +294,14 @@ export const adminModule = {
             video: obj.items.video,
             genres: obj.items.genres,
             actors: obj.items.actors,
-            poster: obj.items.poster,
-            BipPoster: obj.items.BipPoster,
+            // poster: obj.items.poster,
+            // BipPoster: obj.items.BipPoster,
+          });
+        } else if (obj.items.banner) {
+          await updateDoc(docRef, {
+            name: obj.items.name,
+            slug: obj.items.slug,
+            text: obj.items.text,
           });
         } else {
           await updateDoc(docRef, {
@@ -256,13 +309,14 @@ export const adminModule = {
             slug: obj.items.slug,
           });
         }
+        dispatch("FetchData", obj.to);
       } catch (err) {
         console.error(err);
       } finally {
         commit("setLoading", false);
       }
     },
-    async DeleteDoc({ state, commit }, obj) {
+    async DeleteDoc({ state, commit, dispatch }, obj) {
       try {
         commit("setLoading", true);
 
@@ -288,6 +342,18 @@ export const adminModule = {
             await Promise.all(promises);
           });
         }
+        else if (obj.to === "news") {
+          const desertRef = ref(storage, `images/news/${obj.id}`);
+
+          listAll(desertRef).then(async (listResults) => {
+            const promises = listResults.items.map((item) => {
+              return deleteObject(item);
+            });
+
+            await Promise.all(promises);
+          });
+        }
+        dispatch("FetchData", obj.to);
       } catch (err) {
         console.error(err);
       } finally {

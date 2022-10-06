@@ -21,7 +21,8 @@ export default {
     ...mapActions({
       AuthState: "auth/AuthState",
       GetUserData: "user/GetUserData",
-      FetchFilms:"films/FetchFilms"
+      FetchFilms: "films/FetchFilms",
+      FetchNews: "news/FetchNews",
     }),
   },
   computed: {
@@ -30,6 +31,7 @@ export default {
       IsLoadingAuth: (state) => state.auth.isLoading,
       IsLoadingFilms: (state) => state.films.isLoading,
       IsLoadingUsers: (state) => state.user.isLoading,
+      IsLoadingNews: (state) => state.news.isLoading,
       isAdmin: (state) => state.auth.isAdmin,
     }),
     IsLoad() {
@@ -37,6 +39,7 @@ export default {
         this.IsLoadingAdmin ||
         this.IsLoadingAuth ||
         this.IsLoadingFilms ||
+        this.IsLoadingNews ||
         this.IsLoadingUsers
       )
         return true;
@@ -47,6 +50,7 @@ export default {
     this.AuthState();
     this.GetUserData();
     this.FetchFilms();
+    this.FetchNews()
   },
 };
 </script>

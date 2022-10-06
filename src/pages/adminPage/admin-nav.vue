@@ -17,7 +17,7 @@ export default {
     return {
       path: null,
       routes: [
-        { path: "/admin/users", name: "Пользователи" },
+        { path: "/admin/news", name: "Новости" },
         { path: "/admin/films", name: "Фильмы" },
         { path: "/admin/actors", name: "Актеры" },
         { path: "/admin/genres", name: "Жанры" },

@@ -6,7 +6,7 @@ import singUpPage from "@/pages/auth/singUpPage";
 import store from "@/store";
 import adminGenres from "@/pages/adminPage/admin-genres";
 import adminActors from "@/pages/adminPage/admin-actors";
-import adminUsers from "@/pages/adminPage/admin-users";
+import adminNews from "@/pages/adminPage/admin-news";
 import adminFilms from "@/pages/adminPage/admin-films";
 import filmsDetail from "@/pages/films/filmsDetail";
 import filmsCompilation from "@/pages/films/filmsCompilation";
@@ -27,8 +27,8 @@ const routes = [
         component: adminActors,
       },
       {
-        path: "users",
-        component: adminUsers,
+        path: "news",
+        component: adminNews,
       },
       { name: "Фильмы", path: "films", component: adminFilms },
       { path: "genres", component: adminGenres },

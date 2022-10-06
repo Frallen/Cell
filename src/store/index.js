@@ -3,6 +3,7 @@ import { AuthModule } from "@/store/auth";
 import { adminModule } from "@/store/admin";
 import { filmsModule } from "@/store/films";
 import { userModule } from "@/store/user";
+import {newsModule} from "@/store/news";
 
 export default createStore({
   modules: {
@@ -10,5 +11,6 @@ export default createStore({
     admin: adminModule,
     films: filmsModule,
     user: userModule,
+    news: newsModule
   },
 });

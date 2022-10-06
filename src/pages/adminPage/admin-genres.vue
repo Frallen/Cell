@@ -7,7 +7,7 @@
   >
     <label for="name" class="form-item">
       Введите жанр
-      <Field name="name" id="name" class="input" v-model.trim="slugField" />
+      <Field name="name" id="name" class="input" v-model="slugField" />
       <ErrorMessage name="name" />
     </label>
     <label for="slug" class="form-item">

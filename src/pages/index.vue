@@ -64,6 +64,27 @@
       </swiper-slide>
     </swiper>
   </div>
+  <div class="index-news">
+    <swiper
+      class="index-genres-wrapper"
+      :modules="modules"
+      :slides-per-view="3"
+      :space-between="20"
+      :navigation="true"
+      :breakpoints="breakpointGenres"
+      @swiper="onSwiper"
+      @slideChange="onSlideChange"
+    >
+      <swiper-slide
+        class="index-news-item"
+        v-for="item in firstFour"
+        :key="item.id"
+        @click="this.$router.push(`/news/${item.slug}`)"
+      >
+        <img :src="item.banner" :alt="item.name" />
+      </swiper-slide>
+    </swiper>
+  </div>
 </template>
 
 <script>
@@ -137,10 +158,14 @@ export default {
       films: (state) => state.films.films,
       genres: (state) => state.films.genres,
       user: (state) => state.user.userInfo,
+      news: (state) => state.news.news,
     }),
 
     firstFive() {
       return this.films.slice(0, 4);
+    },
+    firstFour() {
+      return this.news.slice(0, 4);
     },
   },
 };
@@ -266,7 +291,7 @@ export default {
   height: 25px;
   width: 25px;
   cursor: pointer;
-  img{
+  img {
     width: 100%;
     height: 100%;
   }

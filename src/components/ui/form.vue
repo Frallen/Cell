@@ -22,6 +22,7 @@
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import DefaultButton from "@/components/ui/button";
+import "@/formLocalize"
 export default {
   name: "DefaultForm",
   components: {

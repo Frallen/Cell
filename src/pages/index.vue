@@ -60,7 +60,7 @@
         :key="item.id"
         @click="this.$router.push(`/genre/${item.slug}`)"
       >
-        <img :src="item.genre" :alt="genres.name" />
+        <img v-lazy="item.genre" :alt="genres.name" />
       </swiper-slide>
     </swiper>
   </div>
@@ -81,7 +81,7 @@
         :key="item.id"
         @click="this.$router.push(`/news/${item.slug}`)"
       >
-        <img :src="item.banner" :alt="item.name" />
+        <img v-lazy="item.banner" :alt="item.name" />
       </swiper-slide>
     </swiper>
   </div>

@@ -1,47 +1,55 @@
-import indexPage from "@/pages/index";
-import adminPage from "@/pages/adminPage/admin";
 import { createRouter, createWebHistory } from "vue-router";
-import authPage from "@/pages/auth/authPage";
-import singUpPage from "@/pages/auth/singUpPage";
 import store from "@/store";
-import adminGenres from "@/pages/adminPage/admin-genres";
-import adminActors from "@/pages/adminPage/admin-actors";
-import adminNews from "@/pages/adminPage/admin-news";
-import adminFilms from "@/pages/adminPage/admin-films";
-import filmsDetail from "@/pages/films/filmsDetail";
-import filmsCompilation from "@/pages/films/filmsCompilation";
-import userFavorites from "@/pages/user/userFavorites";
 
 const routes = [
   {
     path: "/",
-    component: indexPage,
+    component: () => import("@/pages/index"),
   },
   {
     path: "/admin",
-    component: adminPage,
+    component: () => import("@/pages/adminPage/admin"),
     meta: { requiresLogin: true },
     children: [
       {
         path: "actors",
-        component: adminActors,
+        component: () => import("@/pages/adminPage/admin-actors"),
       },
       {
         path: "news",
-        component: adminNews,
+        component: () => import("@/pages/adminPage/admin-news"),
       },
-      { name: "Фильмы", path: "films", component: adminFilms },
-      { path: "genres", component: adminGenres },
+      {
+        name: "Фильмы",
+        path: "films",
+        component: () => import("@/pages/adminPage/admin-films"),
+      },
+      {
+        path: "genres",
+        component: () => import("@/pages/adminPage/admin-genres"),
+      },
     ],
   },
   {
     path: "/film/:id",
-    component: filmsDetail,
+    component: () => import("@/pages/films/filmsDetail"),
   },
-  { name: "Избранное", path: "/favorites", component: userFavorites },
-  { name: "Жанры", path: "/genre/:id", component: filmsCompilation },
-  { path: "/auth", component: authPage },
-  { path: "/registration", component: singUpPage },
+  {
+    path: "/news/:id",
+    component: () => import("@/pages/news/newsDetail"),
+  },
+  {
+    name: "Избранное",
+    path: "/favorites",
+    component: () => import("@/pages/user/userFavorites"),
+  },
+  {
+    name: "Жанры",
+    path: "/genre/:id",
+    component: () => import("@/pages/films/filmsCompilation"),
+  },
+  { path: "/auth", component: () => import("@/pages/auth/authPage") },
+  { path: "/registration", component: () => import("@/pages/auth/singUpPage") },
 ];
 const router = createRouter({
   routes,

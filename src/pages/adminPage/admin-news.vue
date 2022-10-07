@@ -43,20 +43,45 @@
           is-range
           :model-config="{
             type: 'string',
-            mask: 'YYYY-MM-DD',
+            mask: 'DD-MM-YYYY',
           }"
-          :masks="{ L: 'YYYY-MM-DD' }"
-        />
+          :masks="{ L: 'DD-MM-YYYY' }"
+        >
+          <template v-slot="{ inputValue, inputEvents }">
+            <div class="date-box">
+              <input
+                class="input"
+                :value="inputValue.start"
+                v-on="inputEvents.start"
+              />
+              <img :src="Arrow" alt="arrow" />
+              <input
+                class="input"
+                :value="inputValue.end"
+                v-on="inputEvents.end"
+              />
+            </div>
+          </template>
+        </DatePicker>
       </Field>
       <ErrorMessage name="date" />
     </label>
-    <label for="text" class="form-item textarea">
+    <label for="text" class="form-item" :style="{ display: 'none' }">
       Текст статьи
-      <Field name="text" id="text" v-slot="{ field }" type="text-area">
-        <textarea class="input" v-bind="field"></textarea>
-      </Field>
+      <Field name="text" id="text" v-slot="{ field }" type="text-area"> </Field>
       <ErrorMessage name="text" />
     </label>
+    <div class="form-item">
+      <quill-editor
+        style="width: 100%"
+        theme="snow"
+        toolbar="full"
+        :modules="module"
+        :content-type="'html'"
+        v-model:content="rawHtml"
+        ref="editor"
+      ></quill-editor>
+    </div>
   </admin-form>
   <Table
     :table-header="tableHeader"
@@ -78,8 +103,12 @@ import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import * as yup from "yup";
 import slugMixin from "@/mixins/slugMixin";
 import toastMixin from "@/mixins/toastMixin";
-
+import { QuillEditor } from "@vueup/vue-quill";
+import { ImageDrop } from "quill-image-drop-module";
 import { Calendar, DatePicker } from "v-calendar";
+import BlotFormatter from "quill-blot-formatter";
+import AutoFormat from "quill-autoformat";
+import Arrow from "@/icons/right-arrow.png";
 export default {
   name: "admin-news",
   mixins: [slugMixin, toastMixin],
@@ -92,9 +121,11 @@ export default {
     ErrorMessage,
     Calendar,
     DatePicker,
+    QuillEditor,
   },
   data() {
     return {
+      Arrow,
       visible: false,
       tableHeader: ["Название новости", "Чпу", "действия"],
       updateId: null,
@@ -103,6 +134,7 @@ export default {
       poster: null,
       currentUpdItem: [],
       searchValue: null,
+      rawHtml: null,
       range: {
         start: new Date(),
         end: new Date(),
@@ -169,15 +201,20 @@ export default {
     this.FetchData("news");
   },
   watch: {
+    rawHtml(val) {
+      this.refForm.setFieldValue("text", val);
+    },
     updateId(val) {
       let item = this.news.find((p) => p.id === val);
       this.slugField = item.name;
-      this.refForm.setFieldValue("text", item.text);
+      //  this.refForm.setFieldValue("text", item.text);
+      this.$refs.editor.setHTML(item.text);
 
       this.range = {
-        start: new Date(item.date.start),
-        end: new Date(item.date.end),
+        start: new Date(item.date.start.split("-").reverse().join("-")),
+        end: new Date(item.date.end.split("-").reverse().join("-")),
       };
+
       this.submitType = "update";
     },
   },
@@ -198,11 +235,28 @@ export default {
         date: yup.object().required(),
       });
     },
+    module() {
+      return [
+        {
+          name: "ImageDrop",
+          module: ImageDrop,
+        },
+        {
+          name: "BlotFormatter",
+          module: BlotFormatter,
+        },
+        {
+          name: "AutoFormat",
+          module: AutoFormat,
+        },
+      ];
+    },
   },
 };
 </script>
 
 <style scoped lang="less">
+@import "@vueup/vue-quill/dist/vue-quill.snow.css";
 .posters {
   display: flex;
   align-items: center;
@@ -229,5 +283,17 @@ export default {
 .date {
   display: flex;
   flex-direction: column;
+  &-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    @media @xs {
+      flex-direction: column;
+    }
+    img {
+      width: 20px;
+      height: 20px;
+    }
+  }
 }
 </style>

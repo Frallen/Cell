@@ -45,12 +45,11 @@ export default {
         return true;
     },
   },
-
-  mounted() {
+  created() {
     this.AuthState();
     this.GetUserData();
     this.FetchFilms();
-    this.FetchNews()
+    this.FetchNews();
   },
 };
 </script>

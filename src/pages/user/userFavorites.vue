@@ -7,7 +7,7 @@
         v-for="item in favoritesFilms"
         @click="this.$router.push(`/film/${item.id}`)"
       >
-        <img :src="item.poster" alt="" />
+        <img v-lazy="item.poster"  alt="" />
         <Favorite
           @like="like"
           @dislike="DisLike"

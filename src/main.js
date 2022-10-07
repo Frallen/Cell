@@ -11,13 +11,22 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import vIntersection from "@/directives/vIntersection"
+import VueLazyload from "vue-lazyload";
+import vIntersection from "@/directives/vIntersection";
 const app = createApp(App);
-app.directive("Intersection", vIntersection)
+const loadimage = require("@/icons/minPreloader.gif");
+
+app.directive("Intersection", vIntersection);
 app
   .use(store)
   .use(router)
-  .use(SetupCalendar,{})
+  .use(SetupCalendar, {})
   .use(VueSweetalert2)
   .use(Quasar)
+  .use(VueLazyload, {
+    preLoad: 1.3,
+
+    loading: loadimage,
+    attempt: 1,
+  })
   .mount("#app");

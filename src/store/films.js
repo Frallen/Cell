@@ -23,7 +23,11 @@ export const filmsModule = {
 
     isLoading: false,
   }),
-  getters: {},
+  getters: {
+    getFilm:(state)=>(id)=>{
+      return state.films.find(film=>film.id === id);
+    }
+  },
   mutations: {
     loadMoreFilms(state, data) {
       state.orderedGenres = data;
@@ -159,33 +163,6 @@ export const filmsModule = {
         commit("setLoading", false);
       }
     },
-    async GetFilm({ state, commit }, id) {
-      try {
-        commit("setLoading", true);
-        const docs = await getDoc(doc(db, "films", id));
-        let returnPoster = async () => {
-          return await getDownloadURL(
-            ref(storage, `images/films/${docs.id}/poster.png`)
-          );
-        };
-        let returnBigPoster = async () => {
-          return await getDownloadURL(
-            ref(storage, `images/films/${docs.id}/BigPoster.png`)
-          );
-        };
-        const data = {
-          ...docs.data(),
-          id: docs.id,
-          poster: (await returnPoster()) ?? null,
-          BigPoster: (await returnBigPoster()) ?? null,
-        };
 
-        commit("setFilm", data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        commit("setLoading", false);
-      }
-    },
   },
 };

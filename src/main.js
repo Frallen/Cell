@@ -25,7 +25,6 @@ app
   .use(Quasar)
   .use(VueLazyload, {
     preLoad: 1.3,
-
     loading: loadimage,
     attempt: 1,
   })

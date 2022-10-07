@@ -1,39 +1,50 @@
 <template>
   <div class="info">
     <div class="info-poster">
-      <img :src="film.BigPoster" alt="" />
+      <img :src="getFilm(this.$route.params.id).BigPoster" alt="" />
       <div class="info-short">
-        <h3>{{ film.name }}</h3>
+        <h3>{{ getFilm(this.$route.params.id).name }}</h3>
         <div class="info-genres">
           <span>Жанры:</span>
           <div class="info-genres-list">
-            <div v-for="item in film.genres">{{ item.name }},</div>
+            <div v-for="item in getFilm(this.$route.params.id).genres">
+              {{ item.name }},
+            </div>
           </div>
         </div>
         <ul>
-          <li><span>Страна:</span>{{ film.country }}</li>
-          <li><span>Продожительность:</span>{{ film.duration }}</li>
-          <li><span>Год:</span>{{ film.year }}</li>
+          <li>
+            <span>Страна:</span>{{ getFilm(this.$route.params.id).country }}
+          </li>
+          <li>
+            <span>Продожительность:</span
+            >{{ getFilm(this.$route.params.id).duration }}
+          </li>
+          <li><span>Год:</span>{{ getFilm(this.$route.params.id).year }}</li>
         </ul>
       </div>
       <Favorite
         @like="like"
         @dislike="DisLike"
-        :isFavorite="favoriteStatus(film.id)"
-        :id="film.id"
+        :isFavorite="favoriteStatus(getFilm(this.$route.params.id).id)"
+        :id="getFilm(this.$route.params.id).id"
         class="favorite"
       ></Favorite>
     </div>
   </div>
   <div class="info-text">
     <h4>Описание</h4>
-    <p>{{ film.text }}</p>
+    <p>{{ getFilm(this.$route.params.id).text }}</p>
   </div>
   <div class="info-video">
     <iframe
       width="100%"
-      :src="'https://www.youtube.com/embed/' + film.video + '?mute=1'"
-      :title="film.title"
+      :src="
+        'https://www.youtube.com/embed/' +
+        getFilm(this.$route.params.id).video +
+        '?mute=1'
+      "
+      :title="getFilm(this.$route.params.id).title"
       frameborder="0"
       allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen
@@ -42,7 +53,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import Favorite from "@/components/ui/favorite";
 export default {
   name: "filmsDetail",
@@ -55,16 +66,20 @@ export default {
       film: (state) => state.films.film,
       user: (state) => state.user.userInfo,
     }),
+    ...mapGetters({
+      getFilm: "films/getFilm",
+    }),
   },
   mounted() {
-    this.GetFilm(this.$route.params.id);
+
   },
+
   methods: {
     ...mapActions({
-      GetFilm: "films/GetFilm",
       addToFavorite: "user/addToFavorite",
       removeFromFavorite: "user/removeFromFavorite",
     }),
+
     like(val) {
       this.addToFavorite(val);
     },
@@ -93,7 +108,7 @@ export default {
     img {
       width: 100%;
       height: 100%;
-      @media @md{
+      @media @md {
         object-fit: cover;
       }
     }
@@ -201,7 +216,5 @@ export default {
   height: 25px;
   width: 25px;
   cursor: pointer;
-
-
 }
 </style>

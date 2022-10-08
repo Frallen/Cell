@@ -66,7 +66,7 @@
   </div>
   <div class="index-news">
     <swiper
-      class="index-genres-wrapper"
+      class="index-news-wrapper"
       :modules="modules"
       :slides-per-view="3"
       :space-between="20"
@@ -81,6 +81,7 @@
         :key="item.id"
         @click="this.$router.push(`/news/${item.slug}`)"
       >
+        <h4>{{ item.name }}</h4>
         <img v-lazy="item.banner" :alt="item.name" />
       </swiper-slide>
     </swiper>
@@ -280,6 +281,46 @@ export default {
   &-item:hover {
     box-shadow: 0px 6px 5px 0px #fff;
     .trs();
+  }
+}
+.index-news {
+  &-wrapper {
+    margin: 2em 0;
+    height: 350px;
+  }
+  &-item {
+    overflow: hidden;
+    .br(10px);
+    position: relative;
+    h4 {
+      .text-eclipse();
+      -webkit-line-clamp: 3;
+      position: absolute;
+      margin-left: auto;
+      margin-right: auto;
+      top: 20%;
+      left: 0;
+      right: 0;
+      text-align: center;
+      overflow: hidden;
+      color: #fff;
+      z-index: 2;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  &-item::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #0000007d;
   }
 }
 .favorite {

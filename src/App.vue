@@ -1,10 +1,27 @@
 <template>
   <div class="container">
-    <navbar class="container-nav"></navbar>
+    <navbar class="container-nav" @modalStatus="modalStatus"></navbar>
     <div class="section-container">
       <div class="container-body">
         <router-view></router-view>
       </div>
+    </div>
+  </div>
+  <div class="modal" :class="{ order: isActive }" @click="Close">
+    <div class="modal-wrapper">
+      <auth-page
+        class="modal-item"
+        v-show="authModal"
+        @click.stop
+        @closeModal="Close"
+      ></auth-page>
+      <sing-up-page
+        class="modal-item"
+        v-show="regModal"
+        @click.stop
+        @closeModal="Close"
+      ></sing-up-page>
+      <img :src="closeIcon" alt="" class="modal-close" @click="Close" />
     </div>
   </div>
   <preloader v-show="IsLoad"></preloader>
@@ -15,8 +32,19 @@ import Navbar from "@/components/ui/navbar";
 import { mapActions, mapGetters, mapState } from "vuex";
 import "@/formLocalize";
 import Preloader from "@/components/ui/preloader";
+import AuthPage from "@/pages/auth/authPage";
+import SingUpPage from "@/pages/auth/singUpPage";
+import closeIcon from "@/icons/close.png";
 export default {
-  components: { Preloader, Navbar },
+  components: { SingUpPage, AuthPage, Preloader, Navbar },
+  data() {
+    return {
+      isActive: false,
+      regModal: false,
+      authModal: false,
+      closeIcon,
+    };
+  },
   methods: {
     ...mapActions({
       AuthState: "auth/AuthState",
@@ -24,6 +52,15 @@ export default {
       FetchFilms: "films/FetchFilms",
       FetchNews: "news/FetchNews",
     }),
+    modalStatus(val) {
+      this.isActive = true;
+      val === "auth" ? (this.authModal = true) : (this.regModal = true);
+    },
+    Close() {
+      this.isActive = false;
+      this.authModal = false;
+      this.regModal = false;
+    },
   },
   computed: {
     ...mapState({
@@ -118,5 +155,51 @@ body {
 .swiper-button-next,
 .swiper-button-prev {
   color: #fff !important;
+}
+.modal-enter-active,
+.preloader-leave-active {
+  .trs();
+}
+.modal-enter-from {
+  opacity: 0;
+  visibility: hidden;
+}
+.modal-leave-to {
+  opacity: 1;
+  visibility: visible;
+}
+.modal {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1c1c1ce6;
+  visibility: hidden;
+  opacity: 0;
+  .trs();
+  &-wrapper {
+    position: relative;
+    padding: 4em;
+    .br(5px);
+    background: #fff;
+  }
+  &-close {
+    position: absolute;
+    right: 2%;
+    top: 2%;
+    cursor: pointer;
+  }
+  &-item {
+    max-width: 500px;
+  }
+}
+.order {
+  z-index: 3;
+  visibility: visible;
+  .trs();
+  opacity: 1;
 }
 </style>

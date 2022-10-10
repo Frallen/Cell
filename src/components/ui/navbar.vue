@@ -29,12 +29,17 @@
         </div>
       </template>
       <template v-if="!isAuthReady">
-        <router-link to="/auth" class="menu-item"
-          ><img :src="Auth" alt=""
-        /></router-link>
-        <router-link to="/registration" class="menu-item"
-          ><img :src="newUser" alt=""
-        /></router-link>
+        <div class="menu-item">
+          <img :src="Auth" alt="" @click.stop="visibleModal" data-type="auth" />
+        </div>
+        <div class="menu-item">
+          <img
+            :src="newUser"
+            alt=""
+            @click.stop="visibleModal"
+            data-type="reg"
+          />
+        </div>
       </template>
       <div class="menu-mobile menu-item" :class="{ 'icon-active': mobile }">
         <div class="menu-mobile-icon" @click="mobileView">
@@ -56,6 +61,7 @@ import Auth from "@/icons/auth.png";
 import newUser from "@/icons/newUser.png";
 export default {
   name: "nav-bar",
+  emits: ["modalStatus"],
   data() {
     return {
       mobile: false,
@@ -66,6 +72,7 @@ export default {
       User,
       Crown,
       Auth,
+      modalStatus: null,
     };
   },
   computed: {
@@ -75,6 +82,12 @@ export default {
     }),
   },
   methods: {
+    visibleModal(e) {
+      e.currentTarget.dataset.type === "auth"
+        ? (this.modalStatus = "auth")
+        : (this.modalStatus = "reg");
+      this.$emit("modalStatus",this.modalStatus);
+    },
     logout() {
       this.$store.dispatch("auth/logout");
       this.$router.push("/");

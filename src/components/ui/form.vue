@@ -22,7 +22,7 @@
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import DefaultButton from "@/components/ui/button";
-import "@/formLocalize"
+import "@/formLocalize";
 export default {
   name: "DefaultForm",
   components: {
@@ -54,10 +54,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .form-wrapper {
-  position: relative;
-  padding: 20px 50px;
-  background: #fff;
-  .br(5px);
 }
 .form {
   display: flex;

@@ -52,8 +52,8 @@ const routes = [
     path: "/genre/:id",
     component: () => import("@/pages/films/filmsCompilation"),
   },
-  { path: "/auth", component: () => import("@/pages/auth/authPage") },
-  { path: "/registration", component: () => import("@/pages/auth/singUpPage") },
+ // { path: "/auth", component: () => import("@/pages/auth/authPage") },
+ // { path: "/registration", component: () => import("@/pages/auth/singUpPage") },
 ];
 const router = createRouter({
   routes,

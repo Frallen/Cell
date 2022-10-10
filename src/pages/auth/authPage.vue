@@ -6,17 +6,18 @@
 <script>
 import DefaultForm from "@/components/ui/form";
 import { mapActions, mapMutations } from "vuex";
-import { useRouter } from "vue-router";
 
 export default {
   name: "authPage",
   components: { DefaultForm },
+  emits: ["closeModal"],
   methods: {
     login(val) {
       this.setUser(val);
 
       this.setAuth().then();
-     this.$router.push("/")
+      this.$emit("closeModal");
+      this.$router.push("/");
     },
     ...mapMutations({
       setUser: "auth/setUser",

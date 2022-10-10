@@ -9,17 +9,16 @@ import { mapActions, mapMutations } from "vuex";
 export default {
   name: "singUpPage",
   components: { DefaultForm },
-
+  emits: ["closeModal"],
   methods: {
     createUser(val) {
       try {
         this.setUser(val);
+        this.$emit("closeModal");
         this.signUp();
-        this.$router.push("/")
-      }catch (e) {
 
-      }
-
+        this.$router.push("/");
+      } catch (e) {}
     },
     ...mapMutations({
       setUser: "auth/setUser",
@@ -27,11 +26,8 @@ export default {
     ...mapActions({
       signUp: "auth/signUp",
     }),
-  }
+  },
 };
-
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="less" scoped></style>

@@ -43,6 +43,7 @@
       </swiper-slide>
     </swiper>
   </div>
+  <h2 class="index-title">Жанры</h2>
   <div class="index-genres">
     <swiper
       class="index-genres-wrapper"
@@ -64,6 +65,7 @@
       </swiper-slide>
     </swiper>
   </div>
+  <h2 class="index-title">Новости</h2>
   <div class="index-news">
     <swiper
       class="index-news-wrapper"
@@ -173,6 +175,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.index-title{
+  color:#fff;
+  margin-top: 0.7em;
+}
 .index-slider {
   &-content {
     position: absolute;
@@ -286,10 +292,11 @@ export default {
 .index-news {
   &-wrapper {
     margin: 2em 0;
-    height: 350px;
+    height: 250px;
   }
   &-item {
     overflow: hidden;
+    cursor: pointer;
     .br(10px);
     position: relative;
     h4 {

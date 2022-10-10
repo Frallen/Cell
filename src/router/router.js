@@ -39,6 +39,10 @@ const routes = [
     component: () => import("@/pages/news/newsDetail"),
   },
   {
+    path: "/news",
+    component: () => import("@/pages/news/newsList"),
+  },
+  {
     name: "Избранное",
     path: "/favorites",
     component: () => import("@/pages/user/userFavorites"),

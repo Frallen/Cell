@@ -1,0 +1,88 @@
+<template>
+  <div class="news">
+    <div class="news-wrapper">
+      <div
+        class="news-item"
+        v-for="item in news"
+        @click="this.$router.push(`/news/${item.slug}`)"
+      >
+        <div class="news-item-box">
+          <img v-lazy="item.banner" :alt="item.name" />
+        </div>
+        <div class="news-item-text">
+          <h5>{{ item.name }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapState } from "vuex";
+
+export default {
+  name: "newsList",
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapState({
+      news: (state) => state.news.news,
+    }),
+  },
+};
+</script>
+
+<style scoped lang="less">
+.news {
+  margin: 2em 0;
+  &-wrapper {
+    margin-top: -15px;
+    margin-left: -15px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &-item {
+    overflow: hidden;
+    cursor: pointer;
+    margin-top: 15px;
+    margin-left: 15px;
+    width: calc(100% / 4 - 15px);
+    @media @lg {
+      width: calc(100% / 3 - 15px);
+    }
+    @media @md {
+      width: calc(100% / 2 - 15px);
+    }
+    @media @xs {
+      width: 100%;
+    }
+    background: #fff;
+    .br(10px);
+    position: relative;
+    &-box {
+      height: 150px;
+      width: 100%;
+      overflow: hidden;
+      z-index: 2;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    &-text {
+      padding: 0.8em;
+      overflow: hidden;
+      z-index: 2;
+    }
+    h5 {
+      .text-eclipse();
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      color: @black;
+      font-size: 1.2em;
+    }
+  }
+}
+</style>

@@ -18,7 +18,6 @@ export const filmsModule = {
   state: () => ({
     films: [],
     orderedGenres: [],
-    film: {},
     genres: [],
 
     isLoading: false,
@@ -37,9 +36,6 @@ export const filmsModule = {
     },
     setFilms(state, data) {
       state.films = data;
-    },
-    setFilm(state, data) {
-      state.film = data;
     },
     setLoading(state, loading) {
       state.isLoading = loading;

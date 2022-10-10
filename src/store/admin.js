@@ -281,6 +281,10 @@ export const adminModule = {
     },
     async updateDoc({ state, commit, dispatch }, obj) {
       try {
+        const metadata = {
+          contentType: "image/jpeg",
+        };
+
         commit("setLoading", true);
         let docRef = doc(db, obj.to, obj.id);
         if (obj.items.country) {
@@ -297,12 +301,118 @@ export const adminModule = {
             // poster: obj.items.poster,
             // BipPoster: obj.items.BipPoster,
           });
+        } else if (obj.items.poster) {
+
+          dispatch("DeleteImages",obj)
+          const uploadTaskPicture = uploadBytesResumable(
+            ref(storage, `images/films/${obj.id}/poster.png`),
+            obj.items.poster,
+            metadata
+          );
+          const uploadTaskBigPicture = uploadBytesResumable(
+            ref(storage, `images/films/${obj.id}/BigPoster.png`),
+            obj.items.BigPoster,
+            metadata
+          );
+          uploadTaskPicture.on(
+            "state_changed",
+            (snapshot) => {
+              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+              /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');*/
+              switch (snapshot.state) {
+                case "paused":
+                  console.log("Upload is paused");
+                  break;
+                case "running":
+                  console.log("Upload is running");
+                  break;
+              }
+            },
+            (error) => {
+              console.error(error);
+            },
+            () => {}
+          );
+          uploadTaskBigPicture.on(
+            "state_changed",
+            (snapshot) => {
+              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+              /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                 console.log('Upload is ' + progress + '% done');*/
+              switch (snapshot.state) {
+                case "paused":
+                  console.log("Upload is paused");
+                  break;
+                case "running":
+                  console.log("Upload is running");
+                  break;
+              }
+            },
+            (error) => {
+              console.error(error);
+            },
+            () => {}
+          );
         } else if (obj.items.banner) {
+          dispatch("DeleteImages",obj)
           await updateDoc(docRef, {
             name: obj.items.name,
             slug: obj.items.slug,
             text: obj.items.text,
           });
+          const uploadTaskPicture = uploadBytesResumable(
+            ref(storage, `images/news/${obj.id}/banner.png`),
+            obj.items.banner,
+            metadata
+          );
+          uploadTaskPicture.on(
+            "state_changed",
+            (snapshot) => {
+              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+              /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');*/
+              switch (snapshot.state) {
+                case "paused":
+                  console.log("Upload is paused");
+                  break;
+                case "running":
+                  console.log("Upload is running");
+                  break;
+              }
+            },
+            (error) => {
+              console.error(error);
+            },
+            () => {}
+          );
+        } else if (obj.items.genre) {
+          dispatch("DeleteImages",obj)
+          const uploadTaskPicture = uploadBytesResumable(
+            ref(storage, `images/genres/${obj.id}/genre.png`),
+            obj.items.genre,
+            metadata
+          );
+          uploadTaskPicture.on(
+            "state_changed",
+            (snapshot) => {
+              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+              /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                  console.log('Upload is ' + progress + '% done');*/
+              switch (snapshot.state) {
+                case "paused":
+                  console.log("Upload is paused");
+                  break;
+                case "running":
+                  console.log("Upload is running");
+                  break;
+              }
+            },
+            (error) => {
+              console.error(error);
+            },
+            () => {}
+          );
         } else {
           await updateDoc(docRef, {
             name: obj.items.name,
@@ -321,38 +431,7 @@ export const adminModule = {
         commit("setLoading", true);
 
         await deleteDoc(doc(db, obj.to, obj.id));
-        if (obj.to === "films") {
-          const desertRef = ref(storage, `images/films/${obj.id}`);
-
-          listAll(desertRef).then(async (listResults) => {
-            const promises = listResults.items.map((item) => {
-              return deleteObject(item);
-            });
-
-            await Promise.all(promises);
-          });
-        } else if (obj.to === "genres") {
-          const desertRef = ref(storage, `images/genres/${obj.id}`);
-
-          listAll(desertRef).then(async (listResults) => {
-            const promises = listResults.items.map((item) => {
-              return deleteObject(item);
-            });
-
-            await Promise.all(promises);
-          });
-        }
-        else if (obj.to === "news") {
-          const desertRef = ref(storage, `images/news/${obj.id}`);
-
-          listAll(desertRef).then(async (listResults) => {
-            const promises = listResults.items.map((item) => {
-              return deleteObject(item);
-            });
-
-            await Promise.all(promises);
-          });
-        }
+        dispatch("DeleteImages",obj)
         dispatch("FetchData", obj.to);
       } catch (err) {
         console.error(err);
@@ -360,5 +439,39 @@ export const adminModule = {
         commit("setLoading", false);
       }
     },
+    async DeleteImages({ state, commit, dispatch }, obj) {
+      if (obj.to === "films") {
+        const desertRef = ref(storage, `images/films/${obj.id}`);
+
+        listAll(desertRef).then(async (listResults) => {
+          const promises = listResults.items.map((item) => {
+            return deleteObject(item);
+          });
+
+          await Promise.all(promises);
+        });
+      } else if (obj.to === "genres") {
+        const desertRef = ref(storage, `images/genres/${obj.id}`);
+
+        listAll(desertRef).then(async (listResults) => {
+          const promises = listResults.items.map((item) => {
+            return deleteObject(item);
+          });
+
+          await Promise.all(promises);
+        });
+      }
+      else if (obj.to === "news") {
+        const desertRef = ref(storage, `images/news/${obj.id}`);
+
+        listAll(desertRef).then(async (listResults) => {
+          const promises = listResults.items.map((item) => {
+            return deleteObject(item);
+          });
+
+          await Promise.all(promises);
+        });
+      }
+    }
   },
 };

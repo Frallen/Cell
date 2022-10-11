@@ -28,10 +28,10 @@
       <Field name="banner" id="banner" class="input" type="file" />
       <ErrorMessage name="banner" />
     </label>
-    <div v-if="currentUpdItem.poster" class="form-item posters">
-      <a href="#">
+    <div v-if="currentUpdateItem.poster" class="form-item posters">
+      <a href="#" class="admin-photo-container">
         Баннер статьи
-        <img :src="currentUpdItem.poster" alt="" />
+        <img :src="currentUpdateItem.poster" alt="" />
       </a>
     </div>
     <label for="date" class="form-item date">
@@ -109,9 +109,10 @@ import { Calendar, DatePicker } from "v-calendar";
 import BlotFormatter from "quill-blot-formatter";
 import AutoFormat from "quill-autoformat";
 import Arrow from "@/icons/right-arrow.png";
+import adminMixin from "@/mixins/adminMixin";
 export default {
   name: "admin-news",
-  mixins: [slugMixin, toastMixin],
+  mixins: [slugMixin, toastMixin, adminMixin],
   components: {
     Table,
     AdminNav,
@@ -126,13 +127,8 @@ export default {
   data() {
     return {
       Arrow,
-      visible: false,
       tableHeader: ["Название новости", "Чпу", "действия"],
-      updateId: null,
-      submitType: "submit",
       refForm: null,
-      poster: null,
-      currentUpdItem: [],
       searchValue: null,
       rawHtml: null,
       range: {
@@ -142,10 +138,6 @@ export default {
     };
   },
   methods: {
-    visibleForm(val) {
-      this.visible = val;
-      if (val === false) this.submitType = "submit";
-    },
     submitData(val) {
       if (this.submitType === "submit") {
         let obj = {
@@ -178,23 +170,11 @@ export default {
         .then((p) => this.setSuccess("Запись удалена"))
         .catch((err) => this.setError());
     },
-    ...mapActions({
-      CreateItem: "admin/CreateItem",
-      FetchData: "admin/FetchData",
-      updateDoc: "admin/updateDoc",
-      DeleteDoc: "admin/DeleteDoc",
-    }),
     ...mapMutations({
       setNewsQuery: "admin/setNewsQuery",
     }),
-    SetId(val) {
-      this.updateId = val;
-    },
     setQuery(val) {
       this.setNewsQuery(val);
-    },
-    refFormAction(val) {
-      this.refForm = val;
     },
   },
   mounted() {

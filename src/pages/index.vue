@@ -14,7 +14,7 @@
         class="index-slider-item"
         v-for="slide in firstFive"
         :key="slide.id"
-        @click="this.$router.push(`/film/${slide.id}`)"
+        @click="this.$router.push(`/film/${slide.slug}`)"
       >
         <iframe
           width="100%"

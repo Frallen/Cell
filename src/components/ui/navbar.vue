@@ -144,6 +144,7 @@ export default {
     text-decoration: none;
     color: #fff;
     font-size: 1.3em;
+    cursor: pointer;
     @media @md {
       font-size: 1em;
     }

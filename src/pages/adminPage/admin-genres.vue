@@ -28,7 +28,9 @@
     </label>
     <div class="form-item genre-img" v-if="currentUpdateItem.genre">
       <h5>Текущее изображение</h5>
-      <a href="#"><img :src="currentUpdateItem.genre" alt="" /></a>
+      <a href="#" class="admin-photo-container"
+        ><img :src="currentUpdateItem.genre" alt=""
+      /></a>
     </div>
   </adminForm>
   <Table
@@ -51,9 +53,10 @@ import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import * as yup from "yup";
 import slugMixin from "@/mixins/slugMixin";
 import toastMixin from "@/mixins/toastMixin";
+import adminMixin from "@/mixins/adminMixin";
 export default {
   name: "admin-genres",
-  mixins: [slugMixin, toastMixin],
+  mixins: [slugMixin, toastMixin, adminMixin],
   components: {
     Table,
     AdminNav,
@@ -64,11 +67,7 @@ export default {
   },
   data() {
     return {
-      visible: false,
       tableHeader: ["Название жанра", "чпу", "действия"],
-      updateId: null,
-      submitType: "submit",
-      currentUpdateItem: [],
     };
   },
   methods: {
@@ -78,10 +77,6 @@ export default {
     ...mapMutations({
       setGenresQuery: "admin/setGenresQuery",
     }),
-    visibleForm(val) {
-      this.visible = val;
-      if (val === false) this.submitType = "submit";
-    },
     submitData(val) {
       if (this.submitType === "submit") {
         let obj = {
@@ -113,12 +108,6 @@ export default {
         .then((p) => this.setSuccess("Запись удалена"))
         .catch((err) => this.setError());
     },
-    ...mapActions({
-      CreateItem: "admin/CreateItem",
-      FetchData: "admin/FetchData",
-      updateDoc: "admin/updateDoc",
-      DeleteDoc: "admin/DeleteDoc",
-    }),
     SetId(val) {
       this.updateId = val;
     },

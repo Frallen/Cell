@@ -6,7 +6,7 @@
         class="films-item"
         v-for="item in orderedGenres"
         :key="item.id"
-        @click="this.$router.push(`/film/${item.id}`)"
+        @click="this.$router.push(`/film/${item.slug}`)"
       >
         <img v-lazy="item.poster" alt="" />
       </div>

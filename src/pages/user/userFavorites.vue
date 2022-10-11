@@ -5,9 +5,9 @@
       <div
         class="films-item"
         v-for="item in favoritesFilms"
-        @click="this.$router.push(`/film/${item.id}`)"
+        @click="this.$router.push(`/film/${item.slug}`)"
       >
-        <img v-lazy="item.poster"  alt="" />
+        <img v-lazy="item.poster" alt="" />
         <Favorite
           @like="like"
           @dislike="DisLike"
@@ -24,7 +24,7 @@ import Favorite from "@/components/ui/favorite";
 import { mapActions, mapState } from "vuex";
 import Breadcrumbs from "@/components/breadcrumbs";
 export default {
-  components: {Breadcrumbs, Favorite },
+  components: { Breadcrumbs, Favorite },
   data() {
     return {};
   },

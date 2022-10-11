@@ -1,14 +1,11 @@
 import {
   collection,
-  doc,
   getDocs,
+  limit,
   onSnapshot,
+  orderBy,
   query,
   where,
-  getDoc,
-  orderBy,
-  startAfter,
-  limit,
 } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 import { getDownloadURL, ref } from "firebase/storage";
@@ -19,13 +16,38 @@ export const filmsModule = {
     films: [],
     orderedGenres: [],
     genres: [],
-
+    actors: [],
     isLoading: false,
   }),
   getters: {
-    getFilm:(state)=>(id)=>{
-      return state.films.find(film=>film.id === id);
-    }
+    //получение фильмов в которых снимался актер
+    getFilmsByPerson: (state) => (actor) => {
+      return state.films.filter((film) => film.actors.find((p) => p === actor));
+    },
+    // получение данных об фильме на детальной странице фильма
+    getFilm: (state) => (slug) => {
+      return state.films.find(
+        (film) => film.slug.toLowerCase() === slug.toLowerCase()
+      );
+    },
+    //получение данных об актере на детальной странице актера
+    getActor: (state) => (slug) => {
+      return state.actors.find(
+        (actor) => actor.slug.toLowerCase() === slug.toLowerCase()
+      );
+    },
+    // поиск фильмов и актеров
+    search: (state) => (query) => {
+      return [
+        ...state.films.filter((film) =>
+          film.name.toLowerCase().includes(query.toLowerCase())
+        ),
+
+        ...state.actors.filter((actor) =>
+          actor.name.toLowerCase().includes(query.toLowerCase())
+        ),
+      ];
+    },
   },
   mutations: {
     loadMoreFilms(state, data) {
@@ -33,6 +55,9 @@ export const filmsModule = {
     },
     setGenres(state, data) {
       state.genres = data;
+    },
+    setActors(state, data) {
+      state.actors = data;
     },
     setFilms(state, data) {
       state.films = data;
@@ -92,6 +117,29 @@ export const filmsModule = {
         commit("setLoading", false);
       }
     },
+    async FetchActors({ state, commit }) {
+      try {
+        commit("setLoading", true);
+
+        const { docs } = await getDocs(query(collection(db, "actors")));
+        const data = await Promise.all(
+          docs.map(async (doc) => ({
+            ...doc.data(),
+            id: doc.id,
+            photo:
+              (await getDownloadURL(
+                ref(storage, `images/actors/${doc.id}/photo.png`)
+              )) ?? null,
+          }))
+        );
+
+        commit("setActors", data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        commit("setLoading", false);
+      }
+    },
     async GetFilmsByGenre({ state, commit }, genreSlug) {
       try {
         commit("setLoading", true);
@@ -116,7 +164,7 @@ export const filmsModule = {
         await onSnapshot(
           query(
             collection(db, "films"),
-            where("genres", "array-contains", genre),
+            where("genres", "array-contains", genre)
           ),
           (querySnapshot) => {
             const allPromises = querySnapshot.docs.map(async (doc) => {
@@ -159,6 +207,5 @@ export const filmsModule = {
         commit("setLoading", false);
       }
     },
-
   },
 };

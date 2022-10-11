@@ -52,16 +52,16 @@
     <label for="BigPoster" class="form-item">
       Большой постер
       <Field name="BigPoster" id="BigPoster" class="input" type="file" />
-      <ErrorMessage name="poster" />
+      <ErrorMessage name="BigPoster" />
     </label>
-    <div v-if="currentUpdItem.poster" class="form-item posters">
-      <a href="#">
+    <div v-if="currentUpdateItem.poster" class="form-item posters">
+      <a href="#" class="admin-photo-container">
         Постер
-        <img :src="currentUpdItem.poster" alt="" />
+        <img :src="currentUpdateItem.poster" alt="" />
       </a>
-      <a href="#">
+      <a href="#" class="admin-photo-container">
         Большой постер
-        <img :src="currentUpdItem.BigPoster" alt="" />
+        <img :src="currentUpdateItem.BigPoster" alt="" />
       </a>
     </div>
     <label for="text" class="form-item textarea">
@@ -93,9 +93,10 @@ import toastMixin from "@/mixins/toastMixin";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import * as yup from "yup";
 import Select from "@/components/ui/select";
+import adminMixin from "@/mixins/adminMixin";
 export default {
   name: "admin-films",
-  mixins: [slugMixin, toastMixin],
+  mixins: [slugMixin, toastMixin, adminMixin],
   components: {
     Table,
     AdminNav,
@@ -107,25 +108,17 @@ export default {
   },
   data() {
     return {
-      visible: false,
       tableHeader: ["Название", "Чпу", "действия"],
-      updateId: null,
-      submitType: "submit",
       refForm: null,
       poster: null,
-      currentUpdItem: [],
       searchValue: null,
     };
   },
   methods: {
-    visibleForm(val) {
-      this.visible = val;
-      if (val === false) this.submitType = "submit";
-    },
     submitData(val) {
       if (this.submitType === "submit") {
         let genres = this.genres.filter((p) => val.genres.includes(p.name));
-        genres.forEach(p=>delete p.genre)
+        genres.forEach((p) => delete p.genre);
         delete val.genres;
         let obj = {
           to: "films",
@@ -147,7 +140,7 @@ export default {
           .catch((err) => this.setError());
         this.submitType = "submit";
       }
-      this.currentUpdItem = [];
+      this.currentUpdateItem = [];
     },
     DeleteItem(val) {
       let obj = {
@@ -157,7 +150,7 @@ export default {
       this.DeleteDoc(obj)
         .then((p) => this.setSuccess("Запись удалена"))
         .catch((err) => this.setError());
-      this.currentUpdItem = [];
+      this.currentUpdateItem = [];
     },
     ...mapActions({
       CreateItem: "admin/CreateItem",
@@ -168,14 +161,8 @@ export default {
     ...mapMutations({
       setFilmQuery: "admin/setFilmQuery",
     }),
-    SetId(val) {
-      this.updateId = val;
-    },
     setQuery(val) {
-      this.setFilmQuery(val)
-    },
-    refFormAction(val) {
-      this.refForm = val;
+      this.setFilmQuery(val);
     },
   },
   mounted() {
@@ -198,7 +185,7 @@ export default {
       );
       this.refForm.setFieldValue("actors", item.actors);
       this.submitType = "update";
-      this.currentUpdItem = item;
+      this.currentUpdateItem = item;
     },
   },
 

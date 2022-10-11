@@ -4,13 +4,13 @@
     <Form @submit="onsubmit" :validation-schema="schema" class="form">
       <label for="email">
         Введите почту
-        <Field name="email" id="email" class="input" />
+        <Field name="email" class="input" />
         <ErrorMessage name="email" />
       </label>
 
       <label for="password">
         Введите пароль
-        <Field name="password" id="password" type="password" class="input" />
+        <Field name="password" type="password" class="input" />
         <ErrorMessage name="password" />
       </label>
 

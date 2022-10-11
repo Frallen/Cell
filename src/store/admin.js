@@ -138,6 +138,11 @@ export const adminModule = {
                 ref(storage, `images/news/${doc.id}/banner.png`)
               ),
             }),
+            ...(to === "actors" && {
+              photo: await getDownloadURL(
+                ref(storage, `images/actors/${doc.id}/photo.png`)
+              ),
+            }),
           }))
         );
         commit("setData", { data, to });
@@ -157,6 +162,8 @@ export const adminModule = {
         let BigPoster = obj.val.BigPoster;
         let genre = obj.val.genre;
         let banner = obj.val.banner;
+        let photo = obj.val.photo;
+        delete obj.val.photo;
         delete obj.val.poster;
         delete obj.val.BigPoster;
         delete obj.val.genre;
@@ -244,6 +251,32 @@ export const adminModule = {
               },
               () => {}
             );
+          } else if (obj.to === "actors") {
+            const uploadTaskPicture = uploadBytesResumable(
+              ref(storage, `images/actors/${docId}/photo.png`),
+              photo,
+              metadata
+            );
+            uploadTaskPicture.on(
+              "state_changed",
+              (snapshot) => {
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                  console.log('Upload is ' + progress + '% done');*/
+                switch (snapshot.state) {
+                  case "paused":
+                    console.log("Upload is paused");
+                    break;
+                  case "running":
+                    console.log("Upload is running");
+                    break;
+                }
+              },
+              (error) => {
+                console.error(error);
+              },
+              () => {}
+            );
           } else if (obj.to === "news") {
             const uploadTaskPicture = uploadBytesResumable(
               ref(storage, `images/news/${docId}/banner.png`),
@@ -302,8 +335,7 @@ export const adminModule = {
             // BipPoster: obj.items.BipPoster,
           });
         } else if (obj.items.poster) {
-
-          dispatch("DeleteImages",obj)
+          dispatch("DeleteImages", obj);
           const uploadTaskPicture = uploadBytesResumable(
             ref(storage, `images/films/${obj.id}/poster.png`),
             obj.items.poster,
@@ -355,7 +387,7 @@ export const adminModule = {
             () => {}
           );
         } else if (obj.items.banner) {
-          dispatch("DeleteImages",obj)
+          dispatch("DeleteImages", obj);
           await updateDoc(docRef, {
             name: obj.items.name,
             slug: obj.items.slug,
@@ -387,10 +419,42 @@ export const adminModule = {
             () => {}
           );
         } else if (obj.items.genre) {
-          dispatch("DeleteImages",obj)
+          dispatch("DeleteImages", obj);
           const uploadTaskPicture = uploadBytesResumable(
             ref(storage, `images/genres/${obj.id}/genre.png`),
             obj.items.genre,
+            metadata
+          );
+          uploadTaskPicture.on(
+            "state_changed",
+            (snapshot) => {
+              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+              /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                  console.log('Upload is ' + progress + '% done');*/
+              switch (snapshot.state) {
+                case "paused":
+                  console.log("Upload is paused");
+                  break;
+                case "running":
+                  console.log("Upload is running");
+                  break;
+              }
+            },
+            (error) => {
+              console.error(error);
+            },
+            () => {}
+          );
+        } else if (obj.items.photo) {
+          dispatch("DeleteImages", obj);
+          await updateDoc(docRef, {
+            name: obj.items.name,
+            slug: obj.items.slug,
+            text: obj.items.text,
+          });
+          const uploadTaskPicture = uploadBytesResumable(
+            ref(storage, `images/actors/${obj.id}/photo.png`),
+            obj.items.photo,
             metadata
           );
           uploadTaskPicture.on(
@@ -431,7 +495,7 @@ export const adminModule = {
         commit("setLoading", true);
 
         await deleteDoc(doc(db, obj.to, obj.id));
-        dispatch("DeleteImages",obj)
+        dispatch("DeleteImages", obj);
         dispatch("FetchData", obj.to);
       } catch (err) {
         console.error(err);
@@ -460,8 +524,7 @@ export const adminModule = {
 
           await Promise.all(promises);
         });
-      }
-      else if (obj.to === "news") {
+      } else if (obj.to === "news") {
         const desertRef = ref(storage, `images/news/${obj.id}`);
 
         listAll(desertRef).then(async (listResults) => {
@@ -472,6 +535,6 @@ export const adminModule = {
           await Promise.all(promises);
         });
       }
-    }
+    },
   },
 };

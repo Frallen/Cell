@@ -1,63 +1,73 @@
 <template>
-  <div class="info">
-    <div class="info-poster">
-      <img :src="getFilm(this.$route.params.id).BigPoster" alt="" />
-      <div class="info-short">
-        <h3>{{ getFilm(this.$route.params.id).name }}</h3>
-        <div class="info-genres">
-          <span>Жанры:</span>
-          <div class="info-genres-list">
-            <div v-for="item in getFilm(this.$route.params.id).genres">
-              {{ item.name }},
+  <div class="grid-container">
+    <div class="grid-container-item">
+      <div class="info">
+        <div class="info-poster">
+          <img :src="getFilm(this.$route.params.id).BigPoster" alt="" />
+          <div class="info-short">
+            <h3>{{ getFilm(this.$route.params.id).name }}</h3>
+            <div class="info-genres">
+              <span>Жанры:</span>
+              <div class="info-genres-list">
+                <div v-for="item in getFilm(this.$route.params.id).genres">
+                  {{ item.name }},
+                </div>
+              </div>
             </div>
+            <ul>
+              <li>
+                <span>Страна:</span>{{ getFilm(this.$route.params.id).country }}
+              </li>
+              <li>
+                <span>Продожительность:</span
+                >{{ getFilm(this.$route.params.id).duration }}
+              </li>
+              <li>
+                <span>Год:</span>{{ getFilm(this.$route.params.id).year }}
+              </li>
+            </ul>
           </div>
+          <Favorite
+            @like="like"
+            @dislike="DisLike"
+            :isFavorite="favoriteStatus(getFilm(this.$route.params.id).id)"
+            :id="getFilm(this.$route.params.id).id"
+            class="favorite"
+          ></Favorite>
         </div>
-        <ul>
-          <li>
-            <span>Страна:</span>{{ getFilm(this.$route.params.id).country }}
-          </li>
-          <li>
-            <span>Продожительность:</span
-            >{{ getFilm(this.$route.params.id).duration }}
-          </li>
-          <li><span>Год:</span>{{ getFilm(this.$route.params.id).year }}</li>
-        </ul>
       </div>
-      <Favorite
-        @like="like"
-        @dislike="DisLike"
-        :isFavorite="favoriteStatus(getFilm(this.$route.params.id).id)"
-        :id="getFilm(this.$route.params.id).id"
-        class="favorite"
-      ></Favorite>
+      <div class="info-text">
+        <h4>Описание</h4>
+        <p>{{ getFilm(this.$route.params.id).text }}</p>
+      </div>
+      <div class="info-video">
+        <iframe
+          width="100%"
+          :src="
+            'https://www.youtube.com/embed/' +
+            getFilm(this.$route.params.id).video +
+            '?mute=1'
+          "
+          :title="getFilm(this.$route.params.id).title"
+          frameborder="0"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
     </div>
-  </div>
-  <div class="info-text">
-    <h4>Описание</h4>
-    <p>{{ getFilm(this.$route.params.id).text }}</p>
-  </div>
-  <div class="info-video">
-    <iframe
-      width="100%"
-      :src="
-        'https://www.youtube.com/embed/' +
-        getFilm(this.$route.params.id).video +
-        '?mute=1'
-      "
-      :title="getFilm(this.$route.params.id).title"
-      frameborder="0"
-      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-    ></iframe>
+    <div class="grid-container-item">
+      <Search></Search>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
+import Search from "@/components/search";
 import Favorite from "@/components/ui/favorite";
 export default {
   name: "filmsDetail",
-  components: { Favorite },
+  components: { Favorite, Search },
   data() {
     return {};
   },
@@ -70,9 +80,7 @@ export default {
       getFilm: "films/getFilm",
     }),
   },
-  mounted() {
-
-  },
+  mounted() {},
 
   methods: {
     ...mapActions({

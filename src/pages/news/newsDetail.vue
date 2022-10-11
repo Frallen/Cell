@@ -1,27 +1,35 @@
 <template>
-  <div class="news">
-    <div
-      class="news-img"
-      :style="{
-        background: `url(${GetCurrentNews(this.$route.params.id).banner})`,
-      }"
-      style="background-repeat: no-repeat; background-size: cover"
-    >
-      <h2 class="news-title">
-        {{ GetCurrentNews(this.$route.params.id).name }}
-      </h2>
+  <div class="grid-container">
+    <div class="grid-container-item">
+      <div class="news">
+        <div
+          class="news-img"
+          :style="{
+            background: `url(${GetCurrentNews(this.$route.params.id).banner})`,
+          }"
+          style="background-repeat: no-repeat; background-size: cover"
+        >
+          <h2 class="news-title">
+            {{ GetCurrentNews(this.$route.params.id).name }}
+          </h2>
+        </div>
+        <div class="news-content">
+          <div v-html="GetCurrentNews(this.$route.params.id).text"></div>
+        </div>
+      </div>
     </div>
-    <div class="news-content">
-      <div v-html="GetCurrentNews(this.$route.params.id).text"></div>
+    <div class="grid-container-item">
+      <Search></Search>
     </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-
+import Search from "@/components/search";
 export default {
   name: "newsDetail",
+  components: { Search },
   data() {
     return {};
   },

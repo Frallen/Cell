@@ -4,6 +4,7 @@
     :schema="schema"
     v-show="visible"
     @hide="visibleForm"
+    @refForm="refFormAction"
   >
     <label for="name" class="form-item">
       Полное имя актера
@@ -20,6 +21,24 @@
         v-bind:readonly="true"
       />
       <ErrorMessage name="slug" />
+    </label>
+    <label for="photo" class="form-item">
+      Фото актера
+      <Field name="photo" id="genre" class="input" type="file" />
+      <ErrorMessage name="photo" />
+    </label>
+    <div class="form-item genre-img" v-if="currentUpdateItem.photo">
+      <h5>Текущее фото</h5>
+      <a href="#" class="admin-photo-container"
+        ><img :src="currentUpdateItem.photo" alt=""
+      /></a>
+    </div>
+    <label for="text" class="form-item textarea">
+      Описание
+      <Field name="text" id="text" v-slot="{ field }" type="text-area">
+        <textarea class="input" v-bind="field"></textarea>
+      </Field>
+      <ErrorMessage name="text" />
     </label>
   </admin-form>
   <Table
@@ -38,13 +57,14 @@ import AdminNav from "@/components/ui/table";
 import adminForm from "@/components/ui/adminForm";
 import DefaultButton from "@/components/ui/button";
 import { Field, ErrorMessage } from "vee-validate";
-import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import * as yup from "yup";
 import slugMixin from "@/mixins/slugMixin";
 import toastMixin from "@/mixins/toastMixin";
+import adminMixin from "@/mixins/adminMixin";
 export default {
   name: "admin-actors",
-  mixins: [slugMixin, toastMixin],
+  mixins: [slugMixin, toastMixin, adminMixin],
   components: {
     Table,
     AdminNav,
@@ -55,17 +75,11 @@ export default {
   },
   data() {
     return {
-      visible: false,
       tableHeader: ["Полное имя актера", "Чпу", "действия"],
-      updateId: null,
-      submitType: "submit",
+      refForm: null,
     };
   },
   methods: {
-    visibleForm(val) {
-      this.visible = val;
-      if (val === false) this.submitType = "submit";
-    },
     submitData(val) {
       if (this.submitType === "submit") {
         let obj = {
@@ -100,18 +114,9 @@ export default {
         .then((p) => this.setSuccess("Запись удалена"))
         .catch((err) => this.setError());
     },
-    ...mapActions({
-      CreateItem: "admin/CreateItem",
-      FetchData: "admin/FetchData",
-      updateDoc: "admin/updateDoc",
-      DeleteDoc: "admin/DeleteDoc",
-    }),
     ...mapMutations({
       setActorsQuery: "admin/setActorsQuery",
     }),
-    SetId(val) {
-      this.updateId = val;
-    },
   },
   mounted() {
     this.FetchData("actors");
@@ -119,7 +124,9 @@ export default {
   watch: {
     updateId(val) {
       let item = this.actors.find((p) => p.id === val);
+      this.refForm.setFieldValue("text", item.text);
       this.slugField = item.name;
+      this.currentUpdateItem = item;
       this.submitType = "update";
     },
   },
@@ -135,10 +142,21 @@ export default {
       return yup.object({
         name: yup.string().required(),
         slug: yup.string().required(),
+        photo: yup.string().required(),
+        text: yup.string().required(),
       });
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="less">
+.textarea {
+  width: 100%;
+  textarea {
+    width: 100%;
+    resize: none;
+    height: 150px;
+  }
+}
+</style>

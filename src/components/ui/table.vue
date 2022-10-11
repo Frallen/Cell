@@ -18,8 +18,18 @@
         <div class="table-body-item">{{ item.name }}</div>
         <div class="table-body-item">{{ item.slug }}</div>
         <div class="table-body-item">
-          <Pen @click="updateValues(item.id)" />
-          <Close @click="DeleteGenre(item.id)" />
+          <img
+            :src="Pen"
+            alt="pen"
+            @click="updateValues(item.id)"
+            class="icon"
+          />
+          <img
+            :src="Close"
+            alt="close"
+            @click="DeleteGenre(item.id)"
+            class="icon"
+          />
         </div>
       </div>
     </div>
@@ -27,14 +37,13 @@
 </template>
 
 <script>
-import Pen from "@/icons/pen.vue";
-import Close from "@/icons/close.vue";
+import Pen from "@/icons/pen.png";
+import Close from "@/icons/close.png";
 export default {
   name: "Table",
-  components: { Pen, Close },
   emits: ["visible", "updateValues", "DeleteItem", "filterValue"],
   data() {
-    return {};
+    return { Pen, Close };
   },
   props: {
     tableHeader: {
@@ -120,5 +129,8 @@ export default {
   align-items: center;
   justify-content: space-between;
   margin: 1em 0;
+}
+.icon {
+  cursor: pointer;
 }
 </style>

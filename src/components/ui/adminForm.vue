@@ -10,7 +10,7 @@
         <slot></slot>
       </div>
       <default-button>Создать</default-button>
-      <Close class="form-close" @click="hideForm"></Close>
+      <img :src="Close" alt="close" class="form-close" @click="hideForm">
     </Form>
   </div>
 </template>
@@ -18,13 +18,12 @@
 <script>
 import { Form, Field, ErrorMessage } from "vee-validate";
 import DefaultButton from "@/components/ui/button";
-import Close from "@/icons/close";
+import Close from "@/icons/close.png";
 
 export default {
   name: "adminForm",
   emits: ["hide", "refForm","formValues"],
   components: {
-    Close,
     DefaultButton,
     Form,
     Field,
@@ -38,6 +37,7 @@ export default {
   },
   data() {
     return {
+      Close,
       setValues: null,
     };
   },
@@ -77,6 +77,7 @@ export default {
     height: 30px;
     width: 30px;
     cursor: pointer;
+    display: block;
   }
   &-wrapper {
     margin: -10px 0 1em -10px;

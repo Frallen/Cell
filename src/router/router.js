@@ -43,6 +43,10 @@ const routes = [
     component: () => import("@/pages/news/newsList"),
   },
   {
+    path: "/actor/:id",
+    component: () => import("@/pages/actors/actorPage"),
+  },
+  {
     name: "Избранное",
     path: "/favorites",
     component: () => import("@/pages/user/userFavorites"),

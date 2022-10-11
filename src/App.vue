@@ -3,7 +3,11 @@
     <navbar class="container-nav" @modalStatus="modalStatus"></navbar>
     <div class="section-container">
       <div class="container-body">
-        <router-view></router-view>
+        <router-view v-slot="{ Component }">
+          <transition name="fade">
+            <component :is="Component" />
+          </transition>
+        </router-view>
       </div>
     </div>
   </div>
@@ -29,7 +33,7 @@
 
 <script>
 import Navbar from "@/components/ui/navbar";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import "@/formLocalize";
 import Preloader from "@/components/ui/preloader";
 import AuthPage from "@/pages/auth/authPage";
@@ -51,6 +55,7 @@ export default {
       GetUserData: "user/GetUserData",
       FetchFilms: "films/FetchFilms",
       FetchNews: "news/FetchNews",
+      FetchActors: "films/FetchActors",
     }),
     modalStatus(val) {
       this.isActive = true;
@@ -87,6 +92,7 @@ export default {
     this.GetUserData();
     this.FetchFilms();
     this.FetchNews();
+    this.FetchActors();
   },
 };
 </script>
@@ -200,6 +206,16 @@ body {
   z-index: 3;
   visibility: visible;
   .trs();
+  opacity: 1;
+}
+.fade-enter-active,
+.fade-leave-active {
+  .trs();
+}
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-leave-to {
   opacity: 1;
 }
 </style>

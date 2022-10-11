@@ -1,27 +1,36 @@
 <template>
-  <div class="news">
-    <div class="news-wrapper">
-      <div
-        class="news-item"
-        v-for="item in news"
-        @click="this.$router.push(`/news/${item.slug}`)"
-      >
-        <div class="news-item-box">
-          <img v-lazy="item.banner" :alt="item.name" />
-        </div>
-        <div class="news-item-text">
-          <h5>{{ item.name }}</h5>
+  <div class="grid-container">
+    <div class="grid-container-item">
+      <div class="news">
+        <div class="news-wrapper">
+          <div
+            class="news-item"
+            v-for="item in news"
+            @click="this.$router.push(`/news/${item.slug}`)"
+          >
+            <div class="news-item-box">
+              <img v-lazy="item.banner" :alt="item.name" />
+            </div>
+            <div class="news-item-text">
+              <h5>{{ item.name }}</h5>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
+    <div class="grid-container-item">
+      <Search></Search>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import Search from "@/components/search";
 
 export default {
   name: "newsList",
+  components: { Search },
   data() {
     return {};
   },
@@ -35,7 +44,7 @@ export default {
 
 <style scoped lang="less">
 .news {
-  margin: 2em 0;
+  margin-bottom: 2em;
   &-wrapper {
     margin-top: -15px;
     margin-left: -15px;

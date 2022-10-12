@@ -185,71 +185,11 @@ export const adminModule = {
               BigPoster,
               metadata
             );
-            uploadTaskPicture.on(
-              "state_changed",
-              (snapshot) => {
-                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' + progress + '% done');*/
-                switch (snapshot.state) {
-                  case "paused":
-                    console.log("Upload is paused");
-                    break;
-                  case "running":
-                    console.log("Upload is running");
-                    break;
-                }
-              },
-              (error) => {
-                console.error(error);
-              },
-              () => {}
-            );
-            uploadTaskBigPicture.on(
-              "state_changed",
-              (snapshot) => {
-                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                 console.log('Upload is ' + progress + '% done');*/
-                switch (snapshot.state) {
-                  case "paused":
-                    console.log("Upload is paused");
-                    break;
-                  case "running":
-                    console.log("Upload is running");
-                    break;
-                }
-              },
-              (error) => {
-                console.error(error);
-              },
-              () => {}
-            );
           } else if (obj.to === "genres") {
             const uploadTaskPicture = uploadBytesResumable(
               ref(storage, `images/genres/${docId}/genre.png`),
               genre,
               metadata
-            );
-            uploadTaskPicture.on(
-              "state_changed",
-              (snapshot) => {
-                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                  console.log('Upload is ' + progress + '% done');*/
-                switch (snapshot.state) {
-                  case "paused":
-                    console.log("Upload is paused");
-                    break;
-                  case "running":
-                    console.log("Upload is running");
-                    break;
-                }
-              },
-              (error) => {
-                console.error(error);
-              },
-              () => {}
             );
           } else if (obj.to === "actors") {
             const uploadTaskPicture = uploadBytesResumable(
@@ -257,51 +197,11 @@ export const adminModule = {
               photo,
               metadata
             );
-            uploadTaskPicture.on(
-              "state_changed",
-              (snapshot) => {
-                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                  console.log('Upload is ' + progress + '% done');*/
-                switch (snapshot.state) {
-                  case "paused":
-                    console.log("Upload is paused");
-                    break;
-                  case "running":
-                    console.log("Upload is running");
-                    break;
-                }
-              },
-              (error) => {
-                console.error(error);
-              },
-              () => {}
-            );
           } else if (obj.to === "news") {
             const uploadTaskPicture = uploadBytesResumable(
               ref(storage, `images/news/${docId}/banner.png`),
               banner,
               metadata
-            );
-            uploadTaskPicture.on(
-              "state_changed",
-              (snapshot) => {
-                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log('Upload is ' + progress + '% done');*/
-                switch (snapshot.state) {
-                  case "paused":
-                    console.log("Upload is paused");
-                    break;
-                  case "running":
-                    console.log("Upload is running");
-                    break;
-                }
-              },
-              (error) => {
-                console.error(error);
-              },
-              () => {}
             );
           }
         });
@@ -346,46 +246,6 @@ export const adminModule = {
             obj.items.BigPoster,
             metadata
           );
-          uploadTaskPicture.on(
-            "state_changed",
-            (snapshot) => {
-              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-              /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' + progress + '% done');*/
-              switch (snapshot.state) {
-                case "paused":
-                  console.log("Upload is paused");
-                  break;
-                case "running":
-                  console.log("Upload is running");
-                  break;
-              }
-            },
-            (error) => {
-              console.error(error);
-            },
-            () => {}
-          );
-          uploadTaskBigPicture.on(
-            "state_changed",
-            (snapshot) => {
-              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-              /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                 console.log('Upload is ' + progress + '% done');*/
-              switch (snapshot.state) {
-                case "paused":
-                  console.log("Upload is paused");
-                  break;
-                case "running":
-                  console.log("Upload is running");
-                  break;
-              }
-            },
-            (error) => {
-              console.error(error);
-            },
-            () => {}
-          );
         } else if (obj.items.banner) {
           dispatch("DeleteImages", obj);
           await updateDoc(docRef, {
@@ -398,52 +258,12 @@ export const adminModule = {
             obj.items.banner,
             metadata
           );
-          uploadTaskPicture.on(
-            "state_changed",
-            (snapshot) => {
-              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-              /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log('Upload is ' + progress + '% done');*/
-              switch (snapshot.state) {
-                case "paused":
-                  console.log("Upload is paused");
-                  break;
-                case "running":
-                  console.log("Upload is running");
-                  break;
-              }
-            },
-            (error) => {
-              console.error(error);
-            },
-            () => {}
-          );
         } else if (obj.items.genre) {
           dispatch("DeleteImages", obj);
           const uploadTaskPicture = uploadBytesResumable(
             ref(storage, `images/genres/${obj.id}/genre.png`),
             obj.items.genre,
             metadata
-          );
-          uploadTaskPicture.on(
-            "state_changed",
-            (snapshot) => {
-              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-              /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                  console.log('Upload is ' + progress + '% done');*/
-              switch (snapshot.state) {
-                case "paused":
-                  console.log("Upload is paused");
-                  break;
-                case "running":
-                  console.log("Upload is running");
-                  break;
-              }
-            },
-            (error) => {
-              console.error(error);
-            },
-            () => {}
           );
         } else if (obj.items.photo) {
           dispatch("DeleteImages", obj);
@@ -456,26 +276,6 @@ export const adminModule = {
             ref(storage, `images/actors/${obj.id}/photo.png`),
             obj.items.photo,
             metadata
-          );
-          uploadTaskPicture.on(
-            "state_changed",
-            (snapshot) => {
-              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-              /* const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                  console.log('Upload is ' + progress + '% done');*/
-              switch (snapshot.state) {
-                case "paused":
-                  console.log("Upload is paused");
-                  break;
-                case "running":
-                  console.log("Upload is running");
-                  break;
-              }
-            },
-            (error) => {
-              console.error(error);
-            },
-            () => {}
           );
         } else {
           await updateDoc(docRef, {

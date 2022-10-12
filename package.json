@@ -12,7 +12,9 @@
     "@vee-validate/rules": "^4.6.7",
     "@vueup/vue-quill": "^1.0.0-beta.10",
     "core-js": "^3.8.3",
+    "firebase": "^9.9.3",
     "modern-normalize": "^1.1.0",
+    "moment": "^2.29.4",
     "quasar": "^2.8.2",
     "quill-autoformat": "^0.1.2",
     "quill-blot-formatter": "^1.0.5",
@@ -38,9 +40,9 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.0.3",
-    "firebase": "^9.9.3",
     "less": "^4.0.0",
     "less-loader": "^8.0.0",
+    "postcss": "^8.4.17",
     "prettier": "^2.4.1"
   },
   "eslintConfig": {

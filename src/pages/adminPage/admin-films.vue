@@ -143,14 +143,20 @@ export default {
       this.currentUpdateItem = [];
     },
     DeleteItem(val) {
-      let obj = {
-        to: "films",
-        id: val,
-      };
-      this.DeleteDoc(obj)
-        .then((p) => this.setSuccess("Запись удалена"))
-        .catch((err) => this.setError());
-      this.currentUpdateItem = [];
+      this.DeleteDialog().then((result) => {
+        if (result.isConfirmed) {
+          let obj = {
+            to: "films",
+            id: val,
+          };
+          this.DeleteDoc(obj)
+            .then((p) => this.setSuccess("Запись удалена"))
+            .catch((err) => this.setError());
+          this.currentUpdateItem = [];
+        } else {
+          this.cancelOperation();
+        }
+      });
     },
     ...mapActions({
       CreateItem: "admin/CreateItem",

@@ -73,7 +73,7 @@
       :slides-per-view="3"
       :space-between="20"
       :navigation="true"
-      :breakpoints="breakpointGenres"
+      :breakpoints="breakpointNews"
       @swiper="onSwiper"
       @slideChange="onSlideChange"
     >
@@ -93,7 +93,7 @@
 <script>
 import { Swiper, SwiperSlide, useSwiperSlide } from "swiper/vue";
 import { EffectFade, Navigation, Pagination } from "swiper";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import Favorite from "@/components/ui/favorite";
 
 export default {
@@ -109,6 +109,11 @@ export default {
       breakpointGenres: {
         998: { slidesPerView: 4 },
         767: { slidesPerView: 3 },
+        320: { slidesPerView: 1 },
+      },
+      breakpointNews: {
+        998: { slidesPerView: 3 },
+        767: { slidesPerView: 2 },
         320: { slidesPerView: 1 },
       },
     };
@@ -163,12 +168,15 @@ export default {
       user: (state) => state.user.userInfo,
       news: (state) => state.news.news,
     }),
+    ...mapGetters({
+      timeFilteredNews:"news/timeFilteredNews"
+    }),
 
     firstFive() {
       return this.films.slice(0, 4);
     },
     firstFour() {
-      return this.news.slice(0, 4);
+      return this.timeFilteredNews.slice(0, 4);
     },
   },
 };

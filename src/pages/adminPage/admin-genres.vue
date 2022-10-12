@@ -100,13 +100,19 @@ export default {
       }
     },
     DeleteItem(val) {
-      let obj = {
-        to: "genres",
-        id: val,
-      };
-      this.DeleteDoc(obj)
-        .then((p) => this.setSuccess("Запись удалена"))
-        .catch((err) => this.setError());
+      this.DeleteDialog().then((result) => {
+        if (result.isConfirmed) {
+          let obj = {
+            to: "genres",
+            id: val,
+          };
+          this.DeleteDoc(obj)
+            .then((p) => this.setSuccess("Запись удалена"))
+            .catch((err) => this.setError());
+        } else {
+          this.cancelOperation();
+        }
+      });
     },
     SetId(val) {
       this.updateId = val;

@@ -73,7 +73,7 @@ export default {
 <style scoped lang="less">
 .search-box {
   .trs();
-  @media @lg {
+  @media @xl {
     max-height: 45px;
     overflow: hidden;
   }
@@ -102,7 +102,7 @@ export default {
       top: 10%;
       cursor: pointer;
       .trs();
-      @media @lg {
+      @media @xl {
         display: block;
       }
     }

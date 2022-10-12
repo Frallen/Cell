@@ -65,6 +65,8 @@ export default {
     align-self: flex-start;
     @media @lg {
       flex-basis: initial;
+      width: 100%;
+      max-height: 400px ;
     }
     img {
       width: 100%;
@@ -102,6 +104,7 @@ export default {
     &-item {
       margin-left: 15px;
       margin-top: 15px;
+      border: 1px solid @red;
       .br(10px);
       overflow: hidden;
       cursor: pointer;

@@ -1,6 +1,7 @@
 import { collection, doc, getDoc, getDocs, query } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 import { getDownloadURL, ref } from "firebase/storage";
+import moment from "moment/moment";
 
 export const newsModule = {
   namespaced: true,
@@ -11,6 +12,16 @@ export const newsModule = {
   getters: {
     GetCurrentNews: (state) => (id) => {
       return state.news.find((p) => p.slug === id);
+    },
+    //Если текущая дата между сроками публикации то новость будет показана
+    timeFilteredNews(state) {
+      return state.news.filter(
+        (item) =>
+          moment(moment()).isBetween(
+            moment(item.date.start, "DD/MM/YYYY"),
+            moment(item.date.end, "DD/MM/YYYY")
+          ) && item
+      );
     },
   },
   mutations: {

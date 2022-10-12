@@ -5,7 +5,7 @@
         <div class="news-wrapper">
           <div
             class="news-item"
-            v-for="item in news"
+            v-for="item in timeFilteredNews"
             @click="this.$router.push(`/news/${item.slug}`)"
           >
             <div class="news-item-box">
@@ -25,9 +25,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import Search from "@/components/search";
-
 export default {
   name: "newsList",
   components: { Search },
@@ -38,6 +37,9 @@ export default {
     ...mapState({
       news: (state) => state.news.news,
     }),
+    ...mapGetters({
+      timeFilteredNews:"news/timeFilteredNews"
+    })
   },
 };
 </script>

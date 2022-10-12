@@ -106,13 +106,19 @@ export default {
       this.setActorsQuery(val);
     },
     DeleteItem(val) {
-      let obj = {
-        to: "actors",
-        id: val,
-      };
-      this.DeleteDoc(obj)
-        .then((p) => this.setSuccess("Запись удалена"))
-        .catch((err) => this.setError());
+      this.DeleteDialog().then((result) => {
+        if (result.isConfirmed) {
+          let obj = {
+            to: "actors",
+            id: val,
+          };
+          this.DeleteDoc(obj)
+            .then((p) => this.setSuccess("Запись удалена"))
+            .catch((err) => this.setError());
+        } else {
+          this.cancelOperation();
+        }
+      });
     },
     ...mapMutations({
       setActorsQuery: "admin/setActorsQuery",

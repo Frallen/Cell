@@ -56,6 +56,7 @@ export default {
       FetchFilms: "films/FetchFilms",
       FetchNews: "news/FetchNews",
       FetchActors: "films/FetchActors",
+      FetchGenres:"films/FetchGenres"
     }),
     modalStatus(val) {
       this.isActive = true;
@@ -93,6 +94,7 @@ export default {
     this.FetchFilms();
     this.FetchNews();
     this.FetchActors();
+    this.FetchGenres()
   },
 };
 </script>

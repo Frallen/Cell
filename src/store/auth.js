@@ -18,15 +18,18 @@ import {
 export const AuthModule = {
   namespaced: true,
   state: () => ({
-    isAuthReady: false,
+    isAuthReady: null,
     isLoading: false,
+    openLoginModal: false,
     user: null,
     userProfile: null,
     isAdmin: false,
   }),
   getters: {
-    checkRouteAuth(state) {
-      return state.isAuthReady;
+    async checkRouteAuth(state) {
+      await auth.onAuthStateChanged((userFirebase) => {
+        return userFirebase ?? false;
+      });
     },
   },
   mutations: {
@@ -45,8 +48,14 @@ export const AuthModule = {
     setAdmin(state, isAdmin) {
       state.isAdmin = isAdmin;
     },
+    setOpenModal(state, openLoginModal) {
+      state.openLoginModal = openLoginModal;
+    },
   },
   actions: {
+    openLoginForm({ commit }) {
+      commit("setOpenModal", true);
+    },
     //создание пользователя
     async signUp({ state, commit, dispatch }) {
       try {
@@ -106,7 +115,7 @@ export const AuthModule = {
         commit("setAuthReady", true);
         commit("setUser", user);
         dispatch("UserProfile", user);
-        dispatch("isAdmin")
+        dispatch("isAdmin");
       } else {
         // User is signed out
         // ...

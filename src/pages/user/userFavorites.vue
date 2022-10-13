@@ -23,42 +23,24 @@
 import Favorite from "@/components/ui/favorite";
 import { mapActions, mapState } from "vuex";
 import Breadcrumbs from "@/components/breadcrumbs";
+import favoritesMixin from "@/mixins/favoritesMixin";
 export default {
   components: { Breadcrumbs, Favorite },
+  mixins: [favoritesMixin],
   data() {
     return {};
   },
   methods: {
-    ...mapActions({
-      GetUserFavorites: "user/GetUserFavorites",
-      removeFromFavorite: "user/removeFromFavorite",
-      addToFavorite: "user/addToFavorite",
-    }),
-    like(val) {
-      this.addToFavorite(val);
-    },
-    DisLike(val) {
-      this.removeFromFavorite(val);
-    },
-    favoriteStatus(val) {
-      if (this.user.favorites && this.user.favorites[val] === true) {
-        return true;
-      } else {
-        return false;
-      }
-    },
+    ...mapActions({}),
   },
   computed: {
     ...mapState({
       favorites: (state) => state.user.userInfo.favorites,
-      films: (state) => state.films.films,
-      user: (state) => state.user.userInfo,
     }),
     favoritesFilms() {
       return this.films.filter((p) => this.favorites[p.id]);
     },
   },
-  mounted() {},
 };
 </script>
 <style lang="less" scoped>

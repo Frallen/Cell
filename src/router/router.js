@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import store from "@/store";
+import NotFound from "@/components/notFound";
 
 const routes = [
   {
@@ -9,7 +10,7 @@ const routes = [
   {
     path: "/admin",
     component: () => import("@/pages/adminPage/admin"),
-    meta: { requiresLogin: true },
+    meta: { requiresAuth: true },
     children: [
       {
         path: "actors",
@@ -49,6 +50,9 @@ const routes = [
   {
     name: "Избранное",
     path: "/favorites",
+    meta: {
+      requiresAuth: true,
+    },
     component: () => import("@/pages/user/userFavorites"),
   },
   {
@@ -56,29 +60,33 @@ const routes = [
     path: "/genre/:id",
     component: () => import("@/pages/films/filmsCompilation"),
   },
- // { path: "/auth", component: () => import("@/pages/auth/authPage") },
- // { path: "/registration", component: () => import("@/pages/auth/singUpPage") },
+  { path: "/:pathMatch(.*)*", component: NotFound },
+  // { path: "/auth", component: () => import("@/pages/auth/authPage") },
+  // { path: "/registration", component: () => import("@/pages/auth/singUpPage") },
 ];
 const router = createRouter({
   routes,
   history: createWebHistory(process.env.BASE_URL),
+  scrollBehavior(to, from, savedPosition) {
+    // always scroll to top
+    return { top: 0 };
+  },
 });
 
-/*
-router.beforeResolve( (to, from, next) => {
-  console.log(store.getters['auth/checkRouteAuth'])
-  if (to.matched.some(p => p.meta.requiresLogin) &&  !store.getters['auth/checkRouteAuth']) {
-    next("/auth");
-  }
-  else next("/")
-})*/
-
-router.beforeEach((to, from, next) => {
-  // console.log(to.path, store.state.auth);
-  // console.log(store.getters["auth/checkRouteAuth"]);
-  if (to.path === "/registration" && store.getters["auth/checkRouteAuth"])
-    next("/");
-  else next();
+router.beforeEach(async (to, from, next) => {
+  // Если страница требует авторизации
+  if (to.meta.requiresAuth) {
+    //проверка авторизации
+    if (await store.getters["auth/checkRouteAuth"]) {
+      // если авторизован разрешаем переход
+      next();
+    } else {
+      // если не авторизован, то переходим на главную страницу и отправляем экшен на открытие модалки авторизации
+      await store.dispatch("auth/openLoginForm");
+      next("/");
+    }
+    // если страница не требует авторизации то разрешаем переход
+  } else next();
 });
 
 export default router;

@@ -29,8 +29,8 @@
         </div>
       </template>
       <template v-if="!isAuthReady">
-        <div class="menu-item">
-          <img :src="Auth" alt="" @click.stop="visibleModal" data-type="auth" />
+        <div class="menu-item" >
+          <img :src="Auth" alt="" @click.stop="visibleModal" ref="login" data-type="auth" />
         </div>
         <div class="menu-item">
           <img
@@ -79,7 +79,13 @@ export default {
     ...mapState({
       isAuthReady: (state) => state.auth.isAuthReady,
       isAdmin: (state) => state.auth.isAdmin,
+      openLoginModal:state => state.auth.openLoginModal
     }),
+  },
+  watch: {
+    openLoginModal(){
+      this.$refs.login.click()
+    }
   },
   methods: {
     visibleModal(e) {

@@ -29,6 +29,7 @@
           allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
         ></iframe>
+        <img :src="slide.BigPoster" alt="" class="index-slider-img" />
         <div class="index-slider-content">
           <h3>{{ slide.name }}</h3>
           <p>{{ slide.text }}</p>
@@ -95,9 +96,11 @@ import { Swiper, SwiperSlide, useSwiperSlide } from "swiper/vue";
 import { EffectFade, Navigation, Pagination } from "swiper";
 import { mapActions, mapGetters, mapState } from "vuex";
 import Favorite from "@/components/ui/favorite";
+import favoritesMixin from "@/mixins/favoritesMixin";
 
 export default {
   name: "indexPage",
+  mixins: [favoritesMixin],
   components: {
     Favorite,
     Swiper,
@@ -133,28 +136,9 @@ export default {
     };
   },
   methods: {
-    ...mapActions({
-      FetchFilms: "films/FetchFilms",
-      FetchGenres: "films/FetchGenres",
-      addToFavorite: "user/addToFavorite",
-      removeFromFavorite: "user/removeFromFavorite",
-    }),
-    like(val) {
-      this.addToFavorite(val);
-    },
-    DisLike(val) {
-      this.removeFromFavorite(val);
-    },
-    favoriteStatus(val) {
-      if (this.user.favorites && this.user.favorites[val] === true) {
-        return true;
-      } else {
-        return false;
-      }
-    },
+    ...mapActions({}),
   },
   mounted() {
-    this.FetchGenres();
     if (window.matchMedia("(max-width: 998px)")) {
       this.navigation = false;
     } else {
@@ -163,13 +147,11 @@ export default {
   },
   computed: {
     ...mapState({
-      films: (state) => state.films.films,
       genres: (state) => state.films.genres,
-      user: (state) => state.user.userInfo,
       news: (state) => state.news.news,
     }),
     ...mapGetters({
-      timeFilteredNews:"news/timeFilteredNews"
+      timeFilteredNews: "news/timeFilteredNews",
     }),
 
     firstFive() {
@@ -183,11 +165,20 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.index-title{
-  color:#fff;
+.index-title {
+  color: #fff;
   margin-top: 0.7em;
 }
 .index-slider {
+  &-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+    @media @md {
+      display: block;
+    }
+  }
   &-content {
     position: absolute;
     height: 100%;
@@ -200,6 +191,15 @@ export default {
     @media @lg {
       max-width: 320px;
     }
+    @media @md {
+      margin-left: auto;
+      margin-right: auto;
+      left: 0;
+      right: 0;
+      text-align: center;
+      bottom: 5%;
+      height: initial;
+    }
     h3,
     p {
       color: #fff;
@@ -208,6 +208,9 @@ export default {
       margin-bottom: 2em;
       @media @lg {
         font-size: 1.2em;
+      }
+      @media @md {
+        font-size: 2em;
       }
     }
     p {
@@ -219,10 +222,16 @@ export default {
       @media @lg {
         font-size: 1em;
       }
+      @media @md {
+        display: none !important;
+      }
     }
   }
   &-wrapper {
     height: 35.25vw !important;
+    @media @md {
+      height: 300px !important;
+    }
   }
   &-item {
     .br(10px);
@@ -237,6 +246,9 @@ export default {
       pointer-events: none;
       width: 100%;
       height: 56.25vw;
+      @media @md {
+        display: none;
+      }
     }
   }
   &-item::before {
@@ -266,6 +278,13 @@ export default {
       rgba(0, 0, 0, 0.01) 64.92%,
       transparent 69.32%
     );
+    @media @md {
+      top: 0;
+      height: 100%;
+      right: 0;
+      z-index: 1;
+      background: #00000054;
+    }
   }
 }
 .index-genres {

@@ -65,16 +65,16 @@
 import { mapActions, mapGetters, mapState } from "vuex";
 import Search from "@/components/search";
 import Favorite from "@/components/ui/favorite";
+import favoritesMixin from "@/mixins/favoritesMixin";
 export default {
   name: "filmsDetail",
   components: { Favorite, Search },
+  mixins:[favoritesMixin],
   data() {
     return {};
   },
   computed: {
     ...mapState({
-      film: (state) => state.films.film,
-      user: (state) => state.user.userInfo,
     }),
     ...mapGetters({
       getFilm: "films/getFilm",
@@ -84,23 +84,7 @@ export default {
 
   methods: {
     ...mapActions({
-      addToFavorite: "user/addToFavorite",
-      removeFromFavorite: "user/removeFromFavorite",
     }),
-
-    like(val) {
-      this.addToFavorite(val);
-    },
-    DisLike(val) {
-      this.removeFromFavorite(val);
-    },
-    favoriteStatus(val) {
-      if (this.user.favorites && this.user.favorites[val] === true) {
-        return true;
-      } else {
-        return false;
-      }
-    },
   },
 };
 </script>

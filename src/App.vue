@@ -1,34 +1,37 @@
 <template>
-  <div class="container">
-    <navbar class="container-nav" @modalStatus="modalStatus"></navbar>
-    <div class="section-container">
-      <div class="container-body">
-        <router-view v-slot="{ Component }">
-          <transition name="fade">
-            <component :is="Component" />
-          </transition>
-        </router-view>
+  <div>
+    <div class="container">
+      <navbar class="container-nav" @modalStatus="modalStatus"></navbar>
+      <div class="section-container">
+        <div class="container-body">
+          <router-view v-slot="{ Component, route }">
+            <transition name="fade">
+              <component :is="Component" :key="route.name" />
+            </transition>
+          </router-view>
+        </div>
+      </div>
+      <FooterComponent></FooterComponent>
+    </div>
+    <div class="modal" :class="{ order: isActive }" @click="Close">
+      <div class="modal-wrapper">
+        <auth-page
+          class="modal-item"
+          v-show="authModal"
+          @click.stop
+          @closeModal="Close"
+        ></auth-page>
+        <sing-up-page
+          class="modal-item"
+          v-show="regModal"
+          @click.stop
+          @closeModal="Close"
+        ></sing-up-page>
+        <img :src="closeIcon" alt="" class="modal-close" @click="Close" />
       </div>
     </div>
+    <preloader v-show="IsLoad"></preloader>
   </div>
-  <div class="modal" :class="{ order: isActive }" @click="Close">
-    <div class="modal-wrapper">
-      <auth-page
-        class="modal-item"
-        v-show="authModal"
-        @click.stop
-        @closeModal="Close"
-      ></auth-page>
-      <sing-up-page
-        class="modal-item"
-        v-show="regModal"
-        @click.stop
-        @closeModal="Close"
-      ></sing-up-page>
-      <img :src="closeIcon" alt="" class="modal-close" @click="Close" />
-    </div>
-  </div>
-  <preloader v-show="IsLoad"></preloader>
 </template>
 
 <script>
@@ -39,8 +42,9 @@ import Preloader from "@/components/ui/preloader";
 import AuthPage from "@/pages/auth/authPage";
 import SingUpPage from "@/pages/auth/singUpPage";
 import closeIcon from "@/icons/close.png";
+import FooterComponent from "@/components/footer";
 export default {
-  components: { SingUpPage, AuthPage, Preloader, Navbar },
+  components: { FooterComponent, SingUpPage, AuthPage, Preloader, Navbar },
   data() {
     return {
       isActive: false,
@@ -56,7 +60,7 @@ export default {
       FetchFilms: "films/FetchFilms",
       FetchNews: "news/FetchNews",
       FetchActors: "films/FetchActors",
-      FetchGenres:"films/FetchGenres"
+      FetchGenres: "films/FetchGenres",
     }),
     modalStatus(val) {
       this.isActive = true;
@@ -94,7 +98,7 @@ export default {
     this.FetchFilms();
     this.FetchNews();
     this.FetchActors();
-    this.FetchGenres()
+    this.FetchGenres();
   },
 };
 </script>
@@ -149,6 +153,7 @@ body {
 .container {
   display: flex;
   flex-direction: column;
+  height: 100vh;
   &-body {
     width: 100%;
   }

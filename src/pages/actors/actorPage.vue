@@ -11,16 +11,18 @@
           <template
             v-if="getFilmsByPerson(getActor(this.$route.params.id).name).length"
           >
-            <h5>Фильмы с участием актера</h5>
-            <div class="actor-films">
-              <div
-                class="actor-films-item"
-                v-for="item in getFilmsByPerson(
-                  getActor(this.$route.params.id).name
-                )"
-                @click="this.$router.push(`/film/${item.slug}`)"
-              >
-                <img :src="item.poster" :alt="item.name" />
+            <div>
+              <h5>Фильмы с участием актера</h5>
+              <div class="actor-films">
+                <div
+                  class="actor-films-item"
+                  v-for="item in getFilmsByPerson(
+                    getActor(this.$route.params.id).name
+                  )"
+                  @click="this.$router.push(`/film/${item.slug}`)"
+                >
+                  <img :src="item.poster" :alt="item.name" />
+                </div>
               </div></div
           ></template>
         </div>
@@ -66,7 +68,7 @@ export default {
     @media @lg {
       flex-basis: initial;
       width: 100%;
-      max-height: 400px ;
+      max-height: 400px;
     }
     img {
       width: 100%;

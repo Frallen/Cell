@@ -9,6 +9,7 @@ import {
 } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 import { getDownloadURL, ref } from "firebase/storage";
+import _ from "lodash";
 
 export const filmsModule = {
   namespaced: true,
@@ -20,6 +21,24 @@ export const filmsModule = {
     isLoading: false,
   }),
   getters: {
+    randomizedFilms: (state) => (genres) => {
+      // let byGenres= state.films.filter(film=>film.genres.find(z=>genres.contains(z.id)))
+      /* let result = state.films.filter((p) => {
+
+        return genres.some((genre) =>console.log(_.includes(p.genres,genre.id))  )
+      });
+      _.filter(state.films, function (item) {
+        if (typeof state.films !== "undefined" && !!state.films) {
+
+          return genres.some((genre) => item.genres.includes(genre.id))
+        }
+      });
+      let arr=   _.find(state.films, genres);
+      console.log(arr)*/
+      const shuffled = state.films.sort(() => 0.5 - Math.random());
+
+      return shuffled.slice(0, 5);
+    },
     //получение фильмов в которых снимался актер
     getFilmsByPerson: (state) => (actor) => {
       return state.films.filter((film) => film.actors.find((p) => p === actor));

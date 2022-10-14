@@ -14,18 +14,18 @@
                 </div>
               </div>
             </div>
-            <ul>
-              <li>
+            <div class="info-data">
+              <div class="info-data-item">
                 <span>Страна:</span>{{ getFilm(this.$route.params.id).country }}
-              </li>
-              <li>
+              </div>
+              <div class="info-data-item">
                 <span>Продожительность:</span
                 >{{ getFilm(this.$route.params.id).duration }}
-              </li>
-              <li>
+              </div>
+              <div class="info-data-item">
                 <span>Год:</span>{{ getFilm(this.$route.params.id).year }}
-              </li>
-            </ul>
+              </div>
+            </div>
           </div>
           <Favorite
             @like="like"
@@ -54,6 +54,7 @@
           allowfullscreen
         ></iframe>
       </div>
+      <CompilationSlider title="Похожее"></CompilationSlider>
     </div>
     <div class="grid-container-item">
       <Search></Search>
@@ -66,25 +67,25 @@ import { mapActions, mapGetters, mapState } from "vuex";
 import Search from "@/components/search";
 import Favorite from "@/components/ui/favorite";
 import favoritesMixin from "@/mixins/favoritesMixin";
+import CompilationSlider from "@/pages/films/compilationSlider";
 export default {
   name: "filmsDetail",
-  components: { Favorite, Search },
-  mixins:[favoritesMixin],
+  components: { CompilationSlider, Favorite, Search, },
+  mixins: [favoritesMixin],
   data() {
     return {};
   },
   computed: {
-    ...mapState({
-    }),
+    ...mapState({}),
     ...mapGetters({
       getFilm: "films/getFilm",
+      randomizedFilms: "films/randomizedFilms",
     }),
   },
   mounted() {},
 
   methods: {
-    ...mapActions({
-    }),
+    ...mapActions({}),
   },
 };
 </script>
@@ -100,9 +101,7 @@ export default {
     img {
       width: 100%;
       height: 100%;
-      @media @md {
-        object-fit: cover;
-      }
+      object-fit: cover;
     }
   }
   &-poster::before {
@@ -160,13 +159,13 @@ export default {
         font-size: 2em;
       }
     }
-    ul {
+    .info-data {
       margin-bottom: 0.8em;
       span {
         color: hsla(0, 0%, 100%, 0.56);
-        font-size: 1.5em;
+        margin-right: 0.5em;
       }
-      li {
+      &-item {
         display: flex;
         align-items: center;
         flex-wrap: wrap;
@@ -205,8 +204,5 @@ export default {
   top: 4%;
   z-index: 2;
   display: block;
-  height: 25px;
-  width: 25px;
-  cursor: pointer;
 }
 </style>

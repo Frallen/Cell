@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import store from "@/store";
 import NotFound from "@/components/notFound";
+import { auth } from "../../firebase";
 
 const routes = [
   {
@@ -73,20 +74,22 @@ const router = createRouter({
   },
 });
 
-router.beforeEach(async (to, from, next) => {
-  // Если страница требует авторизации
-  if (to.meta.requiresAuth) {
-    //проверка авторизации
-    if (store.state.user.userInfo.length || store.state.user.userInfo.id) {
-      // если авторизован разрешаем переход
-      next();
-    } else {
-      // если не авторизован, то переходим на главную страницу и отправляем экшен на открытие модалки авторизации
-      await store.dispatch("auth/openLoginForm");
-      next("/");
-    }
-    // если страница не требует авторизации то разрешаем переход
-  } else next();
+router.beforeEach((to, from, next) => {
+  auth.onAuthStateChanged(async (userFirebase) => {
+    // Если страница требует авторизации
+    if (to.meta.requiresAuth) {
+      //проверка авторизации
+      if (userFirebase) {
+        // если авторизован разрешаем переход
+        next();
+      } else {
+        // если не авторизован, то переходим на главную страницу и отправляем экшен на открытие модалки авторизации
+        await store.dispatch("auth/openLoginForm");
+        next("/");
+      }
+      // если страница не требует авторизации то разрешаем переход
+    } else next();
+  });
 });
 
 export default router;

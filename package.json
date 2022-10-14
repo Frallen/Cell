@@ -13,6 +13,7 @@
     "@vueup/vue-quill": "^1.0.0-beta.10",
     "core-js": "^3.8.3",
     "firebase": "^9.9.3",
+    "lodash": "^4.17.21",
     "modern-normalize": "^1.1.0",
     "moment": "^2.29.4",
     "quasar": "^2.8.2",

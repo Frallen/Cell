@@ -1,10 +1,15 @@
 <template>
-  <div class="admin-nav">
-    <router-link v-for="route in routes" :to="route.path" active-class="active"
-      >{{ route.name }}
-    </router-link>
+  <div>
+    <div class="admin-nav">
+      <router-link
+        v-for="route in routes"
+        :to="route.path"
+        active-class="active"
+        >{{ route.name }}
+      </router-link>
+    </div>
+    <router-view></router-view>
   </div>
-  <router-view></router-view>
 </template>
 
 <script>

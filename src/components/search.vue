@@ -18,8 +18,12 @@
           v-for="item in searchGetter(search)"
           @click="redirect(item)"
         >
-          <img v-lazy="item.poster" v-if="item.poster" />
-          <img v-lazy="item.photo" v-else-if="item.photo" />
+          <div v-if="item.poster">
+            <img v-lazy="item.poster" />
+          </div>
+          <div v-else-if="item.photo">
+            <img v-lazy="item.photo" />
+          </div>
           <p>{{ item.name }}</p>
         </div>
       </div>

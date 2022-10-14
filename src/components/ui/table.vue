@@ -76,8 +76,6 @@ export default {
 .table {
   margin: 1em 0;
   &-header {
-    display: flex;
-    justify-content: space-between;
     background: @red;
     text-transform: uppercase;
     color: #fff;
@@ -87,13 +85,13 @@ export default {
     &-item {
       cursor: default;
     }
+    &-item:last-child{
+      text-align: end;
+    }
   }
   &-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     background: #2c2c2c;
-    padding: 0 10px;
+    padding:10px;
     .br(10px);
     margin: 10px 0;
   }
@@ -103,10 +101,19 @@ export default {
     margin-top: 1em;
     &-item {
       color: #fff;
+      overflow: hidden;
+      max-width: 204px;
+      .text-eclipse();
+      -webkit-line-clamp: 2;
       svg {
         cursor: pointer;
       }
     }
+    &-item:last-child{
+      text-align: end;
+      max-width: 100%;
+    }
+
   }
   &-body::-webkit-scrollbar {
     width: 10px;
@@ -120,10 +127,13 @@ export default {
     .br(10px);
   }
 }
-.table-header-item:first-child,
-.table-body-item:first-child {
-  flex-basis: 50%;
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
 }
+
 .table-actions {
   display: flex;
   align-items: center;

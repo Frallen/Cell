@@ -1,20 +1,22 @@
 <template>
-  <Breadcrumbs></Breadcrumbs>
-  <div class="films" v-if="favorites">
-    <div class="films-wrapper">
-      <div
-        class="films-item"
-        v-for="item in favoritesFilms"
-        @click="this.$router.push(`/film/${item.slug}`)"
-      >
-        <img v-lazy="item.poster" alt="" />
-        <Favorite
-          @like="like"
-          @dislike="DisLike"
-          :isFavorite="favoriteStatus(item.id)"
-          :id="item.id"
-          class="favorite"
-        ></Favorite>
+  <div>
+    <Breadcrumbs></Breadcrumbs>
+    <div class="films" v-if="favorites">
+      <div class="films-wrapper">
+        <div
+          class="films-item"
+          v-for="item in favoritesFilms"
+          @click="this.$router.push(`/film/${item.slug}`)"
+        >
+          <img v-lazy="item.poster" alt="" />
+          <Favorite
+            @like="like"
+            @dislike="DisLike"
+            :isFavorite="favoriteStatus(item.id)"
+            :id="item.id"
+            class="favorite"
+          ></Favorite>
+        </div>
       </div>
     </div>
   </div>
@@ -48,8 +50,5 @@ export default {
   position: absolute;
   right: 5%;
   top: 2%;
-  height: 40px;
-  width: 40px;
-  cursor: pointer;
 }
 </style>

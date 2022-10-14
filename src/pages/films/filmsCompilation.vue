@@ -1,15 +1,17 @@
 <template>
   <template v-if="orderedGenres.length">
-    <Breadcrumbs></Breadcrumbs>
-    <div class="films">
-      <div class="films-wrapper">
-        <div
-          class="films-item"
-          v-for="item in orderedGenres"
-          :key="item.id"
-          @click="this.$router.push(`/film/${item.slug}`)"
-        >
-          <img v-lazy="item.poster" alt="" />
+    <div>
+      <Breadcrumbs></Breadcrumbs>
+      <div class="films">
+        <div class="films-wrapper">
+          <div
+            class="films-item"
+            v-for="item in orderedGenres"
+            :key="item.id"
+            @click="this.$router.push(`/film/${item.slug}`)"
+          >
+            <img v-lazy="item.poster" alt="" />
+          </div>
         </div>
       </div></div
   ></template>

@@ -1,10 +1,14 @@
 <template>
   <transition name="favorite">
-    <div v-if="isFavorite">
-      <div><img :src="Favorite" alt="favorite" @click="dislike" /></div>
+    <div class="favorite">
+      <div v-if="isFavorite">
+        <img :src="Favorite" alt="favorite" @click="dislike" />
+      </div>
+      <div v-else>
+        <img :src="Unfavorite" alt="unfavorite" @click="like" />
+      </div>
     </div>
-    <div v-else><img :src="Unfavorite" alt="unfavorite" @click="like" /></div
-  ></transition>
+  </transition>
 </template>
 
 <script>
@@ -40,9 +44,15 @@ export default {
 </script>
 
 <style scoped lang="less">
-.favorite{
-  img{
-    width:100%;
+.favorite {
+  z-index: 2;
+  div {
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+  }
+  img {
+    width: 100%;
     height: 100%;
   }
 }

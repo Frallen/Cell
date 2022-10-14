@@ -1,19 +1,16 @@
 import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
-  data() {return{
-
-  }},
+  data() {
+    return {};
+  },
   computed: {
-    ...mapGetters({
-      checkRouteAuth: "auth/checkRouteAuth",
-    }),
+    ...mapGetters({}),
     ...mapState({
       films: (state) => state.films.films,
       user: (state) => state.user.userInfo,
-    })
+    }),
   },
-
   methods: {
     ...mapActions({
       openLoginForm: "auth/openLoginForm",
@@ -28,7 +25,7 @@ export default {
       }
     },
     like(val) {
-      if (this.checkRouteAuth) {
+      if (this.user) {
         this.addToFavorite(val);
       } else {
         this.openLoginForm();

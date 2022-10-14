@@ -1,93 +1,95 @@
 <template>
-  <div class="index-slider">
-    <swiper
-      class="index-slider-wrapper"
-      :modules="modules"
-      :effect="'fade'"
-      :slides-per-view="1"
-      :space-between="1"
-      :navigation="navigation"
-      @swiper="onSwiper"
-      @slideChange="onSlideChange"
-    >
-      <swiper-slide
-        class="index-slider-item"
-        v-for="slide in firstFive"
-        :key="slide.id"
-        @click="this.$router.push(`/film/${slide.slug}`)"
+  <div>
+    <div class="index-slider">
+      <swiper
+        class="index-slider-wrapper"
+        :modules="modules"
+        :effect="'fade'"
+        :slides-per-view="1"
+        :space-between="1"
+        :navigation="navigation"
+        @swiper="onSwiper"
+        @slideChange="onSlideChange"
       >
-        <iframe
-          width="100%"
-          :src="
-            'https://www.youtube.com/embed/' +
-            slide.video +
-            '?autoplay=1&start=8&controls=0&disablekb=1&loop=1&modestbranding=1&enablejsapi=1&playsinline=1&color=white&mute=1&playlist=' +
-            slide.video
-          "
-          :title="slide.title"
-          frameborder="0"
-          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
-        <img :src="slide.BigPoster" alt="" class="index-slider-img" />
-        <div class="index-slider-content">
-          <h3>{{ slide.name }}</h3>
-          <p>{{ slide.text }}</p>
-        </div>
-        <Favorite
-          @like="like"
-          @dislike="DisLike"
-          :isFavorite="favoriteStatus(slide.id)"
-          :id="slide.id"
-          class="favorite"
-        ></Favorite>
-      </swiper-slide>
-    </swiper>
-  </div>
-  <h2 class="index-title">Жанры</h2>
-  <div class="index-genres">
-    <swiper
-      class="index-genres-wrapper"
-      :modules="modules"
-      :slides-per-view="4"
-      :space-between="20"
-      :navigation="true"
-      :breakpoints="breakpointGenres"
-      @swiper="onSwiper"
-      @slideChange="onSlideChange"
-    >
-      <swiper-slide
-        class="index-genres-item"
-        v-for="item in genres"
-        :key="item.id"
-        @click="this.$router.push(`/genre/${item.slug}`)"
+        <swiper-slide
+          class="index-slider-item"
+          v-for="slide in firstFive"
+          :key="slide.id"
+          @click="this.$router.push(`/film/${slide.slug}`)"
+        >
+          <iframe
+            width="100%"
+            :src="
+              'https://www.youtube.com/embed/' +
+              slide.video +
+              '?autoplay=1&start=8&controls=0&disablekb=1&loop=1&modestbranding=1&enablejsapi=1&playsinline=1&color=white&mute=1&playlist=' +
+              slide.video
+            "
+            :title="slide.title"
+            frameborder="0"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+          <img :src="slide.BigPoster" alt="" class="index-slider-img" />
+          <div class="index-slider-content">
+            <h3>{{ slide.name }}</h3>
+            <p>{{ slide.text }}</p>
+          </div>
+          <Favorite
+            @like="like"
+            @dislike="DisLike"
+            :isFavorite="favoriteStatus(slide.id)"
+            :id="slide.id"
+            class="favorite"
+          ></Favorite>
+        </swiper-slide>
+      </swiper>
+    </div>
+    <h2 class="index-title">Жанры</h2>
+    <div class="index-genres">
+      <swiper
+        class="index-genres-wrapper"
+        :modules="modules"
+        :slides-per-view="4"
+        :space-between="20"
+        :navigation="true"
+        :breakpoints="breakpointGenres"
+        @swiper="onSwiper"
+        @slideChange="onSlideChange"
       >
-        <img v-lazy="item.genre" :alt="genres.name" />
-      </swiper-slide>
-    </swiper>
-  </div>
-  <h2 class="index-title">Новости</h2>
-  <div class="index-news">
-    <swiper
-      class="index-news-wrapper"
-      :modules="modules"
-      :slides-per-view="3"
-      :space-between="20"
-      :navigation="true"
-      :breakpoints="breakpointNews"
-      @swiper="onSwiper"
-      @slideChange="onSlideChange"
-    >
-      <swiper-slide
-        class="index-news-item"
-        v-for="item in firstFour"
-        :key="item.id"
-        @click="this.$router.push(`/news/${item.slug}`)"
+        <swiper-slide
+          class="index-genres-item"
+          v-for="item in genres"
+          :key="item.id"
+          @click="this.$router.push(`/genre/${item.slug}`)"
+        >
+          <img :src="item.genre" :alt="genres.name" />
+        </swiper-slide>
+      </swiper>
+    </div>
+    <h2 class="index-title">Новости</h2>
+    <div class="index-news">
+      <swiper
+        class="index-news-wrapper"
+        :modules="modules"
+        :slides-per-view="3"
+        :space-between="20"
+        :navigation="true"
+        :breakpoints="breakpointNews"
+        @swiper="onSwiper"
+        @slideChange="onSlideChange"
       >
-        <h4>{{ item.name }}</h4>
-        <img v-lazy="item.banner" :alt="item.name" />
-      </swiper-slide>
-    </swiper>
+        <swiper-slide
+          class="index-news-item"
+          v-for="item in firstFour"
+          :key="item.id"
+          @click="this.$router.push(`/news/${item.slug}`)"
+        >
+          <h4>{{ item.name }}</h4>
+          <img v-lazy="item.banner" :alt="item.name" />
+        </swiper-slide>
+      </swiper>
+    </div>
   </div>
 </template>
 
@@ -363,9 +365,6 @@ export default {
   top: 2%;
   z-index: 2;
   display: block;
-  height: 25px;
-  width: 25px;
-  cursor: pointer;
   img {
     width: 100%;
     height: 100%;

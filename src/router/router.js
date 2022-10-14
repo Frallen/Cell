@@ -77,7 +77,7 @@ router.beforeEach(async (to, from, next) => {
   // Если страница требует авторизации
   if (to.meta.requiresAuth) {
     //проверка авторизации
-    if (await store.getters["auth/checkRouteAuth"]) {
+    if (store.state.user.userInfo.length || store.state.user.userInfo.id) {
       // если авторизован разрешаем переход
       next();
     } else {

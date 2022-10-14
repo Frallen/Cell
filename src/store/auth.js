@@ -25,13 +25,7 @@ export const AuthModule = {
     userProfile: null,
     isAdmin: false,
   }),
-  getters: {
-    async checkRouteAuth(state) {
-      await auth.onAuthStateChanged((userFirebase) => {
-        return userFirebase ?? false;
-      });
-    },
-  },
+  getters: {},
   mutations: {
     setUser(state, user) {
       state.user = user;

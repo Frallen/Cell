@@ -1,70 +1,36 @@
 <template>
   <div class="form-wrapper">
-    <h3>{{ typeForm }}</h3>
+    <h4>{{ typeForm }}</h4>
     <Form @submit="onsubmit" :validation-schema="schema" class="form">
-      <label for="email">
-        Введите почту
-        <Field name="email" class="input" />
-        <ErrorMessage name="email" />
-      </label>
-
-      <label for="password">
-        Введите пароль
-        <Field name="password" type="password" class="input" />
-        <ErrorMessage name="password" />
-      </label>
-
-      <default-button>Submit</default-button>
+      <slot></slot>
     </Form>
   </div>
 </template>
 <script>
-import { Form, Field, ErrorMessage } from "vee-validate";
-import * as yup from "yup";
-import DefaultButton from "@/components/ui/button";
+import { Form } from "vee-validate";
+
 import "@/formLocalize";
 export default {
   name: "DefaultForm",
   components: {
-    DefaultButton,
     Form,
-    Field,
-    ErrorMessage,
   },
   data() {
     return {};
   },
   props: {
     typeForm: [String],
+    schema: {
+      type: Object,
+      required: true,
+    },
   },
   methods: {
     onsubmit(values) {
       this.$emit("getData", values);
     },
   },
-  computed: {
-    schema() {
-      return yup.object({
-        email: yup.string().required().email(),
-        password: yup.string().required().min(8),
-      });
-    },
-  },
+  computed: {},
 };
 </script>
-<style lang="less" scoped>
-.form-wrapper {
-}
-.form {
-  display: flex;
-  flex-direction: column;
-  label {
-    display: flex;
-    flex-direction: column;
-    margin-top: 1em;
-  }
-}
-button {
-  margin-top: 1em;
-}
-</style>
+<style lang="less" scoped></style>

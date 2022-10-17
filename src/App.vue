@@ -63,6 +63,8 @@ export default {
       FetchGenres: "films/FetchGenres",
     }),
     modalStatus(val) {
+      this.authModal=false
+      this.regModal=false
       this.isActive = true;
       val === "auth" ? (this.authModal = true) : (this.regModal = true);
     },
@@ -195,7 +197,9 @@ body {
   .trs();
   &-wrapper {
     position: relative;
-    padding: 4em;
+    padding: 2.5em;
+    width: 100%;
+    max-width: 320px;
     .br(5px);
     background: #fff;
   }

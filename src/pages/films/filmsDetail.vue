@@ -54,7 +54,11 @@
           allowfullscreen
         ></iframe>
       </div>
-      <CompilationSlider title="Похожее"></CompilationSlider>
+      <CompilationSlider
+        title="Похожее"
+        v-if="withoutCurrent.length"
+        :data="withoutCurrent"
+      ></CompilationSlider>
     </div>
     <div class="grid-container-item">
       <Search></Search>
@@ -70,7 +74,7 @@ import favoritesMixin from "@/mixins/favoritesMixin";
 import CompilationSlider from "@/pages/films/compilationSlider";
 export default {
   name: "filmsDetail",
-  components: { CompilationSlider, Favorite, Search, },
+  components: { CompilationSlider, Favorite, Search },
   mixins: [favoritesMixin],
   data() {
     return {};
@@ -79,10 +83,22 @@ export default {
     ...mapState({}),
     ...mapGetters({
       getFilm: "films/getFilm",
-      randomizedFilms: "films/randomizedFilms",
+      similar: "films/similar",
     }),
+    //беру айдишники жанров фильма
+    genresDetail() {
+      return [...this.getFilm(this.$route.params.id).genres.map((p) => p.id)];
+    },
+    //Из похожих фильмов убираю текущий фильм, чтобы не было дубликата в слайдере
+    withoutCurrent() {
+      return this.similar(this.genresDetail).filter(
+        (p) => p.slug !== this.getFilm(this.$route.params.id).slug
+      );
+    },
   },
-  mounted() {},
+  mounted() {
+    console.log(this.getFilm(this.$route.params.id).title);
+  },
 
   methods: {
     ...mapActions({}),

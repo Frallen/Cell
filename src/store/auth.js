@@ -76,6 +76,7 @@ export const AuthModule = {
     //Создание профиля пользователя
     async signUpData({ state, commit }) {
       try {
+        commit("isLoading", true);
         await setDoc(doc(db, "users", state.user.uid), {
           id: state.user.uid,
           email: state.user.email,
@@ -108,7 +109,7 @@ export const AuthModule = {
       if (user) {
         commit("setAuthReady", true);
         commit("setUser", user);
-        dispatch("UserProfile", user);
+        //   dispatch("UserProfile", user);
         dispatch("isAdmin");
       } else {
         // User is signed out
@@ -133,19 +134,6 @@ export const AuthModule = {
       } finally {
         commit("isLoading", false);
       }
-    },
-    async UserProfile({ state, commit }, user) {
-      let users = collection(db, "users");
-      let searchQuery = query(users, where("id", "==", user.uid));
-      await getDocs(searchQuery).then((p) =>
-        p.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          commit("setUserProfile", doc.data());
-          if (doc.data().isAdmin) {
-            commit("setAdmin", true);
-          }
-        })
-      );
     },
     async logout({ state, commit }) {
       try {

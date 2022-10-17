@@ -13,7 +13,7 @@
       >
         <swiper-slide
           class="additional-item"
-          v-for="item in randomizedFilms(getFilm(this.$route.params.id).genres)"
+          v-for="item in data"
           @click="this.$router.push(`/film/${item.slug}`)"
         >
           <img :src="item.poster" :alt="item.name" />
@@ -40,6 +40,9 @@ export default {
     title: {
       type: String,
     },
+    data: {
+      type: Array,
+    },
   },
   data() {
     return {
@@ -65,10 +68,7 @@ export default {
   },
   computed: {
     ...mapState({}),
-    ...mapGetters({
-      getFilm: "films/getFilm",
-      randomizedFilms: "films/randomizedFilms",
-    }),
+    ...mapGetters({}),
   },
 };
 </script>

@@ -8,13 +8,19 @@ import {
   getDoc,
   orderBy,
   startAfter,
-  limit,setDoc,
-  updateDoc, addDoc,
+  limit,
+  setDoc,
+  updateDoc,
+  addDoc,
 } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 import { getDownloadURL, ref } from "firebase/storage";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-
+import {
+  getAuth,
+  onAuthStateChanged,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 export const userModule = {
   namespaced: true,
   state: () => ({
@@ -30,33 +36,37 @@ export const userModule = {
       return (state.userInfo = userInfo);
     },
     setFavorites(state, favorites) {
-      return state.favorites=favorites
-    }
+      return (state.favorites = favorites);
+    },
   },
   getters: {},
   actions: {
-    async GetUserFavorites({state,commit}){
-      try{
+    async GetUserFavorites({ state, commit }) {
+      try {
         commit("setLoading", true);
-       let snap= await getDoc(doc(db, "films",state.userInfo.id));
+        let snap = await getDoc(doc(db, "films", state.userInfo.id));
 
-      //  snap.data().favorites
+        //  snap.data().favorites
 
-        commit("setFavorites",)
-      }catch (error) {
-        console.error(error)
-      }finally {
-        commit('setLoading', false);
+        commit("setFavorites");
+      } catch (error) {
+        console.error(error);
+      } finally {
+        commit("setLoading", false);
       }
     },
     async addToFavorite({ state, commit }, id) {
       try {
         commit("setLoading", true);
-        await setDoc(doc(db, "users", state.userInfo.id), {
-          favorites: {
-            [id]: true,
+        await setDoc(
+          doc(db, "users", state.userInfo.id),
+          {
+            favorites: {
+              [id]: true,
+            },
           },
-        },{merge: true});
+          { merge: true }
+        );
       } catch (err) {
         console.error(err);
       } finally {
@@ -66,13 +76,51 @@ export const userModule = {
     async removeFromFavorite({ state, commit }, id) {
       try {
         commit("setLoading", true);
-        await setDoc(doc(db, "users", state.userInfo.id), {
-          favorites: {
-            [id]: false,
+        await setDoc(
+          doc(db, "users", state.userInfo.id),
+          {
+            favorites: {
+              [id]: false,
+            },
           },
-        },{merge: true});
+          { merge: true }
+        );
       } catch (err) {
         console.error(err);
+      } finally {
+        commit("setLoading", false);
+      }
+    },
+    async UpdateUser({ state, commit }, data) {
+      try {
+        commit("setLoading", true);
+        const auth = getAuth();
+        /*updateEmail(auth.currentUser, "user@example.com").then(() => {
+          // Email updated!
+          // ...
+        })*/
+
+        let docRef = doc(db, "users", auth.currentUser.uid);
+        if (data.email) {
+          await sendEmailVerification(auth.currentUser, data.email).then(
+            async () => {
+              await updateDoc(docRef, {
+                email: data.email,
+              });
+            }
+          );
+        }
+        if (data.password) {
+          sendPasswordResetEmail(
+            auth,
+            data.email ?? auth.currentUser.email
+          ).then(() => {
+            // Password reset email sent!
+            // ..
+          });
+        }
+      } catch (e) {
+        console.error(e);
       } finally {
         commit("setLoading", false);
       }

@@ -49,6 +49,10 @@ const routes = [
     component: () => import("@/pages/actors/actorPage"),
   },
   {
+    path: "/profile",
+    component: () => import("@/pages/profile/profilePage"),
+  },
+  {
     name: "Избранное",
     path: "/favorites",
     meta: {

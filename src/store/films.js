@@ -21,23 +21,15 @@ export const filmsModule = {
     isLoading: false,
   }),
   getters: {
-    randomizedFilms: (state) => (genres) => {
-      // let byGenres= state.films.filter(film=>film.genres.find(z=>genres.contains(z.id)))
-      /* let result = state.films.filter((p) => {
+    //похожие фильмы
+    similar: (state) => (genres) => {
+      let byGenres = state.films.filter((film) =>
+        film.genres.find((p) => genres.includes(p.id))
+      );
 
-        return genres.some((genre) =>console.log(_.includes(p.genres,genre.id))  )
-      });
-      _.filter(state.films, function (item) {
-        if (typeof state.films !== "undefined" && !!state.films) {
+      const shuffled = byGenres.sort(() => 0.5 - Math.random());
 
-          return genres.some((genre) => item.genres.includes(genre.id))
-        }
-      });
-      let arr=   _.find(state.films, genres);
-      console.log(arr)*/
-      const shuffled = state.films.sort(() => 0.5 - Math.random());
-
-      return shuffled.slice(0, 5);
+      return shuffled.slice(0, 8);
     },
     //получение фильмов в которых снимался актер
     getFilmsByPerson: (state) => (actor) => {

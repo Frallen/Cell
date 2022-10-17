@@ -118,7 +118,7 @@ export default {
   border-bottom: 1px solid @red;
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 4;
   background: #1f1f1fc9;
   .trs();
   &-logo {

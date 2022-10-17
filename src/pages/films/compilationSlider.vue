@@ -1,10 +1,10 @@
 <template>
   <div class="additional">
-    <h5>{{this.title}}</h5>
+    <h5>{{ this.title }}</h5>
     <div class="additional-wrapper">
       <swiper
         :modules="modules"
-        :slides-per-view="3"
+        :slides-per-view="4"
         :space-between="20"
         :navigation="true"
         :breakpoints="breakpointCompilation"
@@ -36,17 +36,17 @@ export default {
     Swiper,
     SwiperSlide,
   },
-  props:{
-    title:{
-      type:String
-    }
+  props: {
+    title: {
+      type: String,
+    },
   },
   data() {
     return {
       breakpointCompilation: {
-        998: { slidesPerView: 4 },
-        767: { slidesPerView: 3 },
-        320: { slidesPerView: 1 },
+        998: { slidesPerView: 5 },
+        767: { slidesPerView: 4 },
+        320: { slidesPerView: 2 },
       },
     };
   },
@@ -75,7 +75,7 @@ export default {
 
 <style scoped lang="less">
 .additional {
-  h5{
+  h5 {
     margin-bottom: 1em;
     color: #fff;
   }
@@ -85,6 +85,8 @@ export default {
     cursor: pointer;
     position: relative;
     height: auto !important;
+    .br(10px);
+    overflow: hidden;
     img {
       width: 100%;
       height: 100%;

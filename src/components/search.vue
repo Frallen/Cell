@@ -19,10 +19,10 @@
           @click="redirect(item)"
         >
           <div v-if="item.poster">
-            <img v-lazy="item.poster" />
+            <img :src="item.poster" />
           </div>
           <div v-else-if="item.photo">
-            <img v-lazy="item.photo" />
+            <img :src="item.photo" />
           </div>
           <p>{{ item.name }}</p>
         </div>

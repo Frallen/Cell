@@ -106,21 +106,19 @@
     flex-direction: column-reverse;
   }
   &-item:first-child {
-    flex-basis: 80%;
+    width: 80%;
 
-    @media @md {
-      flex-basis: initial;
+    @media @xl {
+      width: initial;
     }
   }
   &-item:nth-child(2) {
-    flex-basis: 20%;
+    width: 20%;
     margin-left: 2em;
     @media @xl {
       margin-left: 0;
       margin-bottom: 1.5em;
-    }
-    @media @md {
-      flex-basis: initial;
+      width: initial;
     }
   }
 }

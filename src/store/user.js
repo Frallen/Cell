@@ -1,5 +1,4 @@
 import {
-  collection,
   doc,
   getDocs,
   onSnapshot,
@@ -13,8 +12,7 @@ import {
   updateDoc,
   addDoc,
 } from "firebase/firestore";
-import { db, storage } from "../../firebase";
-import { getDownloadURL, ref } from "firebase/storage";
+import { db } from "../../firebase";
 import {
   getAuth,
   onAuthStateChanged,
@@ -131,16 +129,10 @@ export const userModule = {
         const auth = getAuth();
         await onAuthStateChanged(auth, (user) => {
           if (user) {
-            onSnapshot(
-              collection(db, "users"),
-              where("id", "==", user.uid),
-              (doc) => {
-                doc.forEach((doc) => {
-                  let data = doc.data();
-                  commit("setUserInfo", data);
-                });
-              }
-            );
+            onSnapshot(doc(db, "users", user.uid), (doc) => {
+              let data = doc.data();
+              commit("setUserInfo", data);
+            });
           } else {
             // User is signed out
             // ...

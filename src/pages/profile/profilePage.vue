@@ -1,4 +1,5 @@
 <template>
+  <Breadcrumbs></Breadcrumbs>
   <Form @submit="onSubmit" :validation-schema="schema" class="form" ref="Form">
     <label for="email">
       Почта
@@ -19,9 +20,11 @@ import { Field, ErrorMessage, Form } from "vee-validate";
 import * as yup from "yup";
 import DefaultButton from "@/components/ui/button";
 import { mapActions } from "vuex";
+import Breadcrumbs from "@/components/breadcrumbs";
 export default {
   name: "profilePage",
   components: {
+    Breadcrumbs,
     DefaultButton,
     Field,
     ErrorMessage,

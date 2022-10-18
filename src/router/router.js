@@ -41,6 +41,7 @@ const routes = [
     component: () => import("@/pages/news/newsDetail"),
   },
   {
+    name: "Новости",
     path: "/news",
     component: () => import("@/pages/news/newsList"),
   },
@@ -49,6 +50,7 @@ const routes = [
     component: () => import("@/pages/actors/actorPage"),
   },
   {
+    name: "Профиль",
     path: "/profile",
     component: () => import("@/pages/profile/profilePage"),
   },

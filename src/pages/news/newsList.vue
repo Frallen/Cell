@@ -1,25 +1,28 @@
 <template>
-  <div class="grid-container">
-    <div class="grid-container-item">
-      <div class="news">
-        <div class="news-wrapper">
-          <div
-            class="news-item"
-            v-for="item in timeFilteredNews"
-            @click="this.$router.push(`/news/${item.slug}`)"
-          >
-            <div class="news-item-box">
-              <img v-lazy="item.banner" :alt="item.name" />
-            </div>
-            <div class="news-item-text">
-              <h5>{{ item.name }}</h5>
+  <div>
+    <Breadcrumbs></Breadcrumbs>
+    <div class="grid-container">
+      <div class="grid-container-item">
+        <div class="news">
+          <div class="news-wrapper">
+            <div
+              class="news-item"
+              v-for="item in timeFilteredNews"
+              @click="this.$router.push(`/news/${item.slug}`)"
+            >
+              <div class="news-item-box">
+                <img v-lazy="item.banner" :alt="item.name" />
+              </div>
+              <div class="news-item-text">
+                <h5>{{ item.name }}</h5>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="grid-container-item">
-      <Search></Search>
+      <div class="grid-container-item">
+        <Search></Search>
+      </div>
     </div>
   </div>
 </template>
@@ -27,9 +30,10 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import Search from "@/components/search";
+import Breadcrumbs from "@/components/breadcrumbs";
 export default {
   name: "newsList",
-  components: { Search },
+  components: { Breadcrumbs, Search },
   data() {
     return {};
   },
@@ -38,8 +42,8 @@ export default {
       news: (state) => state.news.news,
     }),
     ...mapGetters({
-      timeFilteredNews:"news/timeFilteredNews"
-    })
+      timeFilteredNews: "news/timeFilteredNews",
+    }),
   },
 };
 </script>

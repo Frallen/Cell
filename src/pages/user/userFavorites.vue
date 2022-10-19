@@ -35,9 +35,7 @@ export default {
   methods: {
     ...mapActions({}),
   },
-  mounted() {
-  console.log(this.favorites)
-    },
+  mounted() {},
   computed: {
     ...mapState({
       favorites: (state) => state.user.userInfo.favorites,

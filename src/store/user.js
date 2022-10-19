@@ -19,6 +19,7 @@ import {
   sendEmailVerification,
   sendPasswordResetEmail,
 } from "firebase/auth";
+
 export const userModule = {
   namespaced: true,
   state: () => ({
@@ -99,15 +100,17 @@ export const userModule = {
         })*/
 
         let docRef = doc(db, "users", auth.currentUser.uid);
-        if (data.email) {
+         if (data.email) {
+
           await sendEmailVerification(auth.currentUser, data.email).then(
             async () => {
-              await updateDoc(docRef, {
+              /* await updateDoc(docRef, {
                 email: data.email,
-              });
+              });*/
             }
           );
         }
+         debugger
         if (data.password) {
           sendPasswordResetEmail(
             auth,

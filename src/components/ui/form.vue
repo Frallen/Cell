@@ -1,7 +1,7 @@
 <template>
   <div class="form-wrapper">
     <h4>{{ typeForm }}</h4>
-    <Form @submit="onsubmit" :validation-schema="schema" class="form">
+    <Form @submit="onsubmit" :validation-schema="localeSchema" class="form">
       <slot></slot>
     </Form>
   </div>
@@ -19,10 +19,9 @@ export default {
     return {};
   },
   props: {
-    typeForm: [String],
+    typeForm: String,
     schema: {
       type: Object,
-      required: true,
     },
   },
   methods: {
@@ -30,7 +29,11 @@ export default {
       this.$emit("getData", values);
     },
   },
-  computed: {},
+  computed: {
+    localeSchema() {
+      return this.schema;
+    },
+  },
 };
 </script>
 <style lang="less" scoped></style>

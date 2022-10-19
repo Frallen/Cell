@@ -1,10 +1,5 @@
 <template>
-  <DefaultForm
-    class="form"
-    typeForm="Регистрация"
-    @getData="createUser"
-    :schema="schema"
-  >
+  <DefaultForm typeForm="Регистрация" @getData="createUser" :schema="schema">
     <label for="email">
       Введите почту
       <Field name="email" class="input" />
@@ -45,13 +40,13 @@ export default {
     ...mapActions({
       signUp: "auth/signUp",
     }),
-    computed: {
-      schema() {
-        return yup.object({
-          email: yup.string().required().email(),
-          password: yup.string().required().min(8),
-        });
-      },
+  },
+  computed: {
+    schema() {
+      return yup.object({
+        email: yup.string().required().email(),
+        password: yup.string().required().min(8),
+      });
     },
   },
 };

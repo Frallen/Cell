@@ -15,6 +15,7 @@
             :isFavorite="favoriteStatus(item.id)"
             :id="item.id"
             class="favorite"
+            v-if="authUser"
           ></Favorite>
         </div>
       </div>

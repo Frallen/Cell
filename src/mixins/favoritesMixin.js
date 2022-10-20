@@ -9,6 +9,7 @@ export default {
     ...mapState({
       films: (state) => state.films.films,
       user: (state) => state.user.userInfo,
+      authUser: (state) => state.auth.user
     }),
   },
   methods: {

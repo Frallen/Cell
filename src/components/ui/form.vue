@@ -25,8 +25,9 @@ export default {
     },
   },
   methods: {
-    onsubmit(values) {
+    onsubmit(values,{resetForm}) {
       this.$emit("getData", values);
+      resetForm();
     },
   },
   computed: {

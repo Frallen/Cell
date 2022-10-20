@@ -52,6 +52,9 @@ const routes = [
   {
     name: "Профиль",
     path: "/profile",
+    meta: {
+      requiresAuth: true,
+    },
     component: () => import("@/pages/profile/profilePage"),
   },
   {
@@ -68,8 +71,6 @@ const routes = [
     component: () => import("@/pages/films/filmsCompilation"),
   },
   { path: "/:pathMatch(.*)*", component: NotFound },
-  // { path: "/auth", component: () => import("@/pages/auth/authPage") },
-  // { path: "/registration", component: () => import("@/pages/auth/singUpPage") },
 ];
 const router = createRouter({
   routes,

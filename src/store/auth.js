@@ -1,7 +1,7 @@
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signOut,
+  signOut, getAuth
 } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import {
@@ -22,16 +22,12 @@ export const AuthModule = {
     isLoading: false,
     openLoginModal: false,
     user: null,
-    userProfile: null,
     isAdmin: false,
   }),
   getters: {},
   mutations: {
     setUser(state, user) {
       state.user = user;
-    },
-    setUserProfile(state, userProfile) {
-      state.userProfile = userProfile;
     },
     isLoading(state, isLoading) {
       state.isLoading = isLoading;
@@ -137,6 +133,7 @@ export const AuthModule = {
     },
     async logout({ state, commit }) {
       try {
+        const auth = getAuth();
         commit("isLoading", true);
         await signOut(auth);
         commit("setUser", null);

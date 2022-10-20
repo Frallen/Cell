@@ -41,6 +41,7 @@
             :isFavorite="favoriteStatus(slide.id)"
             :id="slide.id"
             class="favorite"
+            v-if="authUser"
           ></Favorite>
         </swiper-slide>
       </swiper>

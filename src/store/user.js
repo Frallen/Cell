@@ -16,8 +16,8 @@ import { db } from "../../firebase";
 import {
   getAuth,
   onAuthStateChanged,
-  sendEmailVerification,
-  sendPasswordResetEmail,
+  updatePassword,
+  updateEmail,
 } from "firebase/auth";
 
 export const userModule = {
@@ -25,7 +25,6 @@ export const userModule = {
   state: () => ({
     setLoading: false,
     userInfo: [],
-    favorites: [],
   }),
   mutations: {
     setLoading(state, loading) {
@@ -34,26 +33,9 @@ export const userModule = {
     setUserInfo(state, userInfo) {
       return (state.userInfo = userInfo);
     },
-    setFavorites(state, favorites) {
-      return (state.favorites = favorites);
-    },
   },
   getters: {},
   actions: {
-    async GetUserFavorites({ state, commit }) {
-      try {
-        commit("setLoading", true);
-        let snap = await getDoc(doc(db, "films", state.userInfo.id));
-
-        //  snap.data().favorites
-
-        commit("setFavorites");
-      } catch (error) {
-        console.error(error);
-      } finally {
-        commit("setLoading", false);
-      }
-    },
     async addToFavorite({ state, commit }, id) {
       try {
         commit("setLoading", true);
@@ -90,34 +72,24 @@ export const userModule = {
         commit("setLoading", false);
       }
     },
-    async UpdateUser({ state, commit }, data) {
+    async UpdateUser({ state, commit, dispatch }, data) {
       try {
         commit("setLoading", true);
         const auth = getAuth();
-        /*updateEmail(auth.currentUser, "user@example.com").then(() => {
-          // Email updated!
-          // ...
-        })*/
 
         let docRef = doc(db, "users", auth.currentUser.uid);
-         if (data.email) {
-
-          await sendEmailVerification(auth.currentUser, data.email).then(
-            async () => {
-              /* await updateDoc(docRef, {
-                email: data.email,
-              });*/
-            }
-          );
+        if (data.email) {
+          await updateEmail(auth.currentUser, data.email).then(async () => {
+            await updateDoc(docRef, {
+              email: data.email,
+            });
+           dispatch("auth/logout", null,{ root: true });
+          });
         }
-         debugger
+
         if (data.password) {
-          sendPasswordResetEmail(
-            auth,
-            data.email ?? auth.currentUser.email
-          ).then(() => {
-            // Password reset email sent!
-            // ..
+          updatePassword(auth.currentUser, data.password).then(() => {
+            dispatch("auth/logout", null, { root: true });
           });
         }
       } catch (e) {

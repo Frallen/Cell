@@ -33,6 +33,7 @@
             :isFavorite="favoriteStatus(getFilm(this.$route.params.id).id)"
             :id="getFilm(this.$route.params.id).id"
             class="favorite"
+            v-if="authUser"
           ></Favorite>
         </div>
       </div>

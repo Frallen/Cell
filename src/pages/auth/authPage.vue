@@ -28,9 +28,7 @@ export default {
     login(val) {
       this.setUser(val);
 
-      this.setAuth().then();
-      this.$emit("closeModal");
-      this.$router.push("/");
+      this.setAuth(this);
     },
     ...mapMutations({
       setUser: "auth/setUser",

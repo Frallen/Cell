@@ -63,8 +63,8 @@ export default {
       FetchGenres: "films/FetchGenres",
     }),
     modalStatus(val) {
-      this.authModal=false
-      this.regModal=false
+      this.authModal = false;
+      this.regModal = false;
       this.isActive = true;
       val === "auth" ? (this.authModal = true) : (this.regModal = true);
     },
@@ -96,11 +96,11 @@ export default {
   },
   created() {
     this.AuthState();
-    this.GetUserData();
-    this.FetchFilms();
-    this.FetchNews();
-    this.FetchActors();
-    this.FetchGenres();
+    this.GetUserData(this);
+    this.FetchFilms(this);
+    this.FetchNews(this);
+    this.FetchActors(this);
+    this.FetchGenres(this);
   },
 };
 </script>

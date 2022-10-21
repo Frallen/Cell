@@ -9,8 +9,13 @@ import {
 } from "firebase/firestore";
 import { db, storage } from "../../firebase";
 import { getDownloadURL, ref } from "firebase/storage";
-import _ from "lodash";
 
+let errorMessage = (componentContext) => {
+  componentContext.$swal.fire({
+    icon: "error",
+    title: "Произошла ошибка",
+  });
+};
 export const filmsModule = {
   namespaced: true,
   state: () => ({
@@ -78,7 +83,7 @@ export const filmsModule = {
     },
   },
   actions: {
-    async FetchFilms({ state, commit }) {
+    async FetchFilms({ state, commit }, componentContext) {
       try {
         commit("setLoading", true);
 
@@ -101,11 +106,15 @@ export const filmsModule = {
         commit("setFilms", data);
       } catch (err) {
         console.error(err);
+        switch (err.message) {
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("setLoading", false);
       }
     },
-    async FetchGenres({ state, commit }) {
+    async FetchGenres({ state, commit }, componentContext) {
       try {
         commit("setLoading", true);
 
@@ -124,11 +133,15 @@ export const filmsModule = {
         commit("setGenres", data);
       } catch (err) {
         console.error(err);
+        switch (err.message) {
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("setLoading", false);
       }
     },
-    async FetchActors({ state, commit }) {
+    async FetchActors({ state, commit }, componentContext) {
       try {
         commit("setLoading", true);
 
@@ -147,11 +160,15 @@ export const filmsModule = {
         commit("setActors", data);
       } catch (err) {
         console.error(err);
+        switch (err.message) {
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("setLoading", false);
       }
     },
-    async GetFilmsByGenre({ state, commit }, genreSlug) {
+    async GetFilmsByGenre({ state, commit }, genreSlug, componentContext) {
       try {
         commit("setLoading", true);
 
@@ -214,6 +231,10 @@ export const filmsModule = {
         });*/
       } catch (err) {
         console.error(err);
+        switch (err.message) {
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("setLoading", false);
       }

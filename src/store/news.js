@@ -3,6 +3,12 @@ import { db, storage } from "../../firebase";
 import { getDownloadURL, ref } from "firebase/storage";
 import moment from "moment/moment";
 
+let errorMessage = (componentContext) => {
+  componentContext.$swal.fire({
+    icon: "error",
+    title: "Произошла ошибка",
+  });
+};
 export const newsModule = {
   namespaced: true,
   state: () => ({
@@ -34,7 +40,7 @@ export const newsModule = {
   },
 
   actions: {
-    async FetchNews({ state, commit }) {
+    async FetchNews({ state, commit }, componentContext) {
       try {
         commit("setLoading", true);
 
@@ -53,6 +59,10 @@ export const newsModule = {
         commit("setNews", data);
       } catch (err) {
         console.error(err);
+        switch (err.message) {
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("setLoading", false);
       }

@@ -29,7 +29,7 @@ export default {
       try {
         this.setUser(val);
         this.$emit("closeModal");
-        this.signUp();
+        this.signUp(this);
 
         this.$router.push("/");
       } catch (e) {}

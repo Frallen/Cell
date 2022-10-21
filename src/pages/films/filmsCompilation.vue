@@ -31,7 +31,7 @@ export default {
     return {};
   },
   mounted() {
-    this.FetchGenres().then((p) => this.GetFilmsByGenre(this.$route.params.id));
+    this.FetchGenres(this).then((p) => this.GetFilmsByGenre(this.$route.params.id,this));
   },
   methods: {
     ...mapActions({

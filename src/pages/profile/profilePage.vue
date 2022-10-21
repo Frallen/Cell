@@ -51,7 +51,7 @@ export default {
             email: data.email,
             password: data.password,
           };
-          this.UpdateUser(obj)
+          this.UpdateUser(obj,this)
             .then((p) => {
               this.$swal.fire({
                 icon: "success",

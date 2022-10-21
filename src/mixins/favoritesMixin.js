@@ -9,7 +9,7 @@ export default {
     ...mapState({
       films: (state) => state.films.films,
       user: (state) => state.user.userInfo,
-      authUser: (state) => state.auth.user
+      authUser: (state) => state.auth.user,
     }),
   },
   methods: {
@@ -27,13 +27,13 @@ export default {
     },
     like(val) {
       if (this.user) {
-        this.addToFavorite(val);
+        this.addToFavorite(val, this);
       } else {
         this.openLoginForm();
       }
     },
     DisLike(val) {
-      this.removeFromFavorite(val);
+      this.removeFromFavorite(val, this);
     },
   },
 };

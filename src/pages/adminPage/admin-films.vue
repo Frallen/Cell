@@ -111,7 +111,6 @@ export default {
       tableHeader: ["Название", "Чпу", "действия"],
       refForm: null,
       poster: null,
-      searchValue: null,
     };
   },
   methods: {
@@ -125,7 +124,7 @@ export default {
           val: val,
           genres: genres,
         };
-        this.CreateItem(obj)
+        this.CreateItem(obj,this)
           .then((p) => this.setSuccess("Запись добавлена"))
           .catch((err) => this.setError());
       } else if (this.submitType === "update") {
@@ -135,7 +134,7 @@ export default {
           items: val,
         };
 
-        this.updateDoc(obj)
+        this.updateDoc(obj,this)
           .then((p) => this.setSuccess("Запись обновлена"))
           .catch((err) => this.setError());
         this.submitType = "submit";
@@ -149,7 +148,7 @@ export default {
             to: "films",
             id: val,
           };
-          this.DeleteDoc(obj)
+          this.DeleteDoc(obj,this)
             .then((p) => this.setSuccess("Запись удалена"))
             .catch((err) => this.setError());
           this.currentUpdateItem = [];
@@ -172,9 +171,9 @@ export default {
     },
   },
   mounted() {
-    this.FetchData("films");
-    this.FetchData("genres");
-    this.FetchData("actors");
+    this.FetchData("films", this);
+    this.FetchData("genres", this);
+    this.FetchData("actors", this);
   },
   watch: {
     updateId(val) {

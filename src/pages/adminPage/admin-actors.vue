@@ -86,7 +86,7 @@ export default {
           to: "actors",
           val: val,
         };
-        this.CreateItem(obj)
+        this.CreateItem(obj,this)
           .then((p) => this.setSuccess("Запись добавлена"))
           .catch((err) => this.setError());
       } else if (this.submitType === "update") {
@@ -96,7 +96,7 @@ export default {
           items: val,
         };
 
-        this.updateDoc(obj)
+        this.updateDoc(obj,this)
           .then((p) => this.setSuccess("Запись обновлена"))
           .catch((err) => this.setError());
         this.submitType = "submit";
@@ -112,7 +112,7 @@ export default {
             to: "actors",
             id: val,
           };
-          this.DeleteDoc(obj)
+          this.DeleteDoc(obj,this)
             .then((p) => this.setSuccess("Запись удалена"))
             .catch((err) => this.setError());
         } else {
@@ -125,7 +125,7 @@ export default {
     }),
   },
   mounted() {
-    this.FetchData("actors");
+    this.FetchData("actors",this);
   },
   watch: {
     updateId(val) {

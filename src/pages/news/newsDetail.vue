@@ -85,6 +85,10 @@ export default {
   }
   &-content {
     padding: 1em;
+    ::v-deep img {
+      width: 100%;
+      height: 100%;
+    }
   }
   // Идет вставка сырого html необходимо использовать ::v-deep для применения стилей
   ::v-deep .ql-video {

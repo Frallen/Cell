@@ -1,7 +1,8 @@
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signOut, getAuth
+  signOut,
+  getAuth,
 } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import {
@@ -15,6 +16,12 @@ import {
   getDoc,
 } from "firebase/firestore";
 
+let errorMessage = (componentContext) => {
+  componentContext.$swal.fire({
+    icon: "error",
+    title: "Произошла ошибка",
+  });
+};
 export const AuthModule = {
   namespaced: true,
   state: () => ({
@@ -47,7 +54,7 @@ export const AuthModule = {
       commit("setOpenModal", true);
     },
     //создание пользователя
-    async signUp({ state, commit, dispatch }) {
+    async signUp({ state, commit, dispatch }, componentContext) {
       try {
         commit("isLoading", true);
         await createUserWithEmailAndPassword(
@@ -57,20 +64,48 @@ export const AuthModule = {
         ).then((snap) => {
           const user = snap.user;
 
-          dispatch("signUpData");
+          dispatch("signUpData", componentContext);
 
           commit("setUser", user);
           commit("setAuthReady", true);
           commit("isLoading", false);
+          componentContext.$swal.fire({
+            icon: "success",
+            title: "Регистрация прошла успешно",
+          });
         });
       } catch (err) {
-        console.error(err);
+        console.error(err.message);
+        switch (err.message) {
+          case "Firebase: Error (auth/invalid-password).":
+            return componentContext.$swal.fire({
+              icon: "error",
+              title: "Не корректный пароль",
+            });
+          case "Firebase: Error (auth/invalid-email).":
+            return componentContext.$swal.fire({
+              icon: "error",
+              title: "Не корректный email",
+            });
+          case "Firebase: Error (auth/too-many-requests).":
+            return componentContext.$swal.fire({
+              icon: "error",
+              title: "Слишком много запросов",
+            });
+          case "Firebase: Error (auth/email-already-in-use).":
+            return componentContext.$swal.fire({
+              icon: "error",
+              title: "Пользователь с такой почтой уже существует",
+            });
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("isLoading", false);
       }
     },
     //Создание профиля пользователя
-    async signUpData({ state, commit }) {
+    async signUpData({ state, commit }, componentContext) {
       try {
         commit("isLoading", true);
         await setDoc(doc(db, "users", state.user.uid), {
@@ -78,6 +113,11 @@ export const AuthModule = {
           email: state.user.email,
         });
       } catch (err) {
+        console.error(err)
+        switch (err.message) {
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("isLoading", false);
       }
@@ -112,7 +152,7 @@ export const AuthModule = {
         // ...
       }
     },
-    async login({ state, commit }) {
+    async login({ state, commit }, componentContext) {
       try {
         commit("isLoading", true);
 
@@ -124,9 +164,41 @@ export const AuthModule = {
           const user = snap.user;
           commit("setUser", user);
           commit("setAuthReady", true);
+          componentContext.$router.push("/");
+          componentContext.$emit("closeModal");
         });
       } catch (err) {
-        console.error(err);
+        console.error(err.message);
+
+        switch (err.message) {
+          case "Firebase: Error (auth/invalid-password).":
+            return componentContext.$swal.fire({
+              icon: "error",
+              title: "Не корректный пароль",
+            });
+          case "Firebase: Error (auth/invalid-email).":
+            return componentContext.$swal.fire({
+              icon: "error",
+              title: "Не корректный email",
+            });
+          case "Firebase: Error (auth/wrong-password).":
+            return componentContext.$swal.fire({
+              icon: "error",
+              title: "Не верный пароль",
+            });
+          case "Firebase: Error (auth/too-many-requests).":
+            return componentContext.$swal.fire({
+              icon: "error",
+              title: "Слишком много запросов",
+            });
+          case "Firebase: Error (auth/user-not-found).":
+            return componentContext.$swal.fire({
+              icon: "error",
+              title: "Пользователя с такой почтой не существует",
+            });
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("isLoading", false);
       }

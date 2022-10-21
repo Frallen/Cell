@@ -19,6 +19,13 @@ import {
 
 import { db, storage } from "../../firebase";
 
+let errorMessage = (componentContext) => {
+  componentContext.$swal.fire({
+    icon: "error",
+    title: "Произошла ошибка",
+  });
+};
+
 export const adminModule = {
   namespaced: true,
   state: () => ({
@@ -107,7 +114,7 @@ export const adminModule = {
     },
   },
   actions: {
-    async FetchData({ state, commit }, to) {
+    async FetchData({ state, commit }, to, componentContext) {
       try {
         commit("setLoading", true);
 
@@ -148,11 +155,15 @@ export const adminModule = {
         commit("setData", { data, to });
       } catch (err) {
         console.error(err);
+        switch (err.message) {
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("setLoading", false);
       }
     },
-    async CreateItem({ state, commit, dispatch }, obj) {
+    async CreateItem({ state, commit, dispatch }, obj,componentContext) {
       try {
         commit("setLoading", true);
         const metadata = {
@@ -208,11 +219,15 @@ export const adminModule = {
         dispatch("FetchData", obj.to);
       } catch (err) {
         console.error(err);
+        switch (err.message) {
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("setLoading", false);
       }
     },
-    async updateDoc({ state, commit, dispatch }, obj) {
+    async updateDoc({ state, commit, dispatch }, obj,componentContext) {
       try {
         const metadata = {
           contentType: "image/jpeg",
@@ -286,11 +301,15 @@ export const adminModule = {
         dispatch("FetchData", obj.to);
       } catch (err) {
         console.error(err);
+        switch (err.message) {
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("setLoading", false);
       }
     },
-    async DeleteDoc({ state, commit, dispatch }, obj) {
+    async DeleteDoc({ state, commit, dispatch }, obj,componentContext) {
       try {
         commit("setLoading", true);
 
@@ -299,6 +318,10 @@ export const adminModule = {
         dispatch("FetchData", obj.to);
       } catch (err) {
         console.error(err);
+        switch (err.message) {
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("setLoading", false);
       }

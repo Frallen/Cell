@@ -20,6 +20,13 @@ import {
   updateEmail,
 } from "firebase/auth";
 
+let errorMessage = (componentContext) => {
+  componentContext.$swal.fire({
+    icon: "error",
+    title: "Произошла ошибка",
+  });
+};
+
 export const userModule = {
   namespaced: true,
   state: () => ({
@@ -36,7 +43,7 @@ export const userModule = {
   },
   getters: {},
   actions: {
-    async addToFavorite({ state, commit }, id) {
+    async addToFavorite({ state, commit }, id, componentContext) {
       try {
         commit("setLoading", true);
         await setDoc(
@@ -50,11 +57,15 @@ export const userModule = {
         );
       } catch (err) {
         console.error(err);
+        switch (err.message) {
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("setLoading", false);
       }
     },
-    async removeFromFavorite({ state, commit }, id) {
+    async removeFromFavorite({ state, commit }, id, componentContext) {
       try {
         commit("setLoading", true);
         await setDoc(
@@ -68,11 +79,15 @@ export const userModule = {
         );
       } catch (err) {
         console.error(err);
+        switch (err.message) {
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("setLoading", false);
       }
     },
-    async UpdateUser({ state, commit, dispatch }, data) {
+    async UpdateUser({ state, commit, dispatch }, data, componentContext) {
       try {
         commit("setLoading", true);
         const auth = getAuth();
@@ -83,7 +98,7 @@ export const userModule = {
             await updateDoc(docRef, {
               email: data.email,
             });
-           dispatch("auth/logout", null,{ root: true });
+            dispatch("auth/logout", null, { root: true });
           });
         }
 
@@ -92,13 +107,17 @@ export const userModule = {
             dispatch("auth/logout", null, { root: true });
           });
         }
-      } catch (e) {
-        console.error(e);
+      } catch (err) {
+        console.error(err);
+        switch (err.message) {
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("setLoading", false);
       }
     },
-    async GetUserData({ state, commit }) {
+    async GetUserData({ state, commit }, componentContext) {
       try {
         commit("setLoading", true);
         const auth = getAuth();
@@ -115,6 +134,10 @@ export const userModule = {
         });
       } catch (err) {
         console.error(err);
+        switch (err.message) {
+          default:
+            return errorMessage(componentContext);
+        }
       } finally {
         commit("setLoading", false);
       }

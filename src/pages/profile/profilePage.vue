@@ -22,6 +22,7 @@
       </label>
       <DefaultButton>Обновить</DefaultButton>
     </Form>
+    <DefaultButton @click="Delete">Удалить аккаунт</DefaultButton>
   </div>
 </template>
 
@@ -43,7 +44,18 @@ export default {
   methods: {
     ...mapActions({
       UpdateUser: "user/UpdateUser",
+      DeleteUser: "auth/DeleteUser",
     }),
+    Delete() {
+      this.DeleteDialog().then((result) => {
+        if (result.isConfirmed) {
+          this.DeleteUser(this);
+        } else {
+          this.cancelOperation();
+        }
+      });
+    },
+
     onSubmit(data) {
       this.UpdateDialog().then((result) => {
         if (result.isConfirmed) {
@@ -68,6 +80,18 @@ export default {
         } else {
           this.cancelOperation();
         }
+      });
+    },
+    DeleteDialog() {
+      return this.$swal.fire({
+        title: "Вы уверены что хотите удалить аккаунт",
+        text: "Данные пользователя будут пользователя полностью удалены",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#ааа",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Подтвердить",
+        cancelButtonText: "Отменить",
       });
     },
     UpdateDialog() {

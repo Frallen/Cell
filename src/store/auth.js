@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   getAuth,
+  deleteUser,
 } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import {
@@ -14,6 +15,7 @@ import {
   doc,
   setDoc,
   getDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 let errorMessage = (componentContext) => {
@@ -113,7 +115,7 @@ export const AuthModule = {
           email: state.user.email,
         });
       } catch (err) {
-        console.error(err)
+        console.error(err);
         switch (err.message) {
           default:
             return errorMessage(componentContext);
@@ -214,6 +216,31 @@ export const AuthModule = {
         console.error(err);
       } finally {
         commit("isLoading", false);
+      }
+    },
+    async DeleteUser({ state, commit, dispatch }, componentContext) {
+      try {
+        commit("setLoading", true);
+        const auth = getAuth();
+        const user = auth.currentUser;
+        await deleteUser(user).then(async () => {
+          await deleteDoc(doc(db, "users", user.uid));
+          dispatch("logout");
+        });
+
+        componentContext.$swal.fire({
+          icon: "success",
+          title: "Аккаунт успешно удален",
+        });
+        componentContext.$router.push("/");
+      } catch (err) {
+        console.error(err);
+        switch (err.message) {
+          default:
+            return errorMessage(componentContext);
+        }
+      } finally {
+        commit("setLoading", false);
       }
     },
   },

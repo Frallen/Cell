@@ -3,35 +3,35 @@
     <div class="grid-container-item">
       <div class="info">
         <div class="info-poster">
-          <img :src="getFilm(this.$route.params.id).BigPoster" alt="" />
+          <img :src="getFilm(this.routeParams).BigPoster" alt="" />
           <div class="info-short">
-            <h3>{{ getFilm(this.$route.params.id).name }}</h3>
+            <h3>{{ getFilm(this.routeParams).name }}</h3>
             <div class="info-genres">
               <span>Жанры:</span>
               <div class="info-genres-list">
-                <div v-for="item in getFilm(this.$route.params.id).genres">
+                <div v-for="item in getFilm(this.routeParams).genres">
                   {{ item.name }},
                 </div>
               </div>
             </div>
             <div class="info-data">
               <div class="info-data-item">
-                <span>Страна:</span>{{ getFilm(this.$route.params.id).country }}
+                <span>Страна:</span>{{ getFilm(this.routeParams).country }}
               </div>
               <div class="info-data-item">
                 <span>Продожительность:</span
-                >{{ getFilm(this.$route.params.id).duration }}
+                >{{ getFilm(this.routeParams).duration }}
               </div>
               <div class="info-data-item">
-                <span>Год:</span>{{ getFilm(this.$route.params.id).year }}
+                <span>Год:</span>{{ getFilm(this.routeParams).year }}
               </div>
             </div>
           </div>
           <Favorite
             @like="like"
             @dislike="DisLike"
-            :isFavorite="favoriteStatus(getFilm(this.$route.params.id).id)"
-            :id="getFilm(this.$route.params.id).id"
+            :isFavorite="favoriteStatus(getFilm(this.routeParams).id)"
+            :id="getFilm(this.routeParams).id"
             class="favorite"
             v-if="authUser"
           ></Favorite>
@@ -39,17 +39,17 @@
       </div>
       <div class="info-text">
         <h4>Описание</h4>
-        <p>{{ getFilm(this.$route.params.id).text }}</p>
+        <p>{{ getFilm(this.routeParams).text }}</p>
       </div>
       <div class="info-video">
         <iframe
           width="100%"
           :src="
             'https://www.youtube.com/embed/' +
-            getFilm(this.$route.params.id).video +
+            getFilm(this.routeParams).video +
             '?mute=1'
           "
-          :title="getFilm(this.$route.params.id).title"
+          :title="getFilm(this.routeParams).title"
           frameborder="0"
           allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
@@ -78,7 +78,10 @@ export default {
   components: { CompilationSlider, Favorite, Search },
   mixins: [favoritesMixin],
   data() {
-    return {};
+    return {
+      routeParams: this.$route.params.id,
+      goback:null,
+    };
   },
   computed: {
     ...mapState({}),
@@ -88,18 +91,30 @@ export default {
     }),
     //беру айдишники жанров фильма
     genresDetail() {
-      return [...this.getFilm(this.$route.params.id).genres.map((p) => p.id)];
+      return [...this.getFilm(this.routeParams).genres.map((p) => p.id)];
     },
     //Из похожих фильмов убираю текущий фильм, чтобы не было дубликата в слайдере
     withoutCurrent() {
       return this.similar(this.genresDetail).filter(
-        (p) => p.slug !== this.getFilm(this.$route.params.id).slug
+        (p) => p.slug !== this.getFilm(this.routeParams).slug
       );
     },
   },
   mounted() {
   },
+  updated() {
+this.goback=    performance.getEntriesByType( 'navigation' ).map( nav => nav.type ).includes( 'back_forward' )&&performance
+    console.log( this.goback )
+  },
+  watch:{
+    '$route' (newRoute, lastRoute){
+      // Check if query is different
+      // call API
 
+      this.routeParams=newRoute.params.id
+      console.log(this.routeParams)
+    }
+  },
   methods: {
     ...mapActions({}),
   },

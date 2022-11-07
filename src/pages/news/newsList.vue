@@ -11,7 +11,7 @@
               @click="this.$router.push(`/news/${item.slug}`)"
             >
               <div class="news-item-box">
-                <img v-lazy="item.banner" :alt="item.name" />
+                <img :src="item.banner" :alt="item.name" />
               </div>
               <div class="news-item-text">
                 <h5>{{ item.name }}</h5>

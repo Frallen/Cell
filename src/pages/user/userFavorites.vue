@@ -2,13 +2,13 @@
   <div>
     <Breadcrumbs></Breadcrumbs>
     <div class="films" v-if="favorites">
-      <div class="films-wrapper" v-lazy-container="{ selector: 'img' }">
+      <div class="films-wrapper">
         <div
           class="films-item"
           v-for="item in favoritesFilms"
           @click="this.$router.push(`/film/${item.slug}`)"
         >
-          <img :data-src="item.poster" alt="" />
+          <img :src="item.poster" alt="" />
           <Favorite
             @like="like"
             @dislike="DisLike"

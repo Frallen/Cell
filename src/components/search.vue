@@ -17,13 +17,12 @@
           class="search-results-item"
           v-for="item in searchGetter(search)"
           @click="redirect(item)"
-          v-lazy-container="{ selector: 'img' }"
         >
           <div v-if="item.poster">
-            <img :data-src="item.poster" />
+            <img :src="item.poster" />
           </div>
           <div v-else-if="item.photo">
-            <img :data-src="item.photo" />
+            <img :src="item.photo" />
           </div>
           <p>{{ item.name }}</p>
         </div>

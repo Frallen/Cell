@@ -71,7 +71,7 @@
       <Field name="text" id="text" v-slot="{ field }" type="text-area"> </Field>
       <ErrorMessage name="text" />
     </label>
-    <div class="form-item">
+    <div class="form-item" style="width: 100%">
       <quill-editor
         style="width: 100%"
         theme="snow"
@@ -144,7 +144,7 @@ export default {
           to: "news",
           val: val,
         };
-        this.CreateItem(obj,this)
+        this.CreateItem(obj, this)
           .then((p) => this.setSuccess("Запись добавлена"))
           .catch((err) => this.setError());
       } else if (this.submitType === "update") {
@@ -154,7 +154,7 @@ export default {
           items: val,
         };
 
-        this.updateDoc(obj,this)
+        this.updateDoc(obj, this)
           .then((p) => this.setSuccess("Запись обновлена"))
           .catch((err) => this.setError());
         this.submitType = "submit";
@@ -168,7 +168,7 @@ export default {
             to: "news",
             id: val,
           };
-          this.DeleteDoc(obj,this)
+          this.DeleteDoc(obj, this)
             .then((p) => this.setSuccess("Запись удалена"))
             .catch((err) => this.setError());
         } else {
@@ -184,7 +184,7 @@ export default {
     },
   },
   mounted() {
-    this.FetchData("news",this);
+    this.FetchData("news", this);
   },
   watch: {
     rawHtml(val) {

@@ -17,7 +17,12 @@
           @click="this.$router.push(`/film/${item.slug}`)"
         >
           <img :src="item.poster" :alt="item.name" />
-          <Favorite class="favorite"></Favorite>
+          <Favorite @like="like"
+                    @dislike="DisLike"
+                    :isFavorite="favoriteStatus(item.id)"
+                    :id="item.id"
+                    class="favorite"
+                    v-if="authUser"></Favorite>
         </swiper-slide>
       </swiper>
     </div>
@@ -29,6 +34,7 @@ import { Swiper, SwiperSlide, useSwiperSlide } from "swiper/vue";
 import { EffectFade, Navigation, Pagination } from "swiper";
 import Favorite from "@/components/ui/favorite";
 import { mapGetters, mapState } from "vuex";
+import favoritesMixin from "@/mixins/favoritesMixin";
 export default {
   name: "compilationSlider",
   components: {
@@ -36,6 +42,7 @@ export default {
     Swiper,
     SwiperSlide,
   },
+  mixins:[favoritesMixin],
   props: {
     title: {
       type: String,
@@ -68,7 +75,9 @@ export default {
   },
   computed: {
     ...mapState({}),
-    ...mapGetters({}),
+    ...mapGetters({
+      getFilm:"films/getFilm"
+    }),
   },
 };
 </script>

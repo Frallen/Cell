@@ -8,7 +8,6 @@
       <div class="menu-nav">
         <router-link to="/news" class="menu-item">Новости</router-link>
         <router-link to="/catalog" class="menu-item">Каталог</router-link>
-        <router-link to="/cartoons" class="menu-item">Мультфильмы</router-link>
       </div>
     </div>
     <div class="menu-additional" :class="{ 'static-position': mobile }">

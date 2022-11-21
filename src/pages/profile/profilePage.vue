@@ -3,6 +3,7 @@
     <Breadcrumbs></Breadcrumbs>
     <div class="page-description">
       <p>На это странице вы можете изменить данные своего профиля</p>
+      <DefaultButton @click="Delete">Удалить аккаунт</DefaultButton>
     </div>
     <Form
       @submit="onSubmit"
@@ -22,7 +23,6 @@
       </label>
       <DefaultButton>Обновить</DefaultButton>
     </Form>
-    <DefaultButton @click="Delete">Удалить аккаунт</DefaultButton>
   </div>
 </template>
 
@@ -63,7 +63,7 @@ export default {
             email: data.email,
             password: data.password,
           };
-          this.UpdateUser(obj,this)
+          this.UpdateUser(obj, this)
             .then((p) => {
               this.$swal.fire({
                 icon: "success",
@@ -132,6 +132,20 @@ export default {
 </script>
 
 <style scoped lang="less">
+.page-description {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @media @md {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  button {
+    @media @md {
+      margin-top: 1em;
+    }
+  }
+}
 .form {
   background: #fff;
   .br(10px);

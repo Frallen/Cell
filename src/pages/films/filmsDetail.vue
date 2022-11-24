@@ -35,6 +35,18 @@
             class="favorite"
             v-if="authUser"
           ></Favorite>
+          <Rating
+            class="rating"
+            :score="globalRating()"
+            :myRating="ratedByUser"
+            @showRating="showRating"
+          ></Rating>
+          <StarRating
+            class="stars"
+            :myRating="ratedByUser"
+            @setRating="setRating"
+            :class="{ visibleStars: visibleStars }"
+          ></StarRating>
         </div>
       </div>
       <div class="info-text">
@@ -73,14 +85,17 @@ import Search from "@/components/search";
 import Favorite from "@/components/ui/favorite";
 import favoritesMixin from "@/mixins/favoritesMixin";
 import CompilationSlider from "@/pages/films/compilationSlider";
+import StarRating from "@/components/ui/starRating";
+import Rating from "@/components/ui/rating";
 export default {
   name: "filmsDetail",
-  components: { CompilationSlider, Favorite, Search },
+  components: { Rating, StarRating, CompilationSlider, Favorite, Search },
   mixins: [favoritesMixin],
   data() {
     return {
       routeParams: this.$route.params.id,
-      goback:null,
+      goback: null,
+      visibleStars: false,
     };
   },
   computed: {
@@ -89,6 +104,21 @@ export default {
       getFilm: "films/getFilm",
       similar: "films/similar",
     }),
+    //оценен ли фильм пользователем
+    ratedByUser() {
+      // если пользователь авторизован
+      if (this.authUser) {
+        //если пользотель оценивал фильм
+        if (
+          this.user.rating &&
+          this.user.rating[this.getFilm(this.routeParams).id]
+        ) {
+          return this.user.rating[this.getFilm(this.routeParams).id];
+        } // если не оценивал фильм
+        else return null;
+      } //если не авторизован
+      else return null;
+    },
     //беру айдишники жанров фильма
     genresDetail() {
       return [...this.getFilm(this.routeParams).genres.map((p) => p.id)];
@@ -100,23 +130,59 @@ export default {
       );
     },
   },
-  mounted() {
-  },
   updated() {
-this.goback=    performance.getEntriesByType( 'navigation' ).map( nav => nav.type ).includes( 'back_forward' )&&performance
-    console.log( this.goback )
+    this.goback =
+      performance
+        .getEntriesByType("navigation")
+        .map((nav) => nav.type)
+        .includes("back_forward") && performance;
   },
-  watch:{
-    '$route' (newRoute, lastRoute){
-      // Check if query is different
-      // call API
-
-      this.routeParams=newRoute.params.id
-      console.log(this.routeParams)
-    }
+  watch: {
+    $route(newRoute, lastRoute) {
+      this.routeParams = newRoute.params.id;
+    },
   },
   methods: {
-    ...mapActions({}),
+    ...mapActions({
+      SetRating: "user/SetRating",
+    }),
+    globalRating() {
+      // если пользователь авторизован
+      if (this.getFilm(this.routeParams).rating) {
+        let rating = Object.values(this.getFilm(this.routeParams).rating);
+
+        let sum = 0; // объявляем переменную, в которой будет храниться сумма всех чисел массива
+
+        for (let i = 0; i < rating.length; i += 1) {
+          // инициализируем цикл
+
+          sum += rating[i]; // на каждой итерации прибавляем к сумме значение текущего элемента массива
+        }
+
+        return sum / rating.length; // возвращаем среднее арифметическое
+      } else return null;
+    },
+    setRating(val) {
+      let obj = {
+        val: val,
+        id: this.getFilm(this.routeParams).id,
+        componentContext: this,
+      };
+      this.SetRating(obj);
+      this.globalRating();
+    },
+    showRating() {
+      if (this.authUser) {
+        this.visibleStars === true
+          ? (this.visibleStars = false)
+          : (this.visibleStars = true);
+      } else {
+        this.$swal.fire({
+          icon: "error",
+          title: "Для оценки необходима авторизация",
+        });
+      }
+    },
   },
 };
 </script>
@@ -235,5 +301,27 @@ this.goback=    performance.getEntriesByType( 'navigation' ).map( nav => nav.typ
   top: 4%;
   z-index: 2;
   display: block;
+}
+.rating {
+  position: absolute;
+  right: 2%;
+  top: 18%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.stars {
+  opacity: 0;
+  .trs();
+  position: absolute;
+  top: 5%;
+  left: 2%;
+  z-index: 2;
+}
+
+.visibleStars {
+  opacity: 1;
+  .trs();
 }
 </style>

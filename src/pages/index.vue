@@ -82,12 +82,12 @@
       >
         <swiper-slide
           class="index-news-item"
-          v-for="item in firstFour"
+          v-for="item in firstSix"
           :key="item.id"
           @click="this.$router.push(`/news/${item.slug}`)"
         >
           <h4>{{ item.name }}</h4>
-          <img v-lazy="item.banner" :alt="item.name" />
+          <img :src="item.banner" :alt="item.name" />
         </swiper-slide>
       </swiper>
     </div>
@@ -160,8 +160,8 @@ export default {
     firstFive() {
       return this.films.slice(0, 4);
     },
-    firstFour() {
-      return this.timeFilteredNews.slice(0, 4);
+    firstSix() {
+      return this.timeFilteredNews.slice(0, 6);
     },
   },
 };
@@ -335,13 +335,14 @@ export default {
       position: absolute;
       margin-left: auto;
       margin-right: auto;
-      top: 20%;
+      top: 25%;
       left: 0;
       right: 0;
       text-align: center;
       overflow: hidden;
       color: #fff;
       z-index: 2;
+      font-size: 2em;
     }
     img {
       width: 100%;

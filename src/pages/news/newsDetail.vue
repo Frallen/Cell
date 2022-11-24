@@ -6,6 +6,7 @@
           class="news-img"
           :style="{
             background: `url(${GetCurrentNews(this.$route.params.id).banner})`,
+            backgroundPosition: '100%',
           }"
           style="background-repeat: no-repeat; background-size: cover"
         >
@@ -85,9 +86,13 @@ export default {
   }
   &-content {
     padding: 1em;
-    ::v-deep img {
-      width: 100%;
-      height: 100%;
+    ::v-deep p {
+      img {
+        @media @lg {
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
   }
   // Идет вставка сырого html необходимо использовать ::v-deep для применения стилей

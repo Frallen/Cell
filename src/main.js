@@ -13,9 +13,13 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import VueLazyload from "vue-lazyload";
 import vIntersection from "@/directives/vIntersection";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 const app = createApp(App);
 const loadimage = require("@/icons/minPreloader.gif");
 
+library.add(faStar);
 app.directive("Intersection", vIntersection);
 app
   .use(store)
@@ -28,4 +32,5 @@ app
     loading: loadimage,
     attempt: 1,
   })
+  .component("font-awesome-icon", FontAwesomeIcon)
   .mount("#app");

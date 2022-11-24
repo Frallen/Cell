@@ -43,6 +43,36 @@ export const userModule = {
   },
   getters: {},
   actions: {
+    async SetRating({ state, commit }, obj) {
+      try {
+        commit("setLoading", true);
+
+        await setDoc(
+          doc(db, "users", state.userInfo.id),
+          {
+            rating: {
+              [obj.id]: obj.val,
+            },
+          },
+          { merge: true }
+        );
+        await setDoc(
+          doc(db, "films", obj.id),
+          {
+            rating: { [state.userInfo.id]: obj.val },
+          },
+          { merge: true }
+        );
+      } catch (err) {
+        console.error(err);
+        switch (err.message) {
+          default:
+            return errorMessage(obj.componentContext);
+        }
+      } finally {
+        commit("setLoading", false);
+      }
+    },
     async addToFavorite({ state, commit }, id, componentContext) {
       try {
         commit("setLoading", true);

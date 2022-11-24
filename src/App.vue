@@ -94,7 +94,7 @@ export default {
         return true;
     },
   },
-  created() {
+  mounted() {
     this.AuthState();
     this.GetUserData(this);
     this.FetchFilms(this);

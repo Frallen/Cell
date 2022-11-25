@@ -15,11 +15,11 @@ import VueLazyload from "vue-lazyload";
 import vIntersection from "@/directives/vIntersection";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faBolt } from "@fortawesome/free-solid-svg-icons";
 const app = createApp(App);
 const loadimage = require("@/icons/minPreloader.gif");
 
-library.add(faStar);
+library.add(faStar, faBolt);
 app.directive("Intersection", vIntersection);
 app
   .use(store)

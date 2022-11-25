@@ -329,6 +329,7 @@ export default {
     cursor: pointer;
     .br(10px);
     position: relative;
+    z-index: 1;
     h4 {
       .text-eclipse();
       -webkit-line-clamp: 3;
@@ -365,7 +366,7 @@ export default {
   position: absolute;
   right: 2%;
   top: 2%;
-  z-index: 2;
+  z-index: 5;
   display: block;
   img {
     width: 100%;

@@ -1,7 +1,7 @@
 <template>
   <div class="rating" @click="showRating" title="Оценить">
     <div class="rating-over">
-      <div class="rating-over-number">{{ score ?? 0 }}</div>
+      <div class="rating-over-number">Рейтинг {{ score ?? 0 }}</div>
       <font-awesome-icon icon="fa-bolt"></font-awesome-icon>
     </div>
     <div class="rating-your" v-if="myRating">
@@ -45,11 +45,10 @@ export default {
     width: fit-content;
     background: #fff;
     padding: 0 10px;
-    box-shadow: 0 0 5px 4px #a8a8a8;
     cursor: pointer;
     z-index: 2;
     &-number {
-      font-size: 2em;
+      font-size: 1.8em;
       margin-right: 10px;
       color: @text;
     }

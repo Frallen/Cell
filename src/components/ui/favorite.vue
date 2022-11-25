@@ -1,27 +1,21 @@
 <template>
-  <transition name="favorite">
-    <div class="favorite">
-      <div v-if="isFavorite">
-        <img :src="Favorite" alt="favorite" @click="dislike" />
-      </div>
-      <div v-else>
-        <img :src="Unfavorite" alt="unfavorite" @click="like" />
-      </div>
+  <div class="favorite" @click="setFavorite">
+    <div>
+      <font-awesome-icon
+        class="fa-icon"
+        :class="{ 'fa-icon-active': isFavorite }"
+        icon="fa-heart"
+      ></font-awesome-icon>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>
-import Favorite from "@/icons/favorite.png";
-import Unfavorite from "@/icons/unfavorite.png";
 export default {
   name: "favorite",
   emits: ["dislike", "like"],
   data() {
-    return {
-      Unfavorite,
-      Favorite,
-    };
+    return {};
   },
   props: {
     isFavorite: {
@@ -33,11 +27,10 @@ export default {
     },
   },
   methods: {
-    dislike() {
-      this.$emit("dislike", this.id);
-    },
-    like() {
-      this.$emit("like", this.id);
+    setFavorite() {
+      this.isFavorite === true
+        ? this.$emit("dislike", this.id)
+        : this.$emit("like", this.id);
     },
   },
 };
@@ -45,25 +38,26 @@ export default {
 
 <style scoped lang="less">
 .favorite {
-  z-index: 2;
-  div {
-    height: 40px;
-    width: 40px;
-    cursor: pointer;
+  background: @text;
+  cursor: pointer;
+  .br(10px);
+  padding: 10px;
+  .fa-icon {
+    font-size: 1.5em;
+    color: #fff;
+    .trs();
   }
-  img {
-    width: 100%;
-    height: 100%;
+
+  .fa-icon-active {
+    color: @red;
+    .trs();
   }
 }
-.preloader-enter-active,
-.preloader-leave-active {
+.favorite:hover {
   .trs();
-}
-.preloader-enter-from {
-  opacity: 1;
-}
-.preloader-leave-to {
-  opacity: 0;
+  .fa-icon {
+    color: @red;
+    .trs();
+  }
 }
 </style>

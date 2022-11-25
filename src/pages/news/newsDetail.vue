@@ -6,7 +6,6 @@
           class="news-img"
           :style="{
             background: `url(${GetCurrentNews(this.$route.params.id).banner})`,
-            backgroundPosition: '100%',
           }"
           style="background-repeat: no-repeat; background-size: cover"
         >
@@ -57,6 +56,7 @@ export default {
     align-items: center;
     justify-content: center;
     position: relative;
+    background-position: 100% !important;
   }
   &-img::after {
     content: "";
@@ -88,9 +88,17 @@ export default {
     padding: 1em;
     ::v-deep p {
       img {
-        @media @lg {
-          width: 100%;
-          height: 100%;
+        width: 100%;
+        height: 100%;
+      }
+      span {
+        img {
+          width: inherit;
+          height: inherit;
+          @media @lg {
+            width: 100%;
+            height: 100%;
+          }
         }
       }
     }

@@ -13,31 +13,50 @@
     <div class="menu-additional" :class="{ 'static-position': mobile }">
       <template v-if="isAuthReady">
         <router-link to="/favorites" class="menu-item">
-          <img :src="Heart" alt="favorites" />
+          <font-awesome-icon
+            class="fa-icon"
+            icon="fa-heart"
+          ></font-awesome-icon>
         </router-link>
 
         <router-link to="/profile" class="menu-item">
-          <img :src="User" alt="profile" />
+          <font-awesome-icon class="fa-icon" icon="fa-user"></font-awesome-icon>
         </router-link>
 
         <div v-if="isAuthReady && isAdmin" class="menu-item">
-          <router-link to="/admin"><img :src="Crown" alt="" /></router-link>
+          <router-link to="/admin"
+            ><font-awesome-icon
+              class="fa-icon"
+              icon="fa-crown"
+            ></font-awesome-icon
+          ></router-link>
         </div>
         <div @click="logout" class="menu-item">
-          <img :src="ExitLogo" alt="" />
+          <font-awesome-icon
+            class="fa-icon"
+            icon="fa-right-to-bracket"
+          ></font-awesome-icon>
         </div>
       </template>
       <template v-if="!isAuthReady">
-        <div class="menu-item" >
-          <img :src="Auth" alt="" @click.stop="visibleModal" ref="login" data-type="auth" />
+        <div class="menu-item">
+          <font-awesome-icon
+            class="fa-icon"
+            icon="fa-lock"
+            alt=""
+            @click.stop="visibleModal"
+            ref="login"
+            data-type="auth"
+          ></font-awesome-icon>
         </div>
         <div class="menu-item">
-          <img
-            :src="newUser"
+          <font-awesome-icon
+            class="fa-icon"
+            icon="fa-user-plus"
             alt=""
             @click.stop="visibleModal"
             data-type="reg"
-          />
+          ></font-awesome-icon>
         </div>
       </template>
       <div class="menu-mobile menu-item" :class="{ 'icon-active': mobile }">
@@ -51,13 +70,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import Heart from "@/icons/heart.png";
-import User from "@/icons/user.png";
 import Logo from "@/icons/logo.png";
-import ExitLogo from "@/icons/exit.png";
-import Crown from "@/icons/crown.png";
-import Auth from "@/icons/auth.png";
-import newUser from "@/icons/newUser.png";
 export default {
   name: "nav-bar",
   emits: ["modalStatus"],
@@ -65,12 +78,6 @@ export default {
     return {
       mobile: false,
       Logo,
-      ExitLogo,
-      newUser,
-      Heart,
-      User,
-      Crown,
-      Auth,
       modalStatus: null,
     };
   },
@@ -78,20 +85,20 @@ export default {
     ...mapState({
       isAuthReady: (state) => state.auth.isAuthReady,
       isAdmin: (state) => state.auth.isAdmin,
-      openLoginModal:state => state.auth.openLoginModal
+      openLoginModal: (state) => state.auth.openLoginModal,
     }),
   },
   watch: {
-    openLoginModal(){
-      this.$refs.login.click()
-    }
+    openLoginModal() {
+      this.$refs.login.click();
+    },
   },
   methods: {
     visibleModal(e) {
       e.currentTarget.dataset.type === "auth"
         ? (this.modalStatus = "auth")
         : (this.modalStatus = "reg");
-      this.$emit("modalStatus",this.modalStatus);
+      this.$emit("modalStatus", this.modalStatus);
     },
     logout() {
       this.$store.dispatch("auth/logout");
@@ -147,16 +154,26 @@ export default {
   &-item {
     margin-left: 1em;
     text-decoration: none;
-    color: #fff;
     font-size: 1.3em;
+    color: #fff;
+    .trs();
     cursor: pointer;
     @media @md {
       font-size: 1em;
     }
-    img {
-      width: 30px;
-      height: 30px;
+    .fa-icon {
+      font-size: 1.5em;
+      color: #fff;
+      .trs();
     }
+    .fa-icon:hover {
+      color: @red;
+      .trs();
+    }
+  }
+  &-item:hover {
+    color: @red;
+    .trs();
   }
   &-mobile {
     display: none;

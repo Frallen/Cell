@@ -35,19 +35,20 @@
             class="favorite"
             v-if="authUser"
           ></Favorite>
-          <Rating
-            class="rating"
-            :score="globalRating()"
-            :myRating="ratedByUser"
-            @showRating="showRating"
-          ></Rating>
-          <StarRating
-            class="stars"
-            :myRating="ratedByUser"
-            @setRating="setRating"
-            :class="{ visibleStars: visibleStars }"
-          ></StarRating>
         </div>
+      </div>
+      <div class="rating-box">
+        <Rating
+          :score="globalRating()"
+          :myRating="ratedByUser"
+          @showRating="showRating"
+        ></Rating>
+        <StarRating
+          class="stars"
+          :myRating="ratedByUser"
+          @setRating="setRating"
+          :class="{ visibleStars: visibleStars }"
+        ></StarRating>
       </div>
       <div class="info-text">
         <h4>Описание</h4>
@@ -302,26 +303,31 @@ export default {
   z-index: 2;
   display: block;
 }
-.rating {
-  position: absolute;
-  right: 2%;
-  top: 18%;
+.rating-box {
+  margin: 1em 0;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
+  justify-content: space-between;
+  @media @md {
+    flex-direction: column;
+  }
+  .stars {
+    opacity: 0;
+    height: 100%;
 
-.stars {
-  opacity: 0;
-  .trs();
-  position: absolute;
-  top: 5%;
-  left: 2%;
-  z-index: 2;
-}
-
-.visibleStars {
-  opacity: 1;
-  .trs();
+    .trs();
+    z-index: 2;
+    @media @md {
+      height: 0;
+    }
+  }
+  .visibleStars {
+    height: 100%;
+    padding: 10px;
+    opacity: 1;
+    .trs();
+    @media @md {
+      margin-top: 1em;
+    }
+  }
 }
 </style>

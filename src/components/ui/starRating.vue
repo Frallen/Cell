@@ -7,7 +7,10 @@
       v-for="(item, index) in 5"
       :key="index"
       @click="setRating(item)"
-      :class="{ 'rating-star-active': index < myRating,'rating-star-disabled': isLoading}"
+      :class="{
+        'rating-star-active': index < myRating,
+        'rating-star-disabled': isLoading,
+      }"
     ></font-awesome-icon>
   </div>
 </template>
@@ -25,7 +28,7 @@ export default {
   },
   methods: {
     setRating(number) {
-      if(!this.isLoading) {
+      if (!this.isLoading) {
         this.$el.querySelectorAll(".rating-star").forEach((item, index) => {
           item.classList.remove("rating-star-active");
           // debugger
@@ -39,8 +42,8 @@ export default {
   },
   computed: {
     ...mapState({
-      isLoading:"user/setLoading"
-    })
+      isLoading: "user/setLoading",
+    }),
   },
 };
 </script>
@@ -51,7 +54,6 @@ export default {
   align-items: center;
   background: #fff;
   .br(10px);
-  padding: 10px;
   .rating-star {
     color: #bbbbbb;
     .trs();
@@ -62,7 +64,7 @@ export default {
     color: #f8a52b;
   }
   .rating-star-disabled {
-    color: #f8a52b99!important;
+    color: #f8a52b99 !important;
   }
   .rating-star:hover {
     .trs();
@@ -71,6 +73,7 @@ export default {
   span {
     margin-right: 10px;
     color: @text;
+    font-size: 1.2em;
   }
 }
 </style>

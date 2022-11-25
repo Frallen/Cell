@@ -1,8 +1,8 @@
 <template>
   <div class="rating" @click="showRating" title="Оценить">
     <div class="rating-over">
-      <div class="rating-over-number">{{ score }}</div>
-      <font-awesome-icon icon="fa-star"></font-awesome-icon>
+      <div class="rating-over-number">{{ score ?? 0 }}</div>
+      <font-awesome-icon icon="fa-bolt"></font-awesome-icon>
     </div>
     <div class="rating-your" v-if="myRating">
       <div class="rating-over-number">Ваша оценка {{ myRating }}</div>
@@ -53,7 +53,7 @@ export default {
       margin-right: 10px;
       color: @text;
     }
-    .fa-star {
+    .fa-star,.fa-bolt {
       color: #fedb10;
       font-size: 2em;
     }

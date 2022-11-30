@@ -1,5 +1,5 @@
 <template>
-  <div class="favorite" @click="setFavorite">
+  <div class="favorite" @click.stop="setFavorite">
     <div>
       <font-awesome-icon
         class="fa-icon"
